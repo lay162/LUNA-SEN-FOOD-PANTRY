@@ -1,0 +1,18 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://lunasen.vercel.app/sitemap.xml
+
+# Specific pages to crawl
+Allow: /
+Allow: /get-support
+Allow: /donate  
+Allow: /volunteer
+
+# Block admin areas (when implemented)
+Disallow: /admin
+Disallow: /api/
+
+# SEO-friendly
+Crawl-delay: 1

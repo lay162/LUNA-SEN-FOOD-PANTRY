@@ -1,0 +1,409 @@
+import React, { useEffect } from 'react';
+import Card, { GiftIcon, HeartIcon, PhoneIcon } from '../components/Card';
+import Button from '../components/Button';
+
+const Donate = () => {
+  useEffect(() => {
+    document.title = 'Donate to LUNA SEN PANTRY - Help Wirral Families | Food & Money Donations';
+  }, []);
+
+  const donationMethods = [
+    {
+      variant: 'primary',
+      icon: HeartIcon,
+      title: 'Money Donations',
+      description: 'Direct financial support helps us buy exactly what families need, including specialty items for SEN requirements.',
+      action: (
+        <div className="space-y-4">
+          <a 
+            href="https://paypal.me/lunasen" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="block"
+          >
+            <Button variant="primary" size="lg" className="w-full">
+              Donate via PayPal
+            </Button>
+          </a>
+          <p className="text-xs text-gray-500">Secure payment via PayPal.me - no account needed</p>
+        </div>
+      )
+    },
+    {
+      variant: 'gradient',
+      icon: GiftIcon,
+      title: 'Food Donations',
+      description: 'Drop off food items at our collection points or arrange collection from you. We especially need SEN-friendly foods.',
+      action: (
+        <div className="space-y-3">
+          <Button variant="gradient" size="lg" className="w-full">
+            View Drop-off Locations
+          </Button>
+          <Button variant="secondary" size="sm" className="w-full">
+            Request Collection
+          </Button>
+        </div>
+      )
+    },
+    {
+      variant: 'secondary',
+      icon: PhoneIcon,
+      title: 'Corporate Support',
+      description: 'Business partnerships, regular donations, or employee fundraising. Help us help more Wirral families.',
+      action: (
+        <Button variant="secondary" size="lg" className="w-full">
+          Contact for Partnership
+        </Button>
+      )
+    }
+  ];
+
+  const mostNeededItems = [
+    {
+      category: 'SEN-Friendly Foods',
+      items: ['Plain pasta shapes', 'Specific brand cereals', 'Smooth textures', 'Allergen-free options'],
+      priority: 'high'
+    },
+    {
+      category: 'Staples',
+      items: ['Rice', 'Pasta', 'Tinned tomatoes', 'Cooking oil', 'Long-life milk'],
+      priority: 'medium'
+    },
+    {
+      category: 'Protein',
+      items: ['Tinned meat', 'Beans/lentils', 'Eggs', 'Peanut butter', 'Tuna'],
+      priority: 'high'
+    },
+    {
+      category: 'Baby/Child',
+      items: ['Baby formula', 'Baby food', 'Nappies', 'Kids snacks', 'Fruit pouches'],
+      priority: 'high'
+    },
+    {
+      category: 'Hygiene',
+      items: ['Toilet paper', 'Soap', 'Shampoo', 'Toothbrushes', 'Period products'],
+      priority: 'medium'
+    },
+    {
+      category: 'Pet Care',
+      items: ['Dog food', 'Cat food', 'Pet treats', 'Cat litter'],
+      priority: 'low'
+    }
+  ];
+
+  const dropOffLocations = [
+    {
+      name: 'LUNA SEN PANTRY Hub',
+      address: 'Community Centre, Wirral CH62 1AA',
+      times: 'Mon-Fri: 10am-4pm, Sat: 9am-1pm',
+      contact: '07123 456 789',
+      notes: 'Main collection point - volunteers available to help unload'
+    },
+    {
+      name: 'Local Pharmacy',
+      address: 'High Street Pharmacy, CH62 2BB',
+      times: 'Mon-Sat: 9am-6pm',
+      contact: '0151 123 4567',
+      notes: 'Small donations only - collection box available'
+    },
+    {
+      name: 'Community Library',
+      address: 'Wirral Library, CH62 3CC',
+      times: 'Mon-Fri: 9am-5pm, Sat: 9am-4pm',
+      contact: '0151 234 5678',
+      notes: 'Non-perishable items only'
+    }
+  ];
+
+  return (
+    <>
+      <main className="luna-page">
+        <div className="luna-container">
+          {/* Hero Section */}
+          <div className="luna-page-header">
+            <h1 className="luna-page-title">
+              Help Wirral Families
+            </h1>
+            <p className="luna-page-subtitle">
+              Your donation directly supports families with SEN and sensory needs
+            </p>
+            <p className="text-lg opacity-90 max-w-2xl mx-auto">
+              Every contribution, big or small, makes a real difference to local families in crisis
+            </p>
+          </div>
+
+          {/* Donation Methods */}
+          <section className="mb-16">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-bold mb-4">
+                Ways to Donate to <span className="luna-text-gradient">LUNA</span>
+              </h2>
+              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+                Choose the method that works best for you - all donations stay local and help Wirral families
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+              {donationMethods.map((method, index) => (
+                <Card
+                  key={index}
+                  variant={method.variant}
+                  icon={method.icon}
+                  title={method.title}
+                  description={method.description}
+                  action={method.action}
+                  className="h-full flex flex-col"
+                />
+              ))}
+            </div>
+
+            {/* Quick PayPal donation */}
+            <div className="luna-card luna-card--primary p-8 text-center mb-16">
+              <h3 className="text-2xl font-bold mb-4">Quick Donation to <span className="luna-text-gradient">LUNA</span></h3>
+              <p className="text-gray-600 mb-6">Make an instant impact - suggested amounts</p>
+              
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
+                {['£5', '£10', '£25', '£50'].map((amount) => (
+                  <a
+                    key={amount}
+                    href={`https://paypal.me/lunasen/${amount.replace('£', '')}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block"
+                  >
+                    <Button variant="outline" size="lg" className="w-full">
+                      {amount}
+                    </Button>
+                  </a>
+                ))}
+              </div>
+              
+              <div className="text-sm text-gray-500 space-y-1">
+                <p><strong>£5</strong> provides a family meal for 2</p>
+                <p><strong>£10</strong> covers basic groceries for a single person</p>
+                <p><strong>£25</strong> supports a family of 4 for several days</p>
+                <p><strong>£50</strong> provides a week of essentials plus specialty SEN foods</p>
+              </div>
+            </div>
+          </section>
+
+          {/* Most Needed Items */}
+          <section className="mb-16">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-bold mb-4">
+                Most Needed Items
+              </h2>
+              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+                These items are always in high demand, especially SEN-friendly options
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {mostNeededItems.map((category, index) => (
+                <div 
+                  key={index} 
+                  className={`luna-card p-6 ${
+                    category.priority === 'high' ? 'luna-card--gradient' :
+                    category.priority === 'medium' ? 'luna-card--secondary' :
+                    'luna-card--primary'
+                  }`}
+                >
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-lg font-semibold">{category.category}</h3>
+                    {category.priority === 'high' && (
+                      <span className="bg-red-100 text-red-800 text-xs px-2 py-1 rounded-full font-medium">
+                        High Priority
+                      </span>
+                    )}
+                  </div>
+                  <ul className="space-y-2">
+                    {category.items.map((item, itemIndex) => (
+                      <li key={itemIndex} className="flex items-center text-sm">
+                        <span className="w-2 h-2 bg-luna-pink rounded-full mr-3 flex-shrink-0"></span>
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-12 bg-yellow-50 border border-yellow-200 rounded-md p-6">
+              <h3 className="text-lg font-semibold text-yellow-800 mb-2">Important Notes for Food Donations:</h3>
+              <ul className="list-disc list-inside text-yellow-700 space-y-1 text-sm">
+                <li>Please check expiry dates - we need at least 1 month remaining</li>
+                <li>We cannot accept fresh produce, homemade items, or alcohol</li>
+                <li>SEN-friendly items (specific brands, textures) are especially valuable</li>
+                <li>Please ensure packaging is unopened and undamaged</li>
+              </ul>
+            </div>
+          </section>
+
+          {/* Drop-off Locations */}
+          <section className="mb-16">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-bold mb-4">
+                Drop-off Locations
+              </h2>
+              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+                Convenient locations across Wirral to drop off your donations
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {dropOffLocations.map((location, index) => (
+                <div key={index} className="luna-card luna-card--primary p-6">
+                  <h3 className="text-xl font-semibold mb-2">{location.name}</h3>
+                  <div className="space-y-3 text-sm">
+                    <div>
+                      <strong>Address:</strong>
+                      <p className="text-gray-600">{location.address}</p>
+                    </div>
+                    <div>
+                      <strong>Opening Times:</strong>
+                      <p className="text-gray-600">{location.times}</p>
+                    </div>
+                    <div>
+                      <strong>Contact:</strong>
+                      <p className="text-gray-600">{location.contact}</p>
+                    </div>
+                    <div>
+                      <strong>Notes:</strong>
+                      <p className="text-gray-600">{location.notes}</p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-12 text-center">
+              <div className="luna-card luna-card--gradient p-8">
+                <h3 className="text-2xl font-bold mb-4">Can't Get to a Drop-off Point?</h3>
+                <p className="text-gray-600 mb-6">
+                  No problem! We can arrange collection from your home or workplace.
+                </p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <a href="tel:07123456789" className="block">
+                    <Button variant="primary" size="lg" className="w-full">
+                      Call for Collection
+                    </Button>
+                  </a>
+                  <a href="mailto:donations@lunasen.org" className="block">
+                    <Button variant="secondary" size="lg" className="w-full">
+                      Email Us
+                    </Button>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Impact Section */}
+          <section className="mb-16">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-bold mb-4">
+                Your Impact
+              </h2>
+              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+                See how your donations make a real difference to Wirral families
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <div className="text-center">
+                <div className="bg-luna-pink text-white w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">
+                  95%
+                </div>
+                <h3 className="text-lg font-semibold mb-2">Local Families</h3>
+                <p className="text-gray-600">of our support goes to families with SEN or disabilities</p>
+              </div>
+              
+              <div className="text-center">
+                <div className="bg-luna-blue text-white w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">
+                  48h
+                </div>
+                <h3 className="text-lg font-semibold mb-2">Response Time</h3>
+                <p className="text-gray-600">from referral to food support delivered</p>
+              </div>
+              
+              <div className="text-center">
+                <div className="bg-luna-pink text-white w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">
+                  £1
+                </div>
+                <h3 className="text-lg font-semibold mb-2">Goes Further</h3>
+                <p className="text-gray-600">provides £3 worth of food through bulk buying</p>
+              </div>
+            </div>
+
+            <div className="mt-16 luna-card luna-card--secondary p-8">
+              <h3 className="text-2xl font-bold mb-4 text-center">Recent Impact</h3>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+                <div>
+                  <div className="text-3xl font-bold text-luna-pink mb-2">127</div>
+                  <div className="text-sm text-gray-600">Families helped this month</div>
+                </div>
+                <div>
+                  <div className="text-3xl font-bold text-luna-blue mb-2">89%</div>
+                  <div className="text-sm text-gray-600">Had SEN requirements</div>
+                </div>
+                <div>
+                  <div className="text-3xl font-bold text-luna-pink mb-2">2.4t</div>
+                  <div className="text-sm text-gray-600">Food distributed</div>
+                </div>
+                <div>
+                  <div className="text-3xl font-bold text-luna-blue mb-2">£12k</div>
+                  <div className="text-sm text-gray-600">Donated this month</div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Call to Action */}
+          <section className="luna-card luna-card--gradient p-16 text-center text-white">
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">
+              Ready to Help Local Families?
+            </h2>
+            <p className="text-xl mb-8 opacity-90">
+              Every donation stays local and directly helps Wirral families in need
+            </p>
+            
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <a 
+                href="https://paypal.me/lunasen" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="block"
+              >
+                <Button variant="primary" size="xl" className="w-full">
+                  Donate Money Now
+                </Button>
+              </a>
+              <a href="tel:07123456789" className="block">
+                <Button variant="secondary" size="xl" className="w-full">
+                  Arrange Food Collection
+                </Button>
+              </a>
+            </div>
+            
+            <div className="mt-8 pt-8 border-t border-white border-opacity-20">
+              <p className="text-sm opacity-75 mb-4">Quick access via QR code:</p>
+              <div className="flex justify-center">
+                <div className="text-center bg-white p-4 rounded-lg">
+                  <img 
+                    src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https://paypal.me/lunasen" 
+                    alt="QR code for PayPal donations"
+                    className="w-24 h-24 mx-auto mb-2"
+                  />
+                  <p className="text-xs text-gray-600">Scan to donate</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+        </div> {/* Close luna-container */}
+      </main> {/* Close luna-page */}
+    </>
+  );
+};
+
+export default Donate;
