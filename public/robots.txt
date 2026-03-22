@@ -2,7 +2,7 @@ User-agent: *
 Allow: /
 
 # Sitemap
-Sitemap: https://lunasen.vercel.app/sitemap.xml
+Sitemap: https://luna-sen-food-pantry.netlify.app/sitemap.xml
 
 # Specific pages to crawl
 Allow: /

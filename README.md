@@ -1,6 +1,6 @@
 # LUNA SEN PANTRY 🌙💖
 
-**Independent SEN-priority food support hub – Wirral (CH62 / Merseyside)**
+**Independent SEN-priority food support hub – Metropolitan Borough of Wirral, Merseyside**
 
 A complete, production-ready web application providing food support with special educational needs (SEN) and sensory requirements as the top priority.
 
@@ -23,13 +23,15 @@ npm run dev
 # Visit http://localhost:3000
 ```
 
+**New to Firebase or terminal commands?** You don’t need them to try the site locally. For the **free-tier** options (Firebase Spark + optional EmailJS), see **[docs/FREE_SETUP.md](docs/FREE_SETUP.md)**. For a full click-by-click walkthrough, use **[docs/SETUP_STEP_BY_STEP.md](docs/SETUP_STEP_BY_STEP.md)**.
+
 ## 🛠️ How to Edit Content
 
 ### Change Text Content
 - **Home page**: Edit `src/pages/Home.jsx`
 - **Navigation**: Edit `src/components/Navbar.jsx`
 - **Footer**: Edit `src/components/Footer.jsx`
-- **Support form**: Edit `src/pages/GetSupport.jsx`
+- **Support form**: Edit `src/pages/Support.jsx`
 
 ### Change Colors
 All colors are defined in `tailwind.config.js`:
@@ -97,26 +99,20 @@ const firebaseConfig = {
 ```
 
 ### 5. Set Firestore Rules
-In Firestore → Rules, replace with:
+The repo includes `firestore.rules` (anonymous sign-in can **create** referrals/volunteers; public **cannot read**).
 
-```javascript
-rules_version = '2';
-service cloud.firestore {
-  match /databases/{database}/documents {
-    // Allow authenticated users to create referrals
-    match /referrals/{document} {
-      allow create: if request.auth != null;
-      allow read: if false; // Only admin can read
-    }
-    
-    // Allow authenticated users to create volunteer applications  
-    match /volunteers/{document} {
-      allow create: if request.auth != null;
-      allow read: if false; // Only admin can read
-    }
-  }
-}
+Deploy from the project root (with Firebase CLI):
+
+```bash
+firebase deploy --only firestore:rules
 ```
+
+Or paste the same rules manually in Firebase console → Firestore → Rules.
+
+### 6. Firebase + Google Sheets (optional, recommended for ops)
+Keep **Firestore** as the database; mirror new submissions into a **Google Sheet** for sorting, urgency triage, and history.
+
+Full steps (service account, Sheet tabs, secrets, deploy): **[docs/FIREBASE_SHEETS.md](docs/FIREBASE_SHEETS.md)**
 
 ## 🌐 Deploy to Vercel (FREE)
 

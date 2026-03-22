@@ -5,7 +5,7 @@ import Button from '../components/Button';
 import Card, { UserGroupIcon, PhoneIcon, HeartIcon } from '../components/Card';
 import { useFormValidation } from '../hooks/useFormValidation';
 import { useOfflineForm } from '../hooks/useOfflineForm';
-import { brandLogoUrl } from '../constants/assets';
+import HeroLogo from '../components/HeroLogo';
 
 const Volunteer = () => {
   const [searchParams] = useSearchParams();
@@ -48,9 +48,9 @@ const Volunteer = () => {
       return;
     }
 
-    await submitForm(formData);
-    
-    if (submitStatus?.success) {
+    const result = await submitForm(formData);
+
+    if (result.success) {
       setShowForm(false);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
@@ -429,15 +429,7 @@ const Volunteer = () => {
         <section className="luna-hero" aria-labelledby="hero-title">
           <div className="luna-container">
             <div className="luna-hero__content">
-              <img 
-                src={brandLogoUrl}
-                alt="" 
-                className="luna-hero__logo"
-                aria-hidden="true"
-                width="96"
-                height="96"
-                decoding="async"
-              />
+              <HeroLogo />
               <h1 id="hero-title" className="luna-hero__title">
                 Volunteer with <span className="luna-brand-text">LUNA</span>
               </h1>
@@ -449,8 +441,8 @@ const Volunteer = () => {
               </p>
               
               <div className="luna-hero__actions">
-                <Button 
-                  variant="primary" 
+                <Button
+                  variant="gradient"
                   size="xl"
                   onClick={() => {
                     updateField('role', 'flexible');
@@ -459,10 +451,27 @@ const Volunteer = () => {
                 >
                   Apply to Volunteer
                 </Button>
-                <a href="tel:07123456789">
+                <a href="tel:07123456789" className="luna-link-button">
                   <Button variant="secondary" size="xl">
                     Call to Discuss
                   </Button>
+                </a>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="luna-emergency-strip luna-emergency-strip--after-hero" aria-label="Crisis food support">
+          <div className="luna-container">
+            <div className="luna-emergency-strip__content">
+              <div className="luna-emergency-strip__icon" aria-hidden="true">
+                🚨
+              </div>
+              <div className="luna-emergency-strip__text">
+                <strong>CRISIS SUPPORT:</strong> Need food today? Call or text
+                <a href="tel:07123456789" className="luna-emergency-strip__phone">
+                  {' '}
+                  07123 456 789
                 </a>
               </div>
             </div>
@@ -482,7 +491,7 @@ const Volunteer = () => {
               </p>
             </div>
 
-            <div class="luna-grid luna-grid--3">
+            <div className="luna-grid luna-grid--3">
               {volunteerRoles.map((role, index) => (
                 <Card
                   key={index}
@@ -543,9 +552,9 @@ const Volunteer = () => {
               </p>
             </div>
 
-            <div className="luna-grid luna-grid--3 luna-grid--mini-cards">
+            <div className="luna-grid luna-grid--why-volunteer">
               <div className="luna-mini-card luna-mini-card--primary">
-                <div className="luna-mini-card__header text-center">
+                <div className="luna-mini-card__header">
                   <h3 className="luna-mini-card__title">SEN Focus</h3>
                 </div>
                 <ul className="luna-mini-list text-center">
@@ -565,7 +574,7 @@ const Volunteer = () => {
               </div>
               
               <div className="luna-mini-card luna-mini-card--gradient">
-                <div className="luna-mini-card__header text-center">
+                <div className="luna-mini-card__header">
                   <h3 className="luna-mini-card__title">Fast Impact</h3>
                 </div>
                 <ul className="luna-mini-list text-center">
@@ -585,7 +594,7 @@ const Volunteer = () => {
               </div>
               
               <div className="luna-mini-card luna-mini-card--secondary">
-                <div className="luna-mini-card__header text-center">
+                <div className="luna-mini-card__header">
                   <h3 className="luna-mini-card__title">Local Community</h3>
                 </div>
                 <ul className="luna-mini-list text-center">
@@ -605,7 +614,7 @@ const Volunteer = () => {
               </div>
 
               <div className="luna-mini-card luna-mini-card--primary">
-                <div className="luna-mini-card__header text-center">
+                <div className="luna-mini-card__header">
                   <h3 className="luna-mini-card__title">Supportive Team</h3>
                 </div>
                 <ul className="luna-mini-list text-center">
@@ -625,7 +634,7 @@ const Volunteer = () => {
               </div>
 
               <div className="luna-mini-card luna-mini-card--gradient">
-                <div className="luna-mini-card__header text-center">
+                <div className="luna-mini-card__header">
                   <h3 className="luna-mini-card__title">Flexible Volunteering</h3>
                 </div>
                 <ul className="luna-mini-list text-center">
@@ -645,7 +654,7 @@ const Volunteer = () => {
               </div>
 
               <div className="luna-mini-card luna-mini-card--secondary">
-                <div className="luna-mini-card__header text-center">
+                <div className="luna-mini-card__header">
                   <h3 className="luna-mini-card__title">Skills & Development</h3>
                 </div>
                 <ul className="luna-mini-list text-center">
@@ -759,9 +768,9 @@ const Volunteer = () => {
             </p>
             
             <div className="luna-grid luna-grid--2">
-              <Button 
-                variant="primary" 
-                size="xl" 
+              <Button
+                variant="gradient"
+                size="xl"
                 className="luna-button--full-width"
                 onClick={() => {
                   updateField('role', 'flexible');

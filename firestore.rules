@@ -1,0 +1,21 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Web forms use anonymous auth — require a signed-in user (anonymous is fine)
+    match /referrals/{document} {
+      allow create: if request.auth != null
+        && request.resource.data.source == 'web'
+        && request.resource.data.type == 'referral';
+      allow read, update, delete: if false;
+    }
+
+    match /volunteers/{document} {
+      allow create: if request.auth != null
+        && request.resource.data.source == 'web'
+        && request.resource.data.type == 'volunteer';
+      allow read, update, delete: if false;
+    }
+  }
+}

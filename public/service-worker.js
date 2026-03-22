@@ -1,5 +1,14 @@
-const CACHE_NAME = 'luna-sen-pantry-v2';
-const PRECACHE_URLS = ['/', '/index.html', '/PANTRY-LOGO.png', '/manifest.json'];
+const CACHE_NAME = 'luna-sen-pantry-v3';
+const PRECACHE_URLS = [
+  '/',
+  '/index.html',
+  '/manifest.json',
+  '/PANTRY-LOGO.png',
+  '/favicon.ico',
+  '/apple-touch-icon.png',
+  '/web-app-manifest-192x192.png',
+  '/web-app-manifest-512x512.png',
+];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(

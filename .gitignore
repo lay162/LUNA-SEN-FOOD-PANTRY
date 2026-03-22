@@ -8,6 +8,11 @@ pnpm-debug.log*
 lerna-debug.log*
 
 node_modules
+
+# Never commit Google / Firebase service account keys
+*-firebase-adminsdk*.json
+serviceAccount*.json
+
 dist
 dist-ssr
 *.local

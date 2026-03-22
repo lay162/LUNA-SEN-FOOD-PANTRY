@@ -2,18 +2,20 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import Card, { HeartIcon, GiftIcon, UserGroupIcon } from '../components/Card';
 import Button from '../components/Button';
-import { brandLogoUrl } from '../constants/assets';
+import HeroLogo from '../components/HeroLogo';
+import { SITE_URL } from '../constants/site';
 
 const Home = () => {
   // Set page title and meta description
   React.useEffect(() => {
-    document.title = 'LUNA SEN PANTRY - Food Support Hub Wirral CH62 | SEN Priority Help';
+    document.title = 'LUNA SEN PANTRY - Food Support Hub | Wirral & Merseyside | SEN Priority Help';
     
     // Update meta description
     const metaDescription = document.querySelector('meta[name="description"]');
     if (metaDescription) {
-      metaDescription.setAttribute('content', 
-        'Independent SEN-priority food support hub in Wirral (CH62/Merseyside). No voucher needed. Crisis food help, sensory-friendly support for disabled families. Get help today.'
+      metaDescription.setAttribute(
+        'content',
+        'Independent SEN-priority food support across the Metropolitan Borough of Wirral, Merseyside — not one postcode alone. Birkenhead, Wallasey, Heswall, Bebington, Bromborough, Hoylake, West Kirby and communities across the peninsula. No voucher needed.'
       );
     }
   }, []);
@@ -67,15 +69,7 @@ const Home = () => {
         <section className="luna-hero" aria-labelledby="hero-title">
           <div className="luna-container">
             <div className="luna-hero__content">
-              <img 
-                src={brandLogoUrl}
-                alt="" 
-                className="luna-hero__logo"
-                aria-hidden="true"
-                width="96"
-                height="96"
-                decoding="async"
-              />
+              <HeroLogo />
               <h1 id="hero-title" className="luna-hero__title">
                 <span className="luna-brand-text">LUNA</span> SEN PANTRY
               </h1>
@@ -83,7 +77,8 @@ const Home = () => {
                 Independent SEN-priority food support hub
               </p>
               <p className="luna-hero__description">
-                Serving Wirral (CH62 / Merseyside) • No vouchers • No questions • Just help when you need it
+                Serving the Metropolitan Borough of Wirral — Birkenhead, Wallasey, Heswall, Bebington, Bromborough,
+                Hoylake, West Kirby and beyond • No vouchers • No questions • Just help when you need it
               </p>
               
               <div className="luna-hero__actions">
@@ -143,8 +138,8 @@ const Home = () => {
                   </svg>
                 </div>
                 <div className="luna-card-mini__content">
-                  <div className="luna-stats-mini__value">CH62</div>
-                  <div className="luna-stats-mini__label">Coverage area</div>
+                  <div className="luna-stats-mini__value">Wirral</div>
+                  <div className="luna-stats-mini__label">Full borough</div>
                 </div>
               </div>
 
@@ -266,8 +261,8 @@ const Home = () => {
                   </svg>
                 </div>
                 <div className="luna-card-mini__content">
-                  <div className="luna-stats-mini__value">CH62</div>
-                  <div className="luna-stats-mini__label">Coverage area</div>
+                  <div className="luna-stats-mini__value">Wirral</div>
+                  <div className="luna-stats-mini__label">Full borough</div>
                 </div>
               </div>
 
@@ -427,7 +422,8 @@ const Home = () => {
                 Ready to Get Started?
               </h2>
               <p className="luna-cta__description">
-                Whether you need support or want to help others, we're here for the Wirral community.
+                Whether you need support or want to help others, we&apos;re here for families across the Wirral
+                peninsula.
               </p>
               
               <div className="luna-cta__actions">
@@ -448,7 +444,7 @@ const Home = () => {
                 <div className="luna-cta__qr-codes">
                   <div className="luna-cta__qr-item">
                     <img 
-                      src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=https://lunasen.vercel.app/support" 
+                      src={`https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=${encodeURIComponent(`${SITE_URL}/support`)}`}
                       alt="QR code for self-referral"
                       className="luna-cta__qr-image"
                     />
@@ -456,7 +452,7 @@ const Home = () => {
                   </div>
                   <div className="luna-cta__qr-item">
                     <img 
-                      src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=https://lunasen.vercel.app/donate" 
+                      src={`https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=${encodeURIComponent(`${SITE_URL}/donate`)}`}
                       alt="QR code for donations"
                       className="luna-cta__qr-image"
                     />
@@ -485,14 +481,6 @@ const Home = () => {
         .luna-hero__content {
           max-width: 800px;
           margin: 0 auto;
-        }
-
-        .luna-hero__logo {
-          height: 96px;
-          width: 96px;
-          margin: 0 auto var(--luna-space-6);
-          object-fit: contain;
-          display: block;
         }
 
         .luna-hero__title {
@@ -809,11 +797,6 @@ const Home = () => {
         @media (max-width: 480px) {
           .luna-hero {
             padding: var(--luna-space-12) 0;
-          }
-
-          .luna-hero__logo {
-            height: 64px;
-            width: 64px;
           }
 
           .luna-hero__title {

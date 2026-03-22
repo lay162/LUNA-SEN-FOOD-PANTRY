@@ -1,0 +1,14 @@
+When you buy a custom domain for this site, update these so links, SEO and QR codes stay correct:
+
+1. Netlify (or your host): add the custom domain and set environment variable
+   VITE_SITE_URL=https://your-domain.co.uk
+   Then trigger a new deploy.
+
+2. index.html (in the project root): set absolute URLs to your domain for
+   - og:url
+   - twitter:url
+   - JSON-LD script: url, logo, image
+
+3. public/robots.txt: Sitemap line — use your real domain.
+
+4. Optional: src/constants/site.js documents the same checklist for developers.

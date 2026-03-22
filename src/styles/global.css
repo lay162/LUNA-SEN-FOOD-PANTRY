@@ -47,6 +47,172 @@ body {
   max-width: 800px;
   margin: 0 auto;
   padding: 2rem;
+  flex: 0 0 auto;
+}
+
+.luna-support-form__main {
+  width: 100%;
+  flex: 0 0 auto;
+  padding-top: var(--luna-space-2);
+}
+
+/* Support referral: prominent page title without a full-width hero (between section titles and hero scale) */
+.luna-support-page__header {
+  text-align: center;
+  margin-bottom: var(--luna-space-12);
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.luna-support-page__title {
+  font-size: clamp(2.125rem, 4.5vw, var(--luna-font-size-5xl));
+  font-weight: var(--luna-font-weight-bold);
+  line-height: var(--luna-line-height-tight);
+  letter-spacing: -0.02em;
+  color: var(--luna-text-primary);
+  margin-bottom: var(--luna-space-4);
+}
+
+@media (max-width: 640px) {
+  .luna-support-page__title {
+    font-size: clamp(1.875rem, 6vw, 2.5rem);
+  }
+}
+
+/* Support page footer: no copyright blurb for now; links are solid brand colours, no underline */
+.luna-support-form__footer {
+  padding-top: var(--luna-space-6, 1.5rem);
+}
+
+.luna-support-form a.luna-support-footer__link {
+  text-decoration: none;
+  font-weight: var(--luna-font-weight-semibold, 600);
+  -webkit-text-fill-color: unset;
+}
+
+.luna-support-form a.luna-support-footer__link:hover,
+.luna-support-form a.luna-support-footer__link:focus {
+  text-decoration: none !important;
+}
+
+.luna-support-form a.luna-support-footer__link--privacy {
+  color: var(--luna-pink) !important;
+}
+
+.luna-support-form a.luna-support-footer__link--privacy:hover,
+.luna-support-form a.luna-support-footer__link--privacy:focus {
+  color: var(--luna-pink-dark) !important;
+}
+
+.luna-support-form a.luna-support-footer__link--help {
+  color: var(--luna-blue-dark) !important;
+}
+
+.luna-support-form a.luna-support-footer__link--help:hover,
+.luna-support-form a.luna-support-footer__link--help:focus {
+  color: var(--luna-blue) !important;
+}
+
+.luna-support-footer__links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 0.75rem 1.25rem;
+  margin-top: 0;
+}
+
+/* Support form: block layout avoids flex stretch quirks with Tailwind / tall main */
+.luna-support-form__form {
+  display: block;
+  width: 100%;
+}
+
+/* Step card hugs content — no tall empty band below the CTA */
+.luna-support-form .luna-support-form__card.luna-form-step {
+  display: block;
+  height: min-content;
+  min-height: 0;
+  max-height: none;
+  flex: none;
+}
+
+/* Extra specificity + !important so base .luna-form-actions (later in file / Tailwind order) cannot win */
+.luna-support-form .luna-support-form__card .luna-form-actions.luna-support-form__actions {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: var(--luna-space-4);
+  width: 100%;
+  margin-top: var(--luna-space-6);
+  margin-bottom: 0;
+  box-sizing: border-box;
+  background: transparent !important;
+  padding: 1rem 0 0 !important;
+  border-radius: 0 !important;
+  border-top: 1px solid #f0f0f0;
+}
+
+.luna-support-form__action-primary,
+.luna-support-form__action-secondary {
+  width: 100%;
+  max-width: 22rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.luna-support-form__actions--single .luna-support-form__action-primary {
+  max-width: 22rem;
+}
+
+.luna-support-form__action-btn.luna-button--full-width {
+  width: 100%;
+}
+
+/* Tablet/desktop: pink (Previous) + blue (Next) side by side */
+@media (min-width: 640px) {
+  .luna-support-form .luna-support-form__card .luna-form-actions.luna-support-form__actions:not(.luna-support-form__actions--single) {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    justify-content: center;
+    gap: var(--luna-space-4);
+    max-width: 48rem;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .luna-support-form .luna-support-form__card .luna-form-actions:not(.luna-support-form__actions--single) .luna-support-form__action-primary,
+  .luna-support-form .luna-support-form__card .luna-form-actions:not(.luna-support-form__actions--single) .luna-support-form__action-secondary {
+    flex: 1 1 0;
+    min-width: 0;
+    max-width: none;
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .luna-support-form .luna-support-form__card .luna-form-actions.luna-support-form__actions.luna-support-form__actions--single {
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  .luna-support-form .luna-support-form__card .luna-form-actions.luna-support-form__actions.luna-support-form__actions--single .luna-support-form__action-primary {
+    flex: 0 1 22rem;
+    max-width: 22rem;
+  }
+}
+
+/* Gradient CTA must not be overridden by accidental .luna-button--primary on same element */
+.luna-button.luna-button--gradient {
+  background: var(--luna-gradient-primary) !important;
+  border-color: transparent !important;
+}
+
+.luna-button.luna-button--gradient:hover {
+  background: var(--luna-gradient-primary) !important;
+  filter: brightness(1.08);
 }
 
 /* Progress Indicator */
@@ -72,6 +238,13 @@ body {
   color: var(--luna-text-primary);
 }
 
+.luna-progress__title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--luna-text-primary);
+  margin: 0.35rem 0 0 0;
+}
+
 .luna-progress__percentage {
   font-size: 0.9rem;
   color: var(--luna-primary);
@@ -80,48 +253,92 @@ body {
 
 .luna-progress__bar {
   width: 100%;
-  height: 8px;
-  background: #f0f0f0;
-  border-radius: 4px;
+  height: 10px;
+  background: var(--luna-grey-200);
+  border-radius: var(--luna-radius-full);
   margin-bottom: 1.5rem;
   overflow: hidden;
 }
 
 .luna-progress__fill {
+  display: block;
   height: 100%;
-  background: linear-gradient(90deg, var(--luna-primary) 0%, var(--luna-secondary) 100%);
-  border-radius: 4px;
-  transition: width 0.3s ease;
+  min-height: 10px;
+  background: var(--luna-gradient-primary);
+  border-radius: var(--luna-radius-full);
+  transition: width 0.35s ease;
+  box-shadow: 0 0 12px rgba(255, 105, 180, 0.35);
 }
 
 .luna-progress__steps {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: var(--luna-space-2);
+  align-items: flex-start;
+}
+
+@media (max-width: 640px) {
+  .luna-progress__steps {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.luna-progress__step-wrap {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   align-items: center;
+  gap: var(--luna-space-2);
+  min-width: 0;
 }
 
 .luna-progress__step {
-  width: 40px;
-  height: 40px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
-  background: #f0f0f0;
-  color: #666;
+  background: var(--luna-grey-200);
+  color: var(--luna-text-secondary);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 600;
-  font-size: 0.9rem;
-  transition: all 0.3s ease;
+  font-weight: 700;
+  font-size: 0.8rem;
+  transition: all 0.25s ease;
+  flex-shrink: 0;
 }
 
 .luna-progress__step--active {
-  background: var(--luna-primary);
+  background: var(--luna-pink);
   color: white;
+  box-shadow: 0 0 0 3px rgba(255, 105, 180, 0.25);
 }
 
 .luna-progress__step--completed {
-  background: var(--luna-secondary);
+  background: var(--luna-blue);
   color: white;
+}
+
+.luna-progress__step-label {
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--luna-text-muted);
+  line-height: 1.2;
+  text-align: center;
+}
+
+.luna-progress__step-label--active {
+  color: var(--luna-pink);
+}
+
+.luna-progress__percentage--gradient {
+  font-size: 1.35rem;
+  font-weight: 800;
+  background: var(--luna-gradient-primary);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
 }
 
 /* Form Step Container */
@@ -779,6 +996,14 @@ li {
   transform: translateY(-1px);
 }
 
+/* Beat Button.jsx inline styles: solid fill on hover so white label stays visible */
+button.luna-button.luna-button--outline:hover:not(:disabled),
+.luna-button.luna-button--outline:hover:not(:disabled) {
+  background: var(--luna-pink) !important;
+  color: white !important;
+  border-color: var(--luna-pink-dark) !important;
+}
+
 .luna-button--outline-blue {
   background: transparent;
   color: var(--luna-blue);
@@ -840,6 +1065,31 @@ li {
 /* Forms */
 .luna-form-group {
   margin-bottom: var(--luna-space-6);
+}
+
+.luna-checkbox-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--luna-space-2);
+  margin-top: var(--luna-space-2);
+}
+
+.luna-checkbox-group__item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--luna-space-3);
+  font-size: var(--luna-font-size-sm);
+  color: var(--luna-text-primary);
+  cursor: pointer;
+  line-height: var(--luna-line-height-snug);
+}
+
+.luna-checkbox-group__item input {
+  width: 1rem;
+  height: 1rem;
+  margin-top: 0.15rem;
+  flex-shrink: 0;
+  accent-color: var(--luna-pink);
 }
 
 .luna-form-label {
@@ -1033,6 +1283,49 @@ li {
   text-align: center;
 }
 
+.luna-card.text-left .luna-card__title {
+  text-align: left;
+}
+
+/* Most needed (Donate): centred header; list left (card must not use Tailwind text-left — overrides title) */
+.luna-donate-needed-card__header {
+  text-align: center;
+  margin-bottom: var(--luna-space-4);
+}
+
+.luna-donate-needed-card .luna-donate-needed-card__title,
+.luna-donate-needed-card .luna-card__title {
+  text-align: center;
+  margin-bottom: var(--luna-space-2);
+}
+
+.luna-donate-needed-priority {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: var(--luna-space-1);
+  padding: var(--luna-space-2) var(--luna-space-4);
+  font-size: var(--luna-font-size-sm);
+  font-weight: var(--luna-font-weight-bold);
+  letter-spacing: 0.04em;
+  line-height: 1.25;
+  color: #7f1d1d;
+  background: linear-gradient(135deg, #fecaca 0%, #fda4af 100%);
+  border: 1px solid rgba(185, 28, 28, 0.45);
+  border-radius: var(--luna-radius-full);
+  box-shadow: 0 2px 8px rgba(220, 38, 38, 0.12);
+}
+
+.luna-donate-needed-list {
+  text-align: left;
+  width: 100%;
+}
+
+.luna-donate-needed-list li {
+  text-align: left;
+  justify-content: flex-start;
+}
+
 .luna-card__description {
   color: var(--luna-text-secondary);
   line-height: var(--luna-line-height-relaxed);
@@ -1040,8 +1333,32 @@ li {
   flex-grow: 1;
 }
 
+/* BEM alias used on Volunteer step cards */
+.luna-card-description {
+  font-size: var(--luna-font-size-base);
+  color: var(--luna-text-secondary);
+  line-height: var(--luna-line-height-relaxed);
+  margin-bottom: var(--luna-space-4);
+}
+
 .luna-card__action {
   margin-top: auto;
+  width: 100%;
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+/* Volunteer role cards (and any card where the CTA is inline-flex): fill card width */
+.luna-card__action > .luna-button,
+.luna-card__action > a.luna-link-button .luna-button {
+  width: 100%;
+}
+
+.luna-card__action > a.luna-link-button {
+  display: block;
+  width: 100%;
 }
 
 /* Accessibility and Text Visibility Improvements */
@@ -1059,8 +1376,8 @@ body *,
   text-shadow: none !important;
 }
 
-/* Prevent transparent text issues */
-.luna-card *,
+/* Prevent transparent text issues (do not strip gradient/brand text inside cards) */
+.luna-card *:not(.luna-text-gradient):not(.luna-gradient-text):not(.luna-brand-text),
 .luna-button *,
 .luna-form-input,
 .luna-form-textarea,
@@ -1083,7 +1400,8 @@ h1, h2, h3, h4, h5, h6,
 
 /* Exception for gradient text (which is intentional) */
 .luna-gradient-text,
-.luna-text-gradient {
+.luna-text-gradient,
+.luna-brand-text {
   -webkit-text-fill-color: transparent;
   -webkit-background-clip: text;
   background-clip: text;
@@ -1092,7 +1410,8 @@ h1, h2, h3, h4, h5, h6,
 /* But still provide fallback */
 @supports not (-webkit-background-clip: text) {
   .luna-gradient-text,
-  .luna-text-gradient {
+  .luna-text-gradient,
+  .luna-brand-text {
     color: var(--luna-pink) !important;
     -webkit-text-fill-color: unset !important;
     background: none;
@@ -1237,10 +1556,42 @@ input[type="submit"] {
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
 }
 
+/* “How we help” & Ways to donate — centre copy inside each card (matches SEN-first card treatment) */
+.luna-card-grid--3-col .luna-card {
+  text-align: center;
+}
+
+.luna-card-grid--3-col .luna-card__title {
+  text-align: center;
+}
+
+.luna-card-grid--3-col .luna-card__description {
+  text-align: center;
+  text-wrap: balance;
+}
+
+.luna-card-grid--3-col .luna-card__action {
+  width: 100%;
+}
+
 .luna-card-grid--4-col {
   grid-template-columns: repeat(4, 1fr);
   width: 100%;
   margin-bottom: var(--luna-space-8);
+}
+
+/* SEN-first (and similar) 4-up cards: centre all copy inside each card */
+.luna-card-grid--4-col .luna-card {
+  text-align: center;
+}
+
+.luna-card-grid--4-col .luna-card__title {
+  text-align: center;
+}
+
+.luna-card-grid--4-col .luna-card__description {
+  text-align: center;
+  text-wrap: balance;
 }
 
 @media (max-width: 1200px) {
@@ -1293,6 +1644,17 @@ input[type="submit"] {
   letter-spacing: 1px;
 }
 
+/* Headings on cards set color: !important; keep gradient LUNA readable */
+.luna-card h1 .luna-brand-text,
+.luna-card h2 .luna-brand-text,
+.luna-card h3 .luna-brand-text,
+.luna-card h1 .luna-text-gradient,
+.luna-card h2 .luna-text-gradient,
+.luna-card h3 .luna-text-gradient {
+  -webkit-text-fill-color: transparent !important;
+  color: transparent !important;
+}
+
 /* Section Headers */
 .luna-section-header {
   text-align: center;
@@ -1317,40 +1679,373 @@ input[type="submit"] {
   margin-bottom: 0;
 }
 
-/* Progress Bar */
-.luna-progress {
-  width: 100%;
-  height: 8px;
-  background-color: var(--luna-grey-200);
-  border-radius: var(--luna-radius-full);
+/* Same as description — used on Volunteer / secondary pages */
+.luna-section-subtitle {
+  font-size: var(--luna-font-size-xl);
+  color: var(--luna-text-secondary);
+  line-height: var(--luna-line-height-relaxed);
+  margin-bottom: 0;
+}
+
+/* Page shell (Home, Volunteer, Donate) */
+.luna-main {
+  min-height: 100vh;
+}
+
+.luna-text-center {
+  text-align: center;
+}
+
+.luna-section-spacer {
+  margin-top: var(--luna-space-12);
+  margin-bottom: var(--luna-space-12);
+}
+
+/* Responsive grids (Volunteer, Donate) */
+.luna-grid {
+  display: grid;
+  gap: var(--luna-space-8);
+}
+
+.luna-grid--2 {
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+.luna-grid--3 {
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.luna-grid--4 {
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.luna-grid--mini-cards {
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+/* Volunteer “Why volunteer with LUNA?” — always 3 columns on wide screens (2×3 cards) */
+.luna-grid--why-volunteer {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+@media (max-width: 900px) {
+  .luna-grid--why-volunteer {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 520px) {
+  .luna-grid--why-volunteer {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Headings inside full-width CTA / highlight cards */
+.luna-card-title {
+  font-size: clamp(1.5rem, 2.5vw, var(--luna-font-size-4xl));
+  font-weight: var(--luna-font-weight-bold);
+  color: var(--luna-text-primary);
+  margin-bottom: var(--luna-space-4);
+  line-height: var(--luna-line-height-tight);
+}
+
+.luna-card-text {
+  font-size: var(--luna-font-size-lg);
+  color: var(--luna-text-secondary);
+  line-height: var(--luna-line-height-relaxed);
+}
+
+.luna-card-note {
+  font-size: var(--luna-font-size-sm);
+  color: var(--luna-text-muted);
+  margin-top: var(--luna-space-8);
+}
+
+.luna-card-note .luna-link {
+  color: var(--luna-pink);
+  font-weight: var(--luna-font-weight-semibold);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.luna-link-button {
+  display: block;
+  text-decoration: none;
+}
+
+/* Stat badges (Donate impact) */
+.luna-impact-badge {
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--luna-font-size-xl);
+  font-weight: var(--luna-font-weight-bold);
+  color: white;
+  margin: 0 auto var(--luna-space-4);
+}
+
+.luna-impact-badge--pink {
+  background: var(--luna-pink);
+}
+
+.luna-impact-badge--blue {
+  background: var(--luna-blue);
+}
+
+/* Volunteer application steps (was referenced without styles) */
+.luna-step-number {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: var(--luna-font-weight-bold);
+  color: white;
+  margin: 0 auto var(--luna-space-4);
+  font-size: var(--luna-font-size-lg);
+}
+
+.luna-step-number--primary {
+  background: var(--luna-pink);
+}
+
+.luna-step-number--gradient {
+  background: var(--luna-gradient-primary);
+}
+
+.luna-step-number--secondary {
+  background: var(--luna-blue);
+}
+
+/* Volunteer “Why volunteer” mini panels */
+.luna-mini-card {
+  position: relative;
+  background: var(--luna-bg-primary);
+  border-radius: var(--luna-radius-lg);
+  padding: var(--luna-space-6);
+  border: 1px solid var(--luna-grey-200);
+  box-shadow: var(--luna-shadow-sm);
   overflow: hidden;
 }
 
-.luna-progress__bar {
-  height: 100%;
-  background: var(--luna-gradient-primary);
-  border-radius: var(--luna-radius-full);
-  transition: width var(--luna-transition-normal);
-  position: relative;
-}
-
-.luna-progress__bar::after {
+.luna-mini-card::before {
   content: '';
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
-  bottom: 0;
-  background: linear-gradient(90deg, 
-    transparent 0%, 
-    rgba(255, 255, 255, 0.3) 50%, 
-    transparent 100%);
-  animation: progress-shimmer 2s infinite;
+  height: 4px;
 }
 
-@keyframes progress-shimmer {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(100%); }
+.luna-mini-card--primary::before {
+  background: var(--luna-pink);
+}
+
+.luna-mini-card--gradient::before {
+  background: var(--luna-gradient-primary);
+}
+
+.luna-mini-card--secondary::before {
+  background: var(--luna-blue);
+}
+
+.luna-mini-card__header {
+  width: 100%;
+  text-align: center;
+}
+
+.luna-mini-card__title {
+  font-size: var(--luna-font-size-lg);
+  font-weight: var(--luna-font-weight-bold);
+  color: var(--luna-text-primary);
+  margin-bottom: var(--luna-space-4);
+  text-align: center;
+  width: 100%;
+}
+
+.luna-mini-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.luna-mini-list-item {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: var(--luna-space-2);
+  margin-bottom: var(--luna-space-2);
+  font-size: var(--luna-font-size-sm);
+  color: var(--luna-text-secondary);
+  line-height: var(--luna-line-height-relaxed);
+}
+
+.luna-mini-bullet {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 0.4em;
+}
+
+.luna-mini-bullet--primary {
+  background: var(--luna-pink);
+}
+
+.luna-mini-bullet--gradient {
+  background: var(--luna-blue);
+}
+
+.luna-mini-bullet--secondary {
+  background: var(--luna-blue);
+}
+
+/* Donate: food donation tips callout — centred block; list text stays left for readability */
+.luna-donate-callout {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: var(--luna-space-10);
+  padding: var(--luna-space-6);
+  border-radius: var(--luna-radius-lg);
+  border: 1px solid #fcd34d;
+  background: #fffbeb;
+  text-align: center;
+}
+
+.luna-donate-callout__title {
+  width: 100%;
+  font-size: var(--luna-font-size-lg);
+  font-weight: var(--luna-font-weight-semibold);
+  color: #92400e;
+  margin-bottom: var(--luna-space-4);
+  text-align: center;
+}
+
+.luna-donate-callout ul {
+  align-self: center;
+  width: min(100%, 36rem);
+  margin: 0;
+  list-style: disc;
+  list-style-position: outside;
+  padding-left: var(--luna-space-6);
+  text-align: left;
+  font-size: var(--luna-font-size-sm);
+  color: #b45309;
+  line-height: var(--luna-line-height-relaxed);
+}
+
+.luna-donate-callout li {
+  margin-bottom: var(--luna-space-1);
+}
+
+/* Donate: food card — stacked full-width actions */
+.luna-donate-food-actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--luna-space-3);
+  width: 100%;
+  align-items: stretch;
+}
+
+.luna-donate-food-actions .luna-link-button {
+  display: block;
+  width: 100%;
+}
+
+/* Donate: quick tiers — five balanced cards (similar chip count per card) */
+.luna-donate-tiers {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: var(--luna-space-4);
+  margin-bottom: var(--luna-space-6);
+  width: 100%;
+  align-items: stretch;
+  text-align: center;
+}
+
+.luna-donate-tier {
+  margin: 0;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+/* Nested tier cards: calmer hover inside parent donate card */
+.luna-card--gradient .luna-donate-tier:hover {
+  transform: translateY(-4px);
+}
+
+.luna-donate-tier__title {
+  font-size: var(--luna-font-size-base);
+  font-weight: var(--luna-font-weight-bold);
+  color: var(--luna-text-primary);
+  margin-bottom: var(--luna-space-3);
+  line-height: var(--luna-line-height-tight);
+}
+
+/* Single column of chips keeps card heights even */
+.luna-donate-tier__chips {
+  display: flex;
+  flex-direction: column;
+  gap: var(--luna-space-2);
+  align-items: stretch;
+  flex: 1;
+}
+
+.luna-donate-tier__chip {
+  display: block;
+  width: 100%;
+}
+
+.luna-donate-tier__btn {
+  width: 100%;
+  text-transform: none;
+  letter-spacing: 0.02em;
+}
+
+@media (max-width: 1200px) {
+  .luna-donate-tiers {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 800px) {
+  .luna-donate-tiers {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 520px) {
+  .luna-donate-tiers {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Quick donation card: impact line — £5 pink, £25 gradient, £100 blue */
+.luna-donate-impact-footnote {
+  color: var(--luna-text-secondary);
+  opacity: 0.95;
+  line-height: var(--luna-line-height-relaxed);
+}
+
+.luna-donate-impact__amt--pink {
+  color: var(--luna-pink);
+  font-weight: var(--luna-font-weight-bold);
+}
+
+.luna-donate-impact__amt--blue {
+  color: var(--luna-blue-dark, var(--luna-blue));
+  font-weight: var(--luna-font-weight-bold);
+}
+
+.luna-donate-impact-footnote .luna-text-gradient {
+  font-weight: var(--luna-font-weight-bold);
 }
 
 .luna-form-error {
@@ -1436,22 +2131,6 @@ input[type="submit"] {
   max-width: var(--luna-container-max-width);
   margin: 0 auto;
   padding: 0 var(--luna-space-6);
-}
-
-/* Progress */
-.luna-progress {
-  width: 100%;
-  height: 8px;
-  background-color: var(--luna-grey-200);
-  border-radius: var(--luna-radius-full);
-  overflow: hidden;
-}
-
-.luna-progress__bar {
-  height: 100%;
-  background: var(--luna-gradient);
-  transition: width var(--luna-transition-normal);
-  border-radius: var(--luna-radius-full);
 }
 
 /* Loading */
@@ -1585,11 +2264,28 @@ input[type="submit"] {
 }
 
 .luna-hero__logo {
-  width: 80px;
-  height: 80px;
+  width: var(--luna-hero-logo-size);
+  height: var(--luna-hero-logo-size);
+  max-width: min(var(--luna-hero-logo-size), var(--luna-hero-logo-max-vw));
   margin: 0 auto var(--luna-space-6) auto;
   display: block;
   object-fit: contain;
+}
+
+@media (max-width: 768px) {
+  .luna-hero__logo {
+    width: var(--luna-hero-logo-size-tablet);
+    height: var(--luna-hero-logo-size-tablet);
+    max-width: min(var(--luna-hero-logo-size-tablet), var(--luna-hero-logo-max-vw-tablet));
+  }
+}
+
+@media (max-width: 480px) {
+  .luna-hero__logo {
+    width: var(--luna-hero-logo-size-mobile);
+    height: var(--luna-hero-logo-size-mobile);
+    max-width: min(var(--luna-hero-logo-size-mobile), var(--luna-hero-logo-max-vw-mobile));
+  }
 }
 
 .luna-hero__title {
@@ -1597,6 +2293,40 @@ input[type="submit"] {
   font-weight: 800;
   margin-bottom: var(--luna-space-4);
   line-height: 1.1;
+}
+
+/* Hero “LUNA”: keep gradient brand fill, black rim so it reads on the same bar */
+.luna-hero .luna-brand-text,
+.luna-hero .luna-text-gradient {
+  background: var(--luna-gradient-reverse) !important;
+  background-size: 180% 180%;
+  background-position: 55% 45%;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  color: transparent !important;
+  -webkit-text-stroke: 1.35px #0a0a0a;
+  paint-order: stroke fill;
+}
+
+@media (max-width: 640px) {
+  .luna-hero .luna-brand-text,
+  .luna-hero .luna-text-gradient {
+    -webkit-text-stroke: 1.05px #0a0a0a;
+  }
+}
+
+/* Footer left brand (small logo + title): same gradient + black edge on gradient bar */
+.luna-footer__brand .luna-brand-text {
+  background: var(--luna-gradient-reverse) !important;
+  background-size: 180% 180%;
+  background-position: 55% 45%;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  color: transparent !important;
+  -webkit-text-stroke: 1.05px #0a0a0a;
+  paint-order: stroke fill;
 }
 
 .luna-hero__subtitle {
@@ -1642,6 +2372,12 @@ input[type="submit"] {
 .luna-hero__actions .luna-button--primary {
   background: var(--luna-pink) !important;
   color: white !important;
+}
+
+.luna-hero__actions .luna-button--gradient {
+  background: var(--luna-gradient-primary) !important;
+  color: white !important;
+  border-color: transparent !important;
 }
 
 .luna-hero__actions .luna-button--secondary {
@@ -1897,12 +2633,17 @@ input[type="submit"] {
 
 /* Emergency Strip Styles */
 .luna-emergency-strip {
-  background: #dc2626;
+  background: linear-gradient(180deg, #dc2626 0%, #991b1b 55%, #7f1d1d 100%);
   color: white;
   padding: var(--luna-space-4) 0;
   margin: var(--luna-space-8) 0;
   position: relative;
   overflow: hidden;
+  border-top: 3px solid #fbbf24;
+  border-bottom: 3px solid #f59e0b;
+  box-shadow:
+    0 4px 24px rgba(127, 29, 29, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
 }
 
 .luna-emergency-strip::before {
@@ -1912,7 +2653,7 @@ input[type="submit"] {
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.14), transparent);
   animation: emergency-pulse 2s infinite;
 }
 
@@ -1928,11 +2669,16 @@ input[type="submit"] {
   gap: var(--luna-space-4);
   flex-wrap: wrap;
   text-align: center;
+  position: relative;
+  z-index: 1;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
 }
 
 .luna-emergency-strip__icon {
-  font-size: 24px;
+  font-size: 1.5rem;
+  line-height: 1;
   animation: bounce 1s infinite;
+  filter: drop-shadow(0 0 6px rgba(251, 191, 36, 0.6));
 }
 
 @keyframes bounce {
@@ -1945,15 +2691,51 @@ input[type="submit"] {
   font-size: var(--luna-font-size-lg);
 }
 
+.luna-emergency-strip__text strong {
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: var(--luna-font-weight-bold);
+}
+
 .luna-emergency-strip__phone {
-  color: white;
+  color: #fef08a;
   text-decoration: underline;
+  text-underline-offset: 0.15em;
   font-weight: var(--luna-font-weight-bold);
   margin-left: var(--luna-space-1);
 }
 
 .luna-emergency-strip__phone:hover {
-  opacity: 0.8;
+  color: #fff;
+  opacity: 1;
+}
+
+/* Support page: bar stays visible while scrolling the long form */
+.luna-support-crisis-bar {
+  position: sticky;
+  top: var(--luna-header-height, 4rem);
+  z-index: 90;
+}
+
+.luna-emergency-strip--sticky {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+/* Volunteer: strip directly under hero (no extra top margin) */
+.luna-emergency-strip--after-hero {
+  margin-top: 0;
+  margin-bottom: var(--luna-space-8);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .luna-emergency-strip::before {
+    animation: none;
+  }
+
+  .luna-emergency-strip__icon {
+    animation: none;
+  }
 }
 
 /* Referrals Tracking Styles */

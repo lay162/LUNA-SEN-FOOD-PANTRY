@@ -15,7 +15,7 @@ const Footer = () => {
   const supportInfo = [
     { label: 'Emergency Food', value: 'Available 7 days' },
     { label: 'SEN Support', value: 'Priority Service' },
-    { label: 'Area Coverage', value: 'CH62 Wirral' },
+    { label: 'Area Coverage', value: 'Metropolitan Borough of Wirral' },
     { label: 'Contact', value: 'Via Referral Form' },
   ];
 
@@ -73,8 +73,10 @@ const Footer = () => {
                   </div>
                 </div>
                 <p className="luna-footer__description">
-                  Supporting families with Special Educational Needs across the CH62 area with 
-                  dignity, compassion, and understanding. Emergency food parcels available 7 days a week.
+                  Supporting families with Special Educational Needs across the Metropolitan Borough of Wirral,
+                  Merseyside from Birkenhead and Wallasey to Heswall, Bebington, Bromborough, Hoylake, West Kirby and
+                  communities throughout the peninsula with dignity, compassion, and understanding. Emergency food
+                  parcels available 7 days a week.
                 </p>
               </div>
 
@@ -129,21 +131,29 @@ const Footer = () => {
 
             {/* Footer Bottom */}
             <div className="luna-footer__bottom">
-              {/* Accessibility Statement */}
               <div className="luna-footer__accessibility">
                 <p className="luna-footer__accessibility-text">
-                  We're committed to making our service accessible to all. If you need help using this website, 
+                  We're committed to making our service accessible to all. If you need help using this website,{' '}
                   <Link to="/accessibility" className="luna-footer__accessibility-link">
                     read our accessibility statement
-                  </Link> or contact us for support.
+                  </Link>{' '}
+                  or contact us for support.
                 </p>
               </div>
-              
-              <div className="luna-footer__bottom-content">
-                <div className="luna-footer__copyright">
-                  <p>&copy; {currentYear} LUNA SEN PANTRY. All rights reserved.</p>
-                </div>
-              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Legal / company strip — black bar (like header); white text, gradient LUNA */}
+        <div className="luna-footer__strip luna-footer__strip--legal">
+          <div className="luna-container">
+            <div className="luna-footer__strip-inner">
+              <p className="luna-footer__company-line">
+                &copy; {currentYear}{' '}
+                <span className="luna-brand-text">LUNA</span> SEN Pantry, trading under{' '}
+                <span className="luna-brand-text">LUNA</span> SEN GROUP LTD (
+                <span className="luna-footer__company-reg">17049817</span>). CIC registration intended. All rights reserved.
+              </p>
             </div>
           </div>
         </div>
@@ -394,96 +404,124 @@ const Footer = () => {
             padding-top: var(--luna-space-6);
           }
 
-          .luna-footer__bottom-content {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: var(--luna-space-4);
+          /* Shared “strip” layout (accessibility + legal) */
+          .luna-footer__strip {
+            width: 100%;
+            padding: var(--luna-space-6) 0 var(--luna-space-8);
+            margin: 0;
             text-align: center;
           }
 
-          .luna-footer__copyright {
-            flex: 1;
-            text-align: center;
+          .luna-footer__strip-inner {
+            max-width: 36rem;
+            margin-left: auto;
+            margin-right: auto;
           }
 
-          .luna-footer__copyright p {
+          .luna-footer__strip--legal {
+            background-color: #000000;
+            border-top: 1px solid var(--luna-grey-200);
+            /* Shorter bar: override shared strip vertical padding only */
+            padding: var(--luna-space-3) 0;
+          }
+
+          .luna-footer__strip--legal .luna-footer__company-line {
             margin: 0;
             font-size: var(--luna-font-size-sm);
-            color: var(--luna-blue-100);
+            line-height: var(--luna-line-height-relaxed);
+            color: rgba(255, 255, 255, 0.9);
+            text-align: center;
+            text-wrap: balance;
           }
 
-          .luna-footer__legal {
-            font-size: var(--luna-font-size-xs) !important;
-            margin-top: var(--luna-space-1) !important;
+          .luna-footer__strip--legal .luna-footer__company-reg {
+            font-weight: var(--luna-font-weight-semibold);
+            font-variant-numeric: tabular-nums;
+            color: #ffffff;
           }
 
-          .luna-footer__meta {
-            display: flex;
-            align-items: center;
-            gap: var(--luna-space-4);
+          .luna-footer__strip--legal .luna-brand-text {
+            display: inline;
+            position: relative;
           }
 
-          .luna-footer__badges {
-            display: flex;
-            gap: var(--luna-space-2);
-            flex-wrap: wrap;
-          }
-
-          .luna-footer__badge {
-            background: rgba(255, 255, 255, 0.15);
-            border: 1px solid rgba(255, 255, 255, 0.25);
-            border-radius: var(--luna-radius-full);
-            padding: var(--luna-space-1) var(--luna-space-3);
-          }
-
-          .luna-footer__badge-text {
-            font-size: var(--luna-font-size-xs);
-            font-weight: var(--luna-font-weight-medium);
-            color: white;
-          }
-
-          .luna-footer__install-btn {
-            background: rgba(255, 255, 255, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            color: white;
-            padding: var(--luna-space-2) var(--luna-space-4);
-            border-radius: var(--luna-radius-md);
-            font-size: var(--luna-font-size-sm);
-            font-weight: var(--luna-font-weight-medium);
-            cursor: pointer;
-            transition: all var(--luna-transition-fast);
-          }
-
-          .luna-footer__install-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
+          @supports not (-webkit-background-clip: text) {
+            .luna-footer__strip--legal .luna-brand-text {
+              background: none;
+              color: var(--luna-pink);
+              -webkit-text-fill-color: unset;
+            }
           }
 
           .luna-footer__accessibility {
-            background-color: rgba(0, 0, 0, 0.3);
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            padding: var(--luna-space-3) 0;
-            margin-bottom: var(--luna-space-4);
+            background-color: #f8fafc;
+            border: 1px solid rgba(15, 23, 42, 0.12);
+            border-radius: var(--luna-radius-lg);
+            padding: var(--luna-space-4) var(--luna-space-4);
+            margin: 0 var(--luna-space-1) 0;
+            box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06);
           }
 
           .luna-footer__accessibility-text {
             font-size: var(--luna-font-size-xs);
-            color: var(--luna-blue-200);
+            color: #0f172a;
             text-align: center;
             margin: 0;
+            line-height: var(--luna-line-height-relaxed);
           }
 
+          /* Gradient-filled text only (no fill box); overrides global a:hover pink */
           .luna-footer__accessibility-link {
-            color: white;
+            font-weight: var(--luna-font-weight-semibold);
+            cursor: pointer;
             text-decoration: underline;
-            margin-left: var(--luna-space-1);
-            transition: opacity var(--luna-transition-fast);
+            text-underline-offset: 3px;
+            text-decoration-thickness: 1px;
+            text-decoration-color: rgba(15, 23, 42, 0.35);
+            background: var(--luna-gradient-primary);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            color: transparent !important;
+            transition: opacity var(--luna-transition-fast), filter var(--luna-transition-fast);
           }
 
           .luna-footer__accessibility-link:hover,
           .luna-footer__accessibility-link:focus {
-            opacity: 0.8;
+            color: transparent !important;
+            -webkit-text-fill-color: transparent !important;
+            background: var(--luna-gradient-primary);
+            -webkit-background-clip: text;
+            background-clip: text;
+            opacity: 0.92;
+            filter: brightness(0.97);
+            outline: none;
+            text-decoration-color: rgba(15, 23, 42, 0.45);
+          }
+
+          .luna-footer__accessibility-link:focus-visible {
+            outline: 2px solid #0f172a;
+            outline-offset: 3px;
+            border-radius: 2px;
+            box-shadow: none;
+          }
+
+          @supports not (-webkit-background-clip: text) {
+            .luna-footer__accessibility-link,
+            .luna-footer__accessibility-link:hover,
+            .luna-footer__accessibility-link:focus {
+              background: none;
+              -webkit-background-clip: unset;
+              background-clip: unset;
+              -webkit-text-fill-color: unset;
+              color: var(--luna-pink) !important;
+              filter: none;
+            }
+
+            .luna-footer__accessibility-link:hover,
+            .luna-footer__accessibility-link:focus {
+              color: var(--luna-secondary) !important;
+            }
           }
 
           @media (max-width: 1024px) {
@@ -510,21 +548,6 @@ const Footer = () => {
               gap: var(--luna-space-2);
             }
 
-            .luna-footer__bottom-content {
-              flex-direction: column;
-              gap: var(--luna-space-4);
-              text-align: center;
-            }
-
-            .luna-footer__meta {
-              flex-direction: column;
-              gap: var(--luna-space-3);
-            }
-
-            .luna-footer__badges {
-              justify-content: center;
-            }
-
             .luna-footer__emergency-contacts {
               justify-content: center;
             }
@@ -538,6 +561,20 @@ const Footer = () => {
             .luna-footer__emergency-icon {
               margin: 0 0 var(--luna-space-2) 0;
             }
+
+            .luna-footer__accessibility {
+              margin-left: 0;
+              margin-right: 0;
+            }
+
+            .luna-footer__strip--legal {
+              padding: var(--luna-space-2) 0 var(--luna-space-3);
+            }
+
+            .luna-footer__strip-inner {
+              padding: 0 var(--luna-space-2);
+            }
+
           }
 
           @media (max-width: 480px) {
@@ -557,11 +594,6 @@ const Footer = () => {
               padding: 0 var(--luna-space-2);
             }
 
-            .luna-footer__badges {
-              flex-direction: column;
-              align-items: center;
-            }
-
             .luna-footer__emergency-content {
               flex-direction: column;
               gap: var(--luna-space-2);
@@ -570,6 +602,19 @@ const Footer = () => {
             .luna-footer__emergency-contacts {
               flex-direction: column;
               gap: var(--luna-space-1);
+            }
+
+            .luna-footer__strip--legal {
+              padding: var(--luna-space-2) 0;
+            }
+
+            .luna-footer__company-line {
+              font-size: var(--luna-font-size-xs);
+              line-height: 1.65;
+            }
+
+            .luna-footer__accessibility-text {
+              font-size: var(--luna-font-size-xs);
             }
           }
         `}</style>

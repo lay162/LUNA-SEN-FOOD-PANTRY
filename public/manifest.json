@@ -1,7 +1,7 @@
 {
   "name": "LUNA SEN PANTRY",
   "short_name": "Luna SEN",
-  "description": "Independent SEN-priority food support hub – Wirral (CH62 / Merseyside)",
+  "description": "Independent SEN-priority food support across the Metropolitan Borough of Wirral, Merseyside",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
@@ -13,36 +13,16 @@
   "categories": ["food", "health", "lifestyle"],
   "icons": [
     {
-      "src": "/PANTRY-LOGO.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
       "src": "/web-app-manifest-192x192.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
     },
     {
       "src": "/web-app-manifest-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
-    }
-  ],
-  "screenshots": [
-    {
-      "src": "/screenshot-mobile.png",
-      "sizes": "320x640",
-      "type": "image/png",
-      "form_factor": "narrow"
-    },
-    {
-      "src": "/screenshot-desktop.png",
-      "sizes": "1280x720",
-      "type": "image/png",
-      "form_factor": "wide"
+      "purpose": "any"
     }
   ],
   "shortcuts": [
@@ -50,11 +30,11 @@
       "name": "Get Support",
       "short_name": "Support",
       "description": "Self-referral for food support",
-      "url": "/get-support",
+      "url": "/support",
       "icons": [
         {
-          "src": "/icon-support.png",
-          "sizes": "96x96",
+          "src": "/web-app-manifest-192x192.png",
+          "sizes": "192x192",
           "type": "image/png"
         }
       ]
@@ -66,8 +46,8 @@
       "url": "/donate",
       "icons": [
         {
-          "src": "/icon-donate.png",
-          "sizes": "96x96",
+          "src": "/web-app-manifest-192x192.png",
+          "sizes": "192x192",
           "type": "image/png"
         }
       ]
@@ -79,8 +59,8 @@
       "url": "/volunteer",
       "icons": [
         {
-          "src": "/icon-volunteer.png",
-          "sizes": "96x96",
+          "src": "/web-app-manifest-192x192.png",
+          "sizes": "192x192",
           "type": "image/png"
         }
       ]

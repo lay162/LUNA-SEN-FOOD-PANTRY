@@ -114,6 +114,15 @@
   --luna-container-max-width: 1200px;
   --luna-section-padding: var(--luna-space-16);
   --luna-header-height: 4rem;
+
+  /* Hero logo — one size system for Home / Donate / Volunteer (see HeroLogo.jsx + .luna-hero__logo) */
+  --luna-hero-logo-intrinsic: 160px;
+  --luna-hero-logo-size: 140px;
+  --luna-hero-logo-size-tablet: 120px;
+  --luna-hero-logo-size-mobile: 104px;
+  --luna-hero-logo-max-vw: 40vw;
+  --luna-hero-logo-max-vw-tablet: 42vw;
+  --luna-hero-logo-max-vw-mobile: 48vw;
   
   /* Accessibility */
   --luna-focus-ring: 0 0 0 3px rgba(122, 215, 240, 0.5);

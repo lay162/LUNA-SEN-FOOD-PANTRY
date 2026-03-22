@@ -33,13 +33,115 @@ export function validateEmail(email) {
 }
 
 export function validatePhone(phone) {
-  const ukPhoneRegex = /^(\+44|0)[0-9]{10}$/;
-  const clean = phone.replace(/\s+/g, '');
-  
+  const digits = phone.replace(/\D/g, '');
+  if (!digits) {
+    return { valid: false, message: 'Please enter a valid UK phone number' };
+  }
+  /* National 0… (10–11 digits) or +44 without leading 0 */
+  let national = digits;
+  if (digits.startsWith('44') && digits.length >= 12) {
+    national = `0${digits.slice(2)}`;
+  }
+  const ok =
+    national.startsWith('0') && national.length >= 10 && national.length <= 11 && /^0\d+$/.test(national);
   return {
-    valid: ukPhoneRegex.test(clean),
-    message: ukPhoneRegex.test(clean) ? '' : 'Please enter a valid UK phone number'
+    valid: ok,
+    message: ok ? '' : 'Please enter a valid UK phone number (e.g. 07123 456 789)',
   };
+}
+
+/**
+ * Multi-step validation for the Get Support / self-referral form.
+ * @param {Record<string, unknown>} data
+ * @param {number} step 1-based
+ * @returns {Record<string, string>} field key → error message
+ */
+export function validateSupportReferralStep(data, step) {
+  const errors = {};
+
+  const trim = (v) => (v == null ? '' : String(v).trim());
+  const required = (key, message = 'This field is required') => {
+    const v = data[key];
+    if (v === false) return;
+    if (v === undefined || v === null || trim(v) === '') {
+      errors[key] = message;
+    }
+  };
+
+  switch (step) {
+    case 1: {
+      required('firstName');
+      required('lastName');
+      required('phone');
+      const phone = trim(data.phone);
+      if (phone) {
+        const phoneResult = validatePhone(phone);
+        if (!phoneResult.valid) errors.phone = phoneResult.message;
+      }
+      const email = trim(data.email);
+      if (email) {
+        const emailResult = validateEmail(email);
+        if (!emailResult.valid) errors.email = emailResult.message;
+      }
+      const postcode = trim(data.postcode);
+      if (postcode) {
+        const pc = validatePostcode(postcode);
+        if (!pc.valid) errors.postcode = pc.message;
+      }
+      break;
+    }
+    case 2: {
+      required('adultsCount', 'Please select number of adults');
+      required('childrenCount', 'Please select number of children');
+      const adults = parseInt(data.adultsCount, 10);
+      if (!Number.isNaN(adults) && adults < 1) {
+        errors.adultsCount = 'Please include at least one adult (18+) in the household';
+      }
+      const children = parseInt(data.childrenCount, 10);
+      if (!Number.isNaN(children) && children > 0) {
+        if (!trim(data.childrenAges)) {
+          errors.childrenAges = 'Please give ages of children (e.g. 4, 7, 12)';
+        }
+      }
+      break;
+    }
+    case 3: {
+      if (data.hasSpecialNeeds) {
+        if (!trim(data.senNeedsDetails)) {
+          errors.senNeedsDetails = 'Please describe SEN / additional needs so we can support you';
+        }
+      }
+      break;
+    }
+    case 4: {
+      const types = data.supportType;
+      const household = data.householdItemRequests;
+      const hasSupportType = Array.isArray(types) && types.length > 0;
+      const hasHouseholdTicks = Array.isArray(household) && household.length > 0;
+      if (!hasSupportType && !hasHouseholdTicks) {
+        errors.supportType =
+          'Please tick at least one type of support (e.g. food parcel) or a household item (e.g. laundry detergent)';
+      }
+      required('urgencyLevel');
+      break;
+    }
+    case 5: {
+      if (data.hasPets && !trim(data.petDetails)) {
+        errors.petDetails = 'Please briefly describe your pets and what you need (e.g. pet food)';
+      }
+      break;
+    }
+    case 6: {
+      if (!data.consentData) {
+        errors.consentData = 'Please confirm consent to continue';
+      }
+      break;
+    }
+    default:
+      break;
+  }
+
+  return errors;
 }
 
 // Form progress tracking
