@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<browserconfig>
+    <msapplication>
+        <tile>
+            <square70x70logo src="/PANTRY-LOGO.png"/>
+            <square150x150logo src="/PANTRY-LOGO.png"/>
+            <square310x310logo src="/PANTRY-LOGO.png"/>
+            <wide310x150logo src="/PANTRY-LOGO.png"/>
+            <TileColor>#ff69b4</TileColor>
+        </tile>
+    </msapplication>
+</browserconfig>
+

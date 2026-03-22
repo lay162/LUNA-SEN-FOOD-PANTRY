@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { brandLogoUrl } from '../constants/assets';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -58,7 +59,7 @@ const Footer = () => {
               <div className="luna-footer__section">
                 <div className="luna-footer__brand">
                   <img 
-                    src="/logo.svg" 
+                    src={brandLogoUrl}
                     alt="LUNA SEN PANTRY Logo" 
                     className="luna-footer__logo"
                     width="48"
@@ -236,7 +237,7 @@ const Footer = () => {
           .luna-footer__logo {
             width: 48px;
             height: 48px;
-            filter: brightness(0) invert(1);
+            display: block;
           }
 
           .luna-footer__brand-text {

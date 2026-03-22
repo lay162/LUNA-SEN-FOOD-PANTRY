@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { brandLogoUrl } from '../constants/assets';
 
 const Navbar = () => {
   const location = useLocation();
@@ -31,11 +32,12 @@ const Navbar = () => {
             {/* Logo */}
             <Link to="/" className="luna-navbar__logo">
               <img 
-                src="/logo.svg" 
+                src={brandLogoUrl}
                 alt="LUNA SEN PANTRY Logo" 
                 className="luna-navbar__logo-img"
                 width="40"
                 height="40"
+                decoding="async"
               />
               <div className="luna-navbar__logo-text">
                 <span className="luna-navbar__title">

@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import Card, { HeartIcon, GiftIcon, UserGroupIcon } from '../components/Card';
 import Button from '../components/Button';
+import { brandLogoUrl } from '../constants/assets';
 
 const Home = () => {
   // Set page title and meta description
@@ -67,10 +68,13 @@ const Home = () => {
           <div className="luna-container">
             <div className="luna-hero__content">
               <img 
-                src="/logo.svg" 
+                src={brandLogoUrl}
                 alt="" 
                 className="luna-hero__logo"
                 aria-hidden="true"
+                width="96"
+                height="96"
+                decoding="async"
               />
               <h1 id="hero-title" className="luna-hero__title">
                 <span className="luna-brand-text">LUNA</span> SEN PANTRY
@@ -487,7 +491,8 @@ const Home = () => {
           height: 96px;
           width: 96px;
           margin: 0 auto var(--luna-space-6);
-          filter: brightness(0) invert(1);
+          object-fit: contain;
+          display: block;
         }
 
         .luna-hero__title {

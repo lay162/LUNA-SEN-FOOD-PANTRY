@@ -112,8 +112,12 @@ export function onNetworkChange(callback) {
   };
 }
 
-// Register service worker for PWA
+// Register service worker for PWA (production only — in dev, cache-first SW makes Chrome
+// show stale HTML/CSS/JS while Cursor’s preview often has no SW, so the two look “different”.)
 export async function registerServiceWorker() {
+  if (import.meta.env.DEV) {
+    return null;
+  }
   if ('serviceWorker' in navigator) {
     try {
       const registration = await navigator.serviceWorker.register('/service-worker.js');

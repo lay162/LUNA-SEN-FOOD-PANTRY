@@ -1589,6 +1589,7 @@ input[type="submit"] {
   height: 80px;
   margin: 0 auto var(--luna-space-6) auto;
   display: block;
+  object-fit: contain;
 }
 
 .luna-hero__title {

@@ -5,6 +5,7 @@ import Button from '../components/Button';
 import Card, { UserGroupIcon, PhoneIcon, HeartIcon } from '../components/Card';
 import { useFormValidation } from '../hooks/useFormValidation';
 import { useOfflineForm } from '../hooks/useOfflineForm';
+import { brandLogoUrl } from '../constants/assets';
 
 const Volunteer = () => {
   const [searchParams] = useSearchParams();
@@ -429,10 +430,13 @@ const Volunteer = () => {
           <div className="luna-container">
             <div className="luna-hero__content">
               <img 
-                src="/logo.svg" 
+                src={brandLogoUrl}
                 alt="" 
                 className="luna-hero__logo"
                 aria-hidden="true"
+                width="96"
+                height="96"
+                decoding="async"
               />
               <h1 id="hero-title" className="luna-hero__title">
                 Volunteer with <span className="luna-brand-text">LUNA</span>

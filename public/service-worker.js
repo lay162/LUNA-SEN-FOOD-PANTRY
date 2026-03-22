@@ -1,36 +1,59 @@
-const CACHE_NAME = 'luna-sen-pantry-v1';
-const urlsToCache = [
-  '/',
-  '/static/js/bundle.js',
-  '/static/css/main.css',
-  '/logo.svg',
-  '/favicon.ico',
-  '/manifest.json'
-];
+const CACHE_NAME = 'luna-sen-pantry-v2';
+const PRECACHE_URLS = ['/', '/index.html', '/PANTRY-LOGO.png', '/manifest.json'];
 
-// Install event - cache resources
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then((cache) => {
-        return cache.addAll(urlsToCache);
-      })
+    caches
+      .open(CACHE_NAME)
+      .then((cache) =>
+        Promise.allSettled(PRECACHE_URLS.map((url) => cache.add(url).catch(() => null)))
+      )
+      .then(() => self.skipWaiting())
   );
 });
 
-// Fetch event - serve from cache when offline
+self.addEventListener('activate', (event) => {
+  event.waitUntil(
+    caches
+      .keys()
+      .then((keys) =>
+        Promise.all(
+          keys.map((key) => {
+            if (key !== CACHE_NAME) return caches.delete(key);
+            return undefined;
+          })
+        )
+      )
+      .then(() => self.clients.claim())
+  );
+});
+
+// Network first, then cache — new deploys are picked up; cache is mainly for offline fallback.
 self.addEventListener('fetch', (event) => {
+  if (event.request.method !== 'GET') return;
+
   event.respondWith(
-    caches.match(event.request)
-      .then((response) => {
-        // Return cached version or fetch from network
-        return response || fetch(event.request);
+    (async () => {
+      try {
+        const response = await fetch(event.request);
+        if (response.ok) {
+          const cache = await caches.open(CACHE_NAME);
+          await cache.put(event.request, response.clone());
+        }
+        return response;
+      } catch {
+        const cached = await caches.match(event.request);
+        if (cached) return cached;
+        if (event.request.mode === 'navigate') {
+          const shell = await caches.match('/') || (await caches.match('/index.html'));
+          if (shell) return shell;
+        }
+        return new Response('Offline', { status: 503, statusText: 'Offline' });
       }
-    )
+    })()
   );
 });
 
-// Background sync for offline form submissions
 self.addEventListener('sync', (event) => {
   if (event.tag === 'background-sync') {
     event.waitUntil(doBackgroundSync());
@@ -39,24 +62,18 @@ self.addEventListener('sync', (event) => {
 
 async function doBackgroundSync() {
   try {
-    // Get offline submissions from IndexedDB
     const db = await openDB();
     const submissions = await getOfflineSubmissions(db);
-    
+
     for (const submission of submissions) {
       try {
-        // Attempt to sync with Firebase
         await fetch('/api/sync-submission', {
           method: 'POST',
           body: JSON.stringify(submission),
-          headers: {
-            'Content-Type': 'application/json'
-          }
+          headers: { 'Content-Type': 'application/json' },
         });
-        
-        // Remove from offline storage on success
         await removeOfflineSubmission(db, submission.id);
-      } catch (error) {
+      } catch {
         console.log('Sync failed for submission:', submission.id);
       }
     }
@@ -65,14 +82,13 @@ async function doBackgroundSync() {
   }
 }
 
-// IndexedDB helpers for offline storage
 function openDB() {
   return new Promise((resolve, reject) => {
     const request = indexedDB.open('LunaSenPantry', 1);
-    
+
     request.onerror = () => reject(request.error);
     request.onsuccess = () => resolve(request.result);
-    
+
     request.onupgradeneeded = () => {
       const db = request.result;
       if (!db.objectStoreNames.contains('submissions')) {
@@ -88,7 +104,7 @@ function getOfflineSubmissions(db) {
     const transaction = db.transaction(['submissions'], 'readonly');
     const store = transaction.objectStore('submissions');
     const request = store.getAll();
-    
+
     request.onerror = () => reject(request.error);
     request.onsuccess = () => resolve(request.result);
   });
@@ -99,7 +115,7 @@ function removeOfflineSubmission(db, id) {
     const transaction = db.transaction(['submissions'], 'readwrite');
     const store = transaction.objectStore('submissions');
     const request = store.delete(id);
-    
+
     request.onerror = () => reject(request.error);
     request.onsuccess = () => resolve();
   });

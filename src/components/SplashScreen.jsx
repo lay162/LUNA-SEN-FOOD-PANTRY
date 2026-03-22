@@ -1,4 +1,5 @@
 import React from 'react';
+import { brandLogoUrl } from '../constants/assets';
 
 const SplashScreen = ({ isVisible }) => {
   if (!isVisible) return null;
@@ -8,7 +9,7 @@ const SplashScreen = ({ isVisible }) => {
       <div className="luna-splash__content">
         <div className="luna-splash__logo">
           <img 
-            src="/logo.svg" 
+            src={brandLogoUrl}
             alt="LUNA SEN PANTRY" 
             width="120" 
             height="120"
@@ -46,7 +47,7 @@ const SplashScreen = ({ isVisible }) => {
         }
         
         .luna-splash__logo img {
-          filter: brightness(0) invert(1);
+          display: block;
           opacity: 0.95;
         }
         
