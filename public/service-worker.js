@@ -1,7 +1,6 @@
-const CACHE_NAME = 'luna-sen-pantry-v3';
+// v4: do not precache HTML — stale shell breaks hashed JS/CSS after deploys (Chrome shows it most).
+const CACHE_NAME = 'luna-sen-pantry-v4';
 const PRECACHE_URLS = [
-  '/',
-  '/index.html',
   '/manifest.json',
   '/PANTRY-LOGO.png',
   '/favicon.ico',
@@ -37,9 +36,18 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-// Network first, then cache — new deploys are picked up; cache is mainly for offline fallback.
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
+
+  if (event.request.mode === 'navigate' || event.request.destination === 'document') {
+    event.respondWith(
+      fetch(event.request, { cache: 'no-store' }).catch(async () => {
+        const cached = await caches.match(event.request);
+        return cached || new Response('Offline', { status: 503, statusText: 'Offline' });
+      })
+    );
+    return;
+  }
 
   event.respondWith(
     (async () => {
@@ -53,10 +61,6 @@ self.addEventListener('fetch', (event) => {
       } catch {
         const cached = await caches.match(event.request);
         if (cached) return cached;
-        if (event.request.mode === 'navigate') {
-          const shell = await caches.match('/') || (await caches.match('/index.html'));
-          if (shell) return shell;
-        }
         return new Response('Offline', { status: 503, statusText: 'Offline' });
       }
     })()
