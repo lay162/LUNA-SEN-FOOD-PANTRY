@@ -116,9 +116,11 @@ const Footer = () => {
                     <div className="luna-footer__emergency-text">
                       <p className="luna-footer__emergency-title">Need Urgent Help?</p>
                       <p className="luna-footer__emergency-desc">Use our referral form for priority SEN support</p>
-                      <Link to="/support" className="luna-button luna-button--emergency luna-button--sm">
-                        Get Support Now
-                      </Link>
+                      <div className="luna-footer__emergency-cta">
+                        <Link to="/support" className="luna-footer__emergency-link luna-button luna-button--emergency luna-button--sm luna-button--full-width">
+                          Get Support Now
+                        </Link>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -323,7 +325,8 @@ const Footer = () => {
 
           .luna-footer__emergency-card {
             display: flex;
-            align-items: flex-start;
+            align-items: center;
+            justify-content: center;
             gap: var(--luna-space-3);
             background: rgba(255, 255, 255, 0.1);
             padding: var(--luna-space-4);
@@ -335,15 +338,17 @@ const Footer = () => {
           .luna-footer__emergency-icon {
             font-size: 24px;
             line-height: 1;
-            margin: 0 auto var(--luna-space-2) auto;
+            flex-shrink: 0;
           }
 
           .luna-footer__emergency-text {
             flex: 1;
+            min-width: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: var(--luna-space-3);
+            text-align: center;
           }
 
           .luna-footer__emergency-title {
@@ -351,12 +356,37 @@ const Footer = () => {
             color: white;
             margin: 0;
             font-size: var(--luna-font-size-sm);
+            text-align: center;
+            width: 100%;
+            text-wrap: balance;
           }
 
           .luna-footer__emergency-desc {
             font-size: var(--luna-font-size-xs);
             color: var(--luna-blue-100);
             margin: 0;
+            text-align: center;
+            width: 100%;
+            max-width: 22rem;
+            text-wrap: balance;
+            line-height: var(--luna-line-height-relaxed);
+          }
+
+          .luna-footer__emergency-cta {
+            width: 100%;
+            max-width: 20rem;
+            display: flex;
+            justify-content: center;
+            margin-top: var(--luna-space-1);
+          }
+
+          .luna-footer__emergency-link {
+            display: flex;
+            width: 100%;
+            justify-content: center;
+            text-align: center;
+            text-decoration: none;
+            box-sizing: border-box;
           }
 
           .luna-footer__bottom {
@@ -498,6 +528,16 @@ const Footer = () => {
             .luna-footer__emergency-contacts {
               justify-content: center;
             }
+
+            .luna-footer__emergency-card {
+              flex-direction: column;
+              align-items: center;
+              text-align: center;
+            }
+
+            .luna-footer__emergency-icon {
+              margin: 0 0 var(--luna-space-2) 0;
+            }
           }
 
           @media (max-width: 480px) {
@@ -507,8 +547,14 @@ const Footer = () => {
 
             .luna-footer__emergency-card {
               flex-direction: column;
+              align-items: center;
               text-align: center;
-              gap: var(--luna-space-2);
+              gap: var(--luna-space-3);
+            }
+
+            .luna-footer__emergency-cta {
+              max-width: none;
+              padding: 0 var(--luna-space-2);
             }
 
             .luna-footer__badges {
