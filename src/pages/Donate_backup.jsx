@@ -15,17 +15,10 @@ const Donate = () => {
       description: 'Direct financial support helps us buy exactly what families need, including specialty items for SEN requirements.',
       action: (
         <div className="space-y-4">
-          <a 
-            href="https://paypal.me/lunasen" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="block"
-          >
-            <Button variant="primary" size="lg" className="w-full">
-              Donate via PayPal
-            </Button>
-          </a>
-          <p className="text-xs text-gray-500">Secure payment via PayPal.me - no account needed</p>
+          <Button variant="primary" size="lg" className="w-full" disabled>
+            Donate online (coming soon)
+          </Button>
+          <p className="text-xs text-gray-500">Payment links will be added once our official checkout is live.</p>
         </div>
       )
     },
@@ -96,17 +89,15 @@ const Donate = () => {
           <p className="text-gray-600 mb-6">Make an instant impact - suggested amounts</p>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
             {['£5', '£10', '£25', '£50'].map((amount) => (
-              <a
+              <Button
                 key={amount}
-                href={`https://paypal.me/lunasen/${amount.replace('£', '')}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block"
+                variant="outline"
+                size="lg"
+                className="w-full hover:border-luna-pink hover:text-luna-pink"
+                disabled
               >
-                <Button variant="outline" size="lg" className="w-full hover:border-luna-pink hover:text-luna-pink">
-                  {amount}
-                </Button>
-              </a>
+                {amount}
+              </Button>
             ))}
           </div>
           <div className="text-sm text-gray-500 space-y-1">
@@ -186,16 +177,9 @@ const Donate = () => {
             Every donation stays local and directly helps Wirral families in need
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            <a 
-              href="https://paypal.me/lunasen" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="block"
-            >
-              <Button variant="secondary" size="xl" className="w-full bg-white text-luna-pink hover:bg-gray-100">
-                Donate Money Now
-              </Button>
-            </a>
+            <Button variant="secondary" size="xl" className="w-full bg-white text-luna-pink hover:bg-gray-100" disabled>
+              Donate online (coming soon)
+            </Button>
             <a href="tel:07123456789" className="block">
               <Button variant="outline" size="xl" className="w-full border-white text-white hover:bg-white hover:text-luna-pink">
                 Arrange Food Collection
@@ -206,9 +190,9 @@ const Donate = () => {
             <p className="text-sm opacity-75 mb-4">Quick access via QR code:</p>
             <div className="flex justify-center">
               <div className="text-center bg-white p-4 rounded-lg">
-                <img 
-                  src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https://paypal.me/lunasen" 
-                  alt="QR code for PayPal donations"
+                <img
+                  src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https://luna-sen-food-pantry.netlify.app/donate"
+                  alt="QR code for donations page"
                   className="w-24 h-24 mx-auto mb-2"
                 />
                 <p className="text-xs text-gray-600">Scan to donate</p>

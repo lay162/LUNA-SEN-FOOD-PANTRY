@@ -90,17 +90,15 @@ const Donate = () => {
       description: 'Direct financial support helps us buy exactly what families need, including specialty items for SEN requirements.',
       action: (
         <div className="space-y-4">
-          <a
-            href="https://paypal.me/lunasen"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="luna-link-button"
-          >
+          <a href="#donate-methods" className="luna-link-button">
             <Button variant="primary" size="lg" className="w-full">
-              Donate via PayPal
+              Donate online (coming soon)
             </Button>
           </a>
-          <p className="text-xs text-gray-500">Secure payment via PayPal.me - no account needed</p>
+          <p className="text-xs text-gray-500">
+            We’re setting up our official donation checkout. In the meantime, please use the options on this page to
+            contact us for the current best way to donate.
+          </p>
         </div>
       )
     },
@@ -192,14 +190,9 @@ const Donate = () => {
                 Every contribution stays local. Money, food, or corporate support - choose what works for you.
               </p>
               <div className="luna-hero__actions">
-                <a
-                  href="https://paypal.me/lunasen"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="luna-link-button"
-                >
+                <a href="#donate-methods" className="luna-link-button">
                   <Button variant="primary" size="xl" className="luna-button--full-width">
-                    Donate with PayPal
+                    Donate online (coming soon)
                   </Button>
                 </a>
                 <a href="#donate-methods" className="luna-link-button">
@@ -254,22 +247,19 @@ const Donate = () => {
                     <h4 className="luna-donate-tier__title">{tier.label}</h4>
                     <div className="luna-donate-tier__chips">
                       {tier.amounts.map((row) => (
-                        <a
-                          key={row.paypal}
-                          href={`https://paypal.me/lunasen/${row.paypal}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="luna-donate-tier__chip luna-link-button"
-                        >
+                        <span key={row.paypal} className="luna-donate-tier__chip luna-link-button">
                           <Button variant={tier.buttonVariant} size="sm" className="luna-donate-tier__btn">
                             {row.label}
                           </Button>
-                        </a>
+                        </span>
                       ))}
                     </div>
                   </div>
                 ))}
               </div>
+              <p className="text-xs text-gray-500 mt-4 mb-0">
+                Quick-pay links will appear here once our official checkout is live.
+              </p>
 
               <p className="luna-card-text luna-donate-impact-footnote text-sm mb-0">
                 <strong className="luna-donate-impact__amt luna-donate-impact__amt--pink">£5</strong> can cover a
@@ -444,14 +434,9 @@ const Donate = () => {
             </p>
 
             <div className="luna-grid luna-grid--2">
-              <a
-                href="https://paypal.me/lunasen"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="luna-link-button"
-              >
+              <a href="#donate-methods" className="luna-link-button">
                 <Button variant="primary" size="xl" className="luna-button--full-width">
-                  Donate money now
+                  Donate online (coming soon)
                 </Button>
               </a>
               <a href="tel:07123456789" className="luna-link-button">
@@ -466,8 +451,8 @@ const Donate = () => {
               <div className="flex justify-center">
                 <div className="text-center bg-white p-4 rounded-lg shadow-sm">
                   <img
-                    src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https://paypal.me/lunasen"
-                    alt="QR code for PayPal donations"
+                    src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https://luna-sen-food-pantry.netlify.app/donate"
+                    alt="QR code for donations page"
                     className="w-24 h-24 mx-auto mb-2"
                   />
                   <p className="text-xs text-gray-600">Scan to donate</p>
