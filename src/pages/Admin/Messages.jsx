@@ -60,7 +60,6 @@ export default function Messages() {
   const { addAudit } = useAdminOps();
   const actor = useMemo(() => readActor(), []);
   const [searchParams] = useSearchParams();
-  const [channelId, setChannelId] = useState(null);
   const [selectedDm, setSelectedDm] = useState(null); // email
   const [contacts, setContacts] = useState([]);
   const [messages, setMessages] = useState(() => loadJSON(LS_MSG, []));

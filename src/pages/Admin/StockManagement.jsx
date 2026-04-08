@@ -340,13 +340,6 @@ const StockManagement = () => {
   const goodCount = stockItems.filter((item) => getStatus(item) === 'good').length;
   const expiringSoonCount = stockItems.filter((item) => getExpiryState(item.expiryDate) === 'due-soon').length;
 
-  const escapeHtml = (s) =>
-    String(s ?? '')
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;');
-
   const handleBulkStockUpdate = () => {
     const text = window.prompt(
       'Paste one line per item: SKU, then comma or tab, then new quantity.\nExample:\nTIN-001, 24\n\nLines must match an existing SKU in the list.'

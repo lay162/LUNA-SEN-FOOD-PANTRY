@@ -31,7 +31,7 @@ import Announcements from './Announcements';
 import Messages from './Messages';
 import MyAvailability from './MyAvailability';
 import { getAdminProfile } from './utils/adminProfile';
-import { createAccountFromAllowlist, getAllowlistEntries, getCurrentAdminRole, signInAdmin, signOutAdmin, bootstrapAdminUsers, requestPasswordReset } from './utils/adminAuth';
+import { getAllowlistEntries, getCurrentAdminRole, signInAdmin, signOutAdmin, bootstrapAdminUsers, requestPasswordReset } from './utils/adminAuth';
 import { useBrandLogoUrl } from '../../context/BrandingContext';
 import { getAuthInstance, getDb, isFirebaseConfigured, omitUndefinedDeep } from '../../firebase';
 
@@ -221,7 +221,7 @@ const AdminShell = () => {
     } catch {
       return [];
     }
-  }, [actorEmailLower, chatContacts]);
+  }, [actorEmailLower, actorLabel, chatContacts]);
 
   const initials = (s) => {
     const v = String(s || '').trim();
@@ -408,18 +408,18 @@ const AdminShell = () => {
 
   const renderNav = (onNavigate) => (
     <>
-      {navItems.map(({ to, end, label, Icon }) => (
+      {navItems.map((item) => (
         <NavLink
-          key={to}
-          to={to}
-          end={end}
+          key={item.to}
+          to={item.to}
+          end={item.end}
           onClick={() => onNavigate?.()}
           className={({ isActive }) =>
             `admin-panel__nav-link ${isActive ? 'admin-panel__nav-link--active' : ''}`
           }
         >
-          <Icon size={20} aria-hidden />
-          {label}
+          {React.createElement(item.Icon, { size: 20, 'aria-hidden': true })}
+          {item.label}
         </NavLink>
       ))}
       <button type="button" className="admin-panel__nav-link admin-panel__sidebar-logout" onClick={handleLogout}>

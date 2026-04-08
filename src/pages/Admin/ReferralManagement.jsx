@@ -39,7 +39,7 @@ function referrerRoute(ref) {
 }
 
 export default function ReferralManagement() {
-  const { referrals, updateReferral, addAudit, stockItems, setStockItems } = useAdminOps();
+  const { referrals, updateReferral, addAudit, setStockItems } = useAdminOps();
   const [selectedStatus, setSelectedStatus] = useState('all');
   const [selectedRoute, setSelectedRoute] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
@@ -50,6 +50,14 @@ export default function ReferralManagement() {
   const [packLines, setPackLines] = useState([]);
   const [packNote, setPackNote] = useState('');
   const [driverEmail, setDriverEmail] = useState('');
+
+  const openReferral = (ref) => {
+    setSelected(ref);
+    const existing = ref?.parcel?.items || [];
+    setPackLines(existing.length ? existing : []);
+    setPackNote(ref?.parcel?.packNote || '');
+    setDriverEmail(ref?.parcel?.assignedDriverEmail || '');
+  };
 
   useEffect(() => {
     let alive = true;
@@ -67,13 +75,7 @@ export default function ReferralManagement() {
     };
   }, []);
 
-  useEffect(() => {
-    if (!selected) return;
-    const existing = selected.parcel?.items || [];
-    setPackLines(existing.length ? existing : []);
-    setPackNote(selected.parcel?.packNote || '');
-    setDriverEmail(selected.parcel?.assignedDriverEmail || '');
-  }, [selected]);
+  // packLines/packNote/driverEmail are initialised when you open a referral.
 
   const statusOptions = [
     { id: 'all', name: 'All referrals' },
@@ -167,17 +169,10 @@ export default function ReferralManagement() {
     });
   }, [referrals, selectedStatus, selectedRoute, searchTerm]);
 
-  useEffect(() => {
-    setListPage(1);
-  }, [selectedStatus, selectedRoute, searchTerm, pageSize]);
-
   const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
   const listPageSafe = Math.min(listPage, totalPages);
 
-  useEffect(() => {
-    const tp = Math.max(1, Math.ceil(filtered.length / pageSize));
-    setListPage((p) => Math.min(p, tp));
-  }, [filtered.length, pageSize]);
+  // listPageSafe clamps pagination without extra effects/state churn.
 
   const pageSlice = useMemo(() => {
     const start = (listPageSafe - 1) * pageSize;
@@ -324,7 +319,10 @@ export default function ReferralManagement() {
                 <button
                   key={option.id}
                   type="button"
-                  onClick={() => setSelectedStatus(option.id)}
+                  onClick={() => {
+                    setSelectedStatus(option.id);
+                    setListPage(1);
+                  }}
                   className={`admin-panel__btn admin-panel__btn--outline admin-panel__btn--pill admin-panel__filter-pill admin-panel__filter-pill--${option.id} ${
                     selectedStatus === option.id ? 'admin-panel__btn--pill-active' : ''
                   }`}
@@ -339,7 +337,10 @@ export default function ReferralManagement() {
                 <button
                   key={option.id}
                   type="button"
-                  onClick={() => setSelectedRoute(option.id)}
+                  onClick={() => {
+                    setSelectedRoute(option.id);
+                    setListPage(1);
+                  }}
                   className={`admin-panel__btn admin-panel__btn--outline admin-panel__btn--pill admin-panel__filter-pill admin-panel__filter-pill--${option.tone || 'all'} ${
                     selectedRoute === option.id ? 'admin-panel__btn--pill-active' : ''
                   }`}
@@ -363,7 +364,10 @@ export default function ReferralManagement() {
               className="admin-panel__input admin-panel__referrals-search-input"
               placeholder="Family code, organisation, route (GP, school…), contact name, ID…"
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={(e) => {
+                setSearchTerm(e.target.value);
+                setListPage(1);
+              }}
             />
           </div>
         </div>
@@ -411,7 +415,7 @@ export default function ReferralManagement() {
                     <button
                       type="button"
                       className="admin-panel__btn admin-panel__btn--primary admin-panel__referral-strip__cta"
-                      onClick={() => setSelected(ref)}
+                        onClick={() => openReferral(ref)}
                     >
                       Review
                     </button>

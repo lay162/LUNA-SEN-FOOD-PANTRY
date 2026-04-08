@@ -13,7 +13,6 @@ const Card = ({
   title,
   description,
   action,
-  hover: _hover,
   ...props 
 }) => {
   // Handle keyboard navigation for clickable cards

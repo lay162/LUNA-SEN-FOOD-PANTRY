@@ -229,7 +229,6 @@ export default function RecruitmentPage() {
                 const nextStageId = pipelineCanAdvance ? stageOrder[idx + 1] : null;
                 const onboardingGateOk =
                   nextStageId !== 'onboarded' || applicantMeetsOnboardingDocRequirements(a);
-                const canClickNextStage = pipelineCanAdvance && founderGateOk && onboardingGateOk;
                 const docBadge = applicantDocReviewLabel(a);
                 const nextStageName = nextStageId
                   ? applicantStages.find((s) => s.id === nextStageId)?.name ||

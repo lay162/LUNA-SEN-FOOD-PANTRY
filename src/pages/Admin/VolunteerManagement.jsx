@@ -6,9 +6,6 @@ import AdminVolunteerDocSlot from './components/AdminVolunteerDocSlot';
 import {
   applicantCanAdvanceStage,
   applicantCanMarkDocumentsReviewed,
-  applicantDocReviewLabel,
-  applicantDrivingLicencePathMet,
-  applicantInsurancePathMet,
   applicantMeetsOnboardingDocRequirements,
   applicantNeedsFounderDocReviewToAdvance,
 } from './utils/applicantDocReview';

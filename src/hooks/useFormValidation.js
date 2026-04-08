@@ -10,7 +10,7 @@ export function useFormValidation(initialData = {}, requiredFields = []) {
     let error = '';
 
     switch (name) {
-      case 'postcode':
+      case 'postcode': {
         const postcodeResult = validatePostcode(value);
         if (!postcodeResult.valid) {
           error = postcodeResult.message;
@@ -19,6 +19,7 @@ export function useFormValidation(initialData = {}, requiredFields = []) {
           error = postcodeResult.message;
         }
         break;
+      }
 
       case 'email':
         if (value) {

@@ -27,7 +27,9 @@ export default function InstallPrompt() {
     <div className="luna-install">
       <div className="luna-install__card" role="region" aria-label="Install LUNA SEN PANTRY app">
         <div className="luna-install__text">
-          <div className="luna-install__title">Install the LUNA app</div>
+          <div className="luna-install__title">
+            Install the <span className="luna-install__brand">LUNA</span> app
+          </div>
           <div className="luna-install__desc">Quick access to support, donate and volunteer.</div>
         </div>
         <div className="luna-install__actions">
@@ -96,6 +98,13 @@ export default function InstallPrompt() {
           letter-spacing: -0.01em;
         }
 
+        .luna-install__brand {
+          background: linear-gradient(135deg, var(--luna-pink) 0%, var(--luna-blue) 100%);
+          -webkit-background-clip: text;
+          background-clip: text;
+          color: transparent;
+        }
+
         .luna-install__desc {
           margin-top: 0.15rem;
           font-size: 0.9rem;
@@ -117,17 +126,18 @@ export default function InstallPrompt() {
         }
 
         .luna-install__dismiss {
-          border: none;
-          background: transparent;
-          color: var(--luna-text-secondary);
+          border: 1px solid rgba(17, 24, 39, 0.1);
+          background: rgba(17, 24, 39, 0.06);
+          color: var(--luna-text-primary);
           font-weight: 700;
-          padding: 0.4rem 0.5rem;
+          padding: 0 0.85rem;
           border-radius: 10px;
           cursor: pointer;
+          min-height: 44px;
         }
 
         .luna-install__dismiss:hover {
-          background: rgba(17, 24, 39, 0.06);
+          background: rgba(17, 24, 39, 0.1);
         }
 
         @media (max-width: 640px) {

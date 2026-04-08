@@ -98,7 +98,10 @@ const Donate = () => {
               Donate with Tide
             </Button>
           </a>
-          <p className="text-xs text-gray-500">Secure payment link powered by Tide.</p>
+          <p className="text-xs text-gray-500">
+            Secure payment link powered by Tide. If you can, add a reference starting{' '}
+            <strong className="font-extrabold text-gray-700">LSP-</strong> so we can track donations.
+          </p>
         </div>
       )
     },
@@ -267,7 +270,8 @@ const Donate = () => {
                 ))}
               </div>
               <p className="text-xs text-gray-500 mt-4 mb-0">
-                You can enter your chosen amount during checkout.
+                You can enter your chosen amount during checkout. If possible, add a reference starting{' '}
+                <strong className="font-extrabold text-gray-700">LSP-</strong>.
               </p>
 
               <p className="luna-card-text luna-donate-impact-footnote text-sm mb-0">

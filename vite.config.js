@@ -2,7 +2,7 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
 // https://vite.dev/config/
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
   plugins: [react()],
   
   // Build configuration
@@ -36,7 +36,7 @@ export default defineConfig({
 
   // Environment variables
   define: {
-    __DEV__: JSON.stringify(process.env.NODE_ENV === 'development'),
+    __DEV__: JSON.stringify(mode === 'development'),
   },
 
   // Asset handling
@@ -46,4 +46,4 @@ export default defineConfig({
   css: {
     postcss: './postcss.config.js'
   }
-})
+}))

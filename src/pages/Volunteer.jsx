@@ -46,7 +46,7 @@ const Volunteer = () => {
 
   const requiredFields = ['name', 'email', 'phone', 'role', 'availability', 'consent'];
 
-  const { formData, errors, touched, updateField, touchField, validateForm, resetForm } = 
+  const { formData, errors, touched, updateField, touchField, validateForm } = 
     useFormValidation(initialFormData, requiredFields);
 
   const { isSubmitting, submitStatus, networkStatus, submitForm } = 
