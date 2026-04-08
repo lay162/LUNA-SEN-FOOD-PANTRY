@@ -3,10 +3,9 @@ import { Link } from 'react-router-dom';
 import Card, { HeartIcon, GiftIcon, UserGroupIcon } from '../components/Card';
 import Button from '../components/Button';
 import HeroLogo from '../components/HeroLogo';
+import { useHomeLiveStats } from '../hooks/useHomeLiveStats';
+import { usePublicImpactStats } from '../hooks/usePublicImpactStats';
 import { SITE_URL } from '../constants/site';
-import { SOCIAL_LINKS } from '../constants/socials';
-import { useOfflineForm } from '../hooks/useOfflineForm';
-import { isFirebaseConfigured, getDb } from '../firebase';
 
 const Home = () => {
   // Set page title and meta description
@@ -65,37 +64,9 @@ const Home = () => {
     }
   ];
 
-  const { isSubmitting, submitStatus, submitForm } = useOfflineForm('story');
-  const [storyName, setStoryName] = React.useState('');
-  const [storyMessage, setStoryMessage] = React.useState('');
-  const [storyConsent, setStoryConsent] = React.useState(false);
-  const [stories, setStories] = React.useState([]);
-
-  React.useEffect(() => {
-    if (!isFirebaseConfigured()) return undefined;
-    const db = getDb();
-    if (!db) return undefined;
-    let unsub = null;
-    (async () => {
-      try {
-        const { collection, limit, onSnapshot, orderBy, query } = await import('firebase/firestore');
-        const q = query(collection(db, 'stories'), orderBy('createdAt', 'desc'), limit(6));
-        unsub = onSnapshot(
-          q,
-          (snap) => {
-            const rows = snap.docs.map((d) => d.data()).filter(Boolean);
-            setStories(rows);
-          },
-          () => {}
-        );
-      } catch {
-        // ignore
-      }
-    })();
-    return () => {
-      if (typeof unsub === 'function') unsub();
-    };
-  }, []);
+  const homeCounts = useHomeLiveStats();
+  const impact = usePublicImpactStats();
+  const statValue = (v) => (homeCounts.loading ? '…' : String(v ?? 0));
 
   return (
     <>
@@ -186,7 +157,7 @@ const Home = () => {
                   </svg>
                 </div>
                 <div className="luna-card-mini__content">
-                  <div className="luna-stats-mini__value">247</div>
+                  <div className="luna-stats-mini__value">{statValue(homeCounts.referralsTaken)}</div>
                   <div className="luna-stats-mini__label">Referrals taken</div>
                 </div>
               </div>
@@ -199,8 +170,8 @@ const Home = () => {
                   </svg>
                 </div>
                 <div className="luna-card-mini__content">
-                  <div className="luna-stats-mini__value">231</div>
-                  <div className="luna-stats-mini__label">Fulfilled</div>
+                  <div className="luna-stats-mini__value">{statValue(homeCounts.referralsDelivered)}</div>
+                  <div className="luna-stats-mini__label">Delivered</div>
                 </div>
               </div>
 
@@ -212,12 +183,12 @@ const Home = () => {
                   </svg>
                 </div>
                 <div className="luna-card-mini__content">
-                  <div className="luna-stats-mini__value">16</div>
+                  <div className="luna-stats-mini__value">{statValue(homeCounts.referralsPending)}</div>
                   <div className="luna-stats-mini__label">Pending</div>
                 </div>
               </div>
 
-              {/* Card 7: Volunteers - PRIMARY PINK */}
+              {/* Card 7: Volunteer applications - PRIMARY PINK */}
               <div className="luna-card-mini luna-card-mini--primary">
                 <div className="luna-card-mini__icon">
                   <svg viewBox="0 0 24 24" fill="currentColor">
@@ -228,12 +199,12 @@ const Home = () => {
                   </svg>
                 </div>
                 <div className="luna-card-mini__content">
-                  <div className="luna-stats-mini__value">42</div>
-                  <div className="luna-stats-mini__label">Volunteers</div>
+                  <div className="luna-stats-mini__value">{statValue(homeCounts.volunteerApplications)}</div>
+                  <div className="luna-stats-mini__label">Volunteer applications</div>
                 </div>
               </div>
 
-              {/* Card 8: Food Parcels - GRADIENT */}
+              {/* Card 8: Families helped (this month) - GRADIENT */}
               <div className="luna-card-mini luna-card-mini--gradient">
                 <div className="luna-card-mini__icon">
                   <svg viewBox="0 0 24 24" fill="currentColor">
@@ -241,12 +212,12 @@ const Home = () => {
                   </svg>
                 </div>
                 <div className="luna-card-mini__content">
-                  <div className="luna-stats-mini__value">85</div>
-                  <div className="luna-stats-mini__label">Food parcels</div>
+                  <div className="luna-stats-mini__value">{impact.loading ? '…' : impact.families || '0'}</div>
+                  <div className="luna-stats-mini__label">Families helped (month)</div>
                 </div>
               </div>
 
-              {/* Card 9: Safe Foods - SECONDARY BLUE */}
+              {/* Card 9: Public messages - SECONDARY BLUE */}
               <div className="luna-card-mini luna-card-mini--secondary">
                 <div className="luna-card-mini__icon">
                   <svg viewBox="0 0 24 24" fill="currentColor">
@@ -254,8 +225,8 @@ const Home = () => {
                   </svg>
                 </div>
                 <div className="luna-card-mini__content">
-                  <div className="luna-stats-mini__value">320</div>
-                  <div className="luna-stats-mini__label">Safe foods</div>
+                  <div className="luna-stats-mini__value">{statValue(homeCounts.publicMessages)}</div>
+                  <div className="luna-stats-mini__label">Thank you messages</div>
                 </div>
               </div>
 
@@ -309,7 +280,7 @@ const Home = () => {
                   </svg>
                 </div>
                 <div className="luna-card-mini__content">
-                  <div className="luna-stats-mini__value">247</div>
+                  <div className="luna-stats-mini__value">{statValue(homeCounts.referralsTaken)}</div>
                   <div className="luna-stats-mini__label">Referrals taken</div>
                 </div>
               </div>
@@ -322,8 +293,8 @@ const Home = () => {
                   </svg>
                 </div>
                 <div className="luna-card-mini__content">
-                  <div className="luna-stats-mini__value">231</div>
-                  <div className="luna-stats-mini__label">Fulfilled</div>
+                  <div className="luna-stats-mini__value">{statValue(homeCounts.referralsDelivered)}</div>
+                  <div className="luna-stats-mini__label">Delivered</div>
                 </div>
               </div>
 
@@ -335,146 +306,8 @@ const Home = () => {
                   </svg>
                 </div>
                 <div className="luna-card-mini__content">
-                  <div className="luna-stats-mini__value">16</div>
+                  <div className="luna-stats-mini__value">{statValue(homeCounts.referralsPending)}</div>
                   <div className="luna-stats-mini__label">Pending</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Socials */}
-        <section className="luna-section">
-          <div className="luna-container">
-            <div className="luna-section__header">
-              <h2 className="luna-section__title">Follow LUNA SEN Pantry</h2>
-              <p className="luna-section__subtitle">
-                Add your Facebook / Instagram / TikTok links when you’re ready.
-              </p>
-            </div>
-            <div className="flex flex-col gap-3 sm:flex-row sm:justify-center sm:gap-4">
-              <a
-                className={`luna-button luna-button--primary ${SOCIAL_LINKS.facebook ? '' : 'opacity-50 pointer-events-none'}`}
-                href={SOCIAL_LINKS.facebook || '#'}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Facebook
-              </a>
-              <a
-                className={`luna-button luna-button--gradient ${SOCIAL_LINKS.instagram ? '' : 'opacity-50 pointer-events-none'}`}
-                href={SOCIAL_LINKS.instagram || '#'}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Instagram
-              </a>
-              <a
-                className={`luna-button luna-button--secondary ${SOCIAL_LINKS.tiktok ? '' : 'opacity-50 pointer-events-none'}`}
-                href={SOCIAL_LINKS.tiktok || '#'}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                TikTok
-              </a>
-            </div>
-          </div>
-        </section>
-
-        {/* Stories / thanks */}
-        <section className="luna-section luna-section--alt" aria-labelledby="stories-title">
-          <div className="luna-container">
-            <div className="luna-section__header">
-              <h2 id="stories-title" className="luna-section__title">Stories &amp; thank yous</h2>
-              <p className="luna-section__subtitle">
-                If LUNA helped your family, you can share a short message here. (We never publish addresses or sensitive details.)
-              </p>
-            </div>
-
-            <div className="grid gap-6 lg:grid-cols-2">
-              <div className="luna-card">
-                <h3 className="luna-card__title">Leave a message</h3>
-                <form
-                  className="mt-4 space-y-4"
-                  onSubmit={async (e) => {
-                    e.preventDefault();
-                    if (!storyConsent) return;
-                    const ok = await submitForm({
-                      name: storyName.trim(),
-                      message: storyMessage.trim(),
-                      consentToDisplay: true,
-                      page: SITE_URL,
-                    });
-                    if (ok?.success) {
-                      setStoryName('');
-                      setStoryMessage('');
-                      setStoryConsent(false);
-                    }
-                  }}
-                >
-                  <div>
-                    <label className="luna-label" htmlFor="story-name">Name (first name or anonymous)</label>
-                    <input
-                      id="story-name"
-                      className="luna-input"
-                      value={storyName}
-                      onChange={(e) => setStoryName(e.target.value)}
-                      placeholder="e.g. Sarah / Anonymous"
-                    />
-                  </div>
-                  <div>
-                    <label className="luna-label" htmlFor="story-message">Your message</label>
-                    <textarea
-                      id="story-message"
-                      className="luna-input"
-                      rows={4}
-                      value={storyMessage}
-                      onChange={(e) => setStoryMessage(e.target.value)}
-                      placeholder="A short thank you or story (no personal details)."
-                      required
-                    />
-                  </div>
-                  <label className="flex items-start gap-3 text-left">
-                    <input
-                      type="checkbox"
-                      className="mt-1 h-4 w-4 shrink-0 rounded border-gray-300 text-pink-500 focus:ring-pink-400"
-                      checked={storyConsent}
-                      onChange={(e) => setStoryConsent(e.target.checked)}
-                      required
-                    />
-                    <span className="text-sm text-gray-700">
-                      I consent to LUNA displaying this message publicly (first name/anonymous only).
-                    </span>
-                  </label>
-                  <button className="luna-button luna-button--gradient w-full" type="submit" disabled={isSubmitting}>
-                    {isSubmitting ? 'Sending…' : 'Submit message'}
-                  </button>
-                  {submitStatus?.message ? (
-                    <p className={`text-sm ${submitStatus.success ? 'text-green-700' : 'text-red-700'}`}>
-                      {submitStatus.message}
-                    </p>
-                  ) : null}
-                  {!isFirebaseConfigured() ? (
-                    <p className="text-xs text-gray-500">
-                      Connect Firebase to save messages to your site.
-                    </p>
-                  ) : null}
-                </form>
-              </div>
-
-              <div className="luna-card">
-                <h3 className="luna-card__title">Recent messages</h3>
-                <div className="mt-4 space-y-3">
-                  {stories.length ? (
-                    stories.map((s, idx) => (
-                      <div key={idx} className="rounded-xl border border-gray-100 bg-white p-4">
-                        <p className="text-sm font-semibold text-gray-900">{String(s.name || 'Anonymous')}</p>
-                        <p className="mt-2 text-sm text-gray-700">{String(s.message || '')}</p>
-                      </div>
-                    ))
-                  ) : (
-                    <p className="text-sm text-gray-600">No messages yet.</p>
-                  )}
                 </div>
               </div>
             </div>

@@ -6,6 +6,7 @@ import Home from './pages/Home';
 import Support from './pages/Support';
 import Donate from './pages/Donate';
 import Volunteer from './pages/Volunteer';
+import Stories from './pages/Stories';
 import Admin from './pages/Admin/Admin';
 import { BrandingProvider } from './context/BrandingContext';
 import { initializeAuth } from './firebase';
@@ -24,6 +25,7 @@ function AppRoutes() {
           <Route path="/support" element={<Support />} />
           <Route path="/donate" element={<Donate />} />
           <Route path="/volunteer" element={<Volunteer />} />
+          <Route path="/stories" element={<Stories />} />
           <Route path="/admin/*" element={<Admin />} />
 
           <Route path="/about" element={<div className="min-h-screen bg-gray-50 flex items-center justify-center"><h1 className="text-2xl">About Us - Coming Soon</h1></div>} />

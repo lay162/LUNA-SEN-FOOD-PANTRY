@@ -842,7 +842,7 @@ li {
   border: none;
 }
 
-.luna-card--gradient-border::before {
+.luna-card--gradient-border::after {
   content: '';
   position: absolute;
   inset: 0;
@@ -852,6 +852,8 @@ li {
   mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
+  pointer-events: none;
+  z-index: 0;
 }
 
 /* Enhanced Buttons */
@@ -1165,6 +1167,18 @@ button.luna-button.luna-button--outline:hover:not(:disabled),
   height: 4px;
   background: var(--luna-grey-200);
   transition: background var(--luna-transition-normal);
+  z-index: 1;
+}
+
+/* Gradient border cards use their own border ring instead of the top bar */
+.luna-card--gradient-border::before {
+  content: none;
+}
+
+/* Ensure gradient ring sits behind content */
+.luna-card--gradient-border > * {
+  position: relative;
+  z-index: 2;
 }
 
 /* Luna Pink Card (1st Card) */

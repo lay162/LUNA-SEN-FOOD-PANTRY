@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useBrandLogoUrl } from '../context/BrandingContext';
+import { SOCIAL_LINKS } from '../constants/socials';
 
 const Footer = () => {
   const brandLogoUrl = useBrandLogoUrl();
@@ -11,6 +12,7 @@ const Footer = () => {
     { path: '/support', label: 'Support' },
     { path: '/donate', label: 'Donate' },
     { path: '/volunteer', label: 'Volunteer' },
+    { path: '/stories', label: 'Stories & Thank Yous' },
   ];
 
   const supportInfo = [
@@ -132,6 +134,60 @@ const Footer = () => {
 
             {/* Footer Bottom */}
             <div className="luna-footer__bottom">
+              <div className="luna-footer__socials" aria-label="Follow us">
+                <div className="luna-footer__socials-label">Follow us</div>
+                <div className="luna-footer__socials-icons">
+                  <a
+                    className={`luna-footer__social luna-footer__social--pink ${SOCIAL_LINKS.facebook ? '' : 'is-disabled'}`}
+                    href={SOCIAL_LINKS.facebook || '#'}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Facebook"
+                    title="Facebook"
+                  >
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path
+                        fill="currentColor"
+                        d="M13.5 22v-8.5H16l.5-3h-3V8.6c0-.9.3-1.5 1.6-1.5h1.6V4.4c-.3 0-1.4-.1-2.7-.1-2.7 0-4.5 1.6-4.5 4.7v1.5H7v3h2.4V22h4.1z"
+                      />
+                    </svg>
+                  </a>
+                  <a
+                    className={`luna-footer__social luna-footer__social--gradient ${SOCIAL_LINKS.instagram ? '' : 'is-disabled'}`}
+                    href={SOCIAL_LINKS.instagram || '#'}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Instagram"
+                    title="Instagram"
+                  >
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path
+                        fill="currentColor"
+                        d="M7.5 2h9A5.5 5.5 0 0 1 22 7.5v9A5.5 5.5 0 0 1 16.5 22h-9A5.5 5.5 0 0 1 2 16.5v-9A5.5 5.5 0 0 1 7.5 2zm0 2A3.5 3.5 0 0 0 4 7.5v9A3.5 3.5 0 0 0 7.5 20h9a3.5 3.5 0 0 0 3.5-3.5v-9A3.5 3.5 0 0 0 16.5 4h-9z"
+                      />
+                      <path fill="currentColor" d="M12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6z" />
+                      <path fill="currentColor" d="M17.6 6.4a1 1 0 1 1-2 0 1 1 0 0 1 2 0z" />
+                    </svg>
+                  </a>
+                  <a
+                    className={`luna-footer__social luna-footer__social--blue ${SOCIAL_LINKS.tiktok ? '' : 'is-disabled'}`}
+                    href={SOCIAL_LINKS.tiktok || '#'}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="TikTok"
+                    title="TikTok"
+                  >
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path
+                        fill="currentColor"
+                        d="M14 3c.4 3 2.3 5 5 5v3.2c-1.9 0-3.5-.6-5-1.7v6.7c0 3.2-2.6 5.8-5.8 5.8S2.4 18.4 2.4 15.2c0-3.2 2.6-5.8 5.8-5.8.4 0 .8 0 1.2.1v3.3c-.4-.2-.8-.3-1.2-.3-1.4 0-2.6 1.2-2.6 2.6 0 1.4 1.2 2.6 2.6 2.6 1.5 0 2.8-1.2 2.8-3V3h3z"
+                      />
+                    </svg>
+                  </a>
+                </div>
+                <div className="luna-footer__socials-hint">Set links when ready.</div>
+              </div>
+
               <div className="luna-footer__accessibility">
                 <p className="luna-footer__accessibility-text">
                   We're committed to making our service accessible to all. If you need help using this website,{' '}
@@ -403,6 +459,80 @@ const Footer = () => {
           .luna-footer__bottom {
             border-top: 1px solid rgba(255, 255, 255, 0.2);
             padding-top: var(--luna-space-6);
+          }
+
+          .luna-footer__socials {
+            display: grid;
+            gap: 0.5rem;
+            justify-items: center;
+            text-align: center;
+            margin-bottom: var(--luna-space-6);
+          }
+
+          .luna-footer__socials-label {
+            font-size: var(--luna-font-size-sm);
+            font-weight: var(--luna-font-weight-bold);
+            color: rgba(255, 255, 255, 0.95);
+            letter-spacing: 0.02em;
+            text-transform: uppercase;
+          }
+
+          .luna-footer__socials-icons {
+            display: flex;
+            gap: 0.7rem;
+            align-items: center;
+            justify-content: center;
+          }
+
+          .luna-footer__social {
+            width: 38px;
+            height: 38px;
+            border-radius: 999px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            box-shadow: 0 10px 28px -18px rgba(0, 0, 0, 0.6);
+            transition: transform var(--luna-transition-fast), opacity var(--luna-transition-fast), filter var(--luna-transition-fast);
+          }
+
+          .luna-footer__social svg {
+            width: 18px;
+            height: 18px;
+            display: block;
+          }
+
+          .luna-footer__social--pink {
+            background: var(--luna-pink);
+          }
+
+          .luna-footer__social--gradient {
+            background: var(--luna-gradient-primary);
+          }
+
+          .luna-footer__social--blue {
+            background: var(--luna-blue);
+          }
+
+          .luna-footer__social:hover,
+          .luna-footer__social:focus {
+            transform: translateY(-1px);
+            filter: brightness(1.03);
+            outline: none;
+          }
+
+          .luna-footer__social.is-disabled {
+            opacity: 0.55;
+            pointer-events: none;
+            filter: saturate(0.85);
+          }
+
+          .luna-footer__socials-hint {
+            font-size: var(--luna-font-size-xs);
+            color: rgba(255, 255, 255, 0.78);
+            font-weight: var(--luna-font-weight-semibold);
           }
 
           /* Shared “strip” layout (accessibility + legal) */

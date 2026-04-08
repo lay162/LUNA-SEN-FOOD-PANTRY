@@ -50,8 +50,12 @@ class ErrorBoundary extends React.Component {
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <ErrorBoundary>
+    {import.meta.env.DEV ? (
       <App />
-    </ErrorBoundary>
+    ) : (
+      <ErrorBoundary>
+        <App />
+      </ErrorBoundary>
+    )}
   </React.StrictMode>,
 );
