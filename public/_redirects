@@ -1,0 +1,10 @@
+http://lunasenpantry.co.uk/* https://lunasenpantry.co.uk/:splat 301!
+http://www.lunasenpantry.co.uk/* https://lunasenpantry.co.uk/:splat 301!
+https://www.lunasenpantry.co.uk/* https://lunasenpantry.co.uk/:splat 301!
+
+http://lunasenpantry.org/* https://lunasenpantry.co.uk/:splat 301!
+https://lunasenpantry.org/* https://lunasenpantry.co.uk/:splat 301!
+http://www.lunasenpantry.org/* https://lunasenpantry.co.uk/:splat 301!
+https://www.lunasenpantry.org/* https://lunasenpantry.co.uk/:splat 301!
+
+/* /index.html 200

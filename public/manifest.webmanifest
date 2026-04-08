@@ -1,0 +1,61 @@
+{
+  "name": "LUNA SEN PANTRY",
+  "short_name": "LUNA",
+  "description": "Independent SEN-priority food support across the Metropolitan Borough of Wirral, Merseyside. Emergency food help, pantry support, and family-first care.",
+  "id": "https://lunasenpantry.co.uk/",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ff69b4",
+  "orientation": "portrait-primary",
+  "lang": "en-GB",
+  "dir": "ltr",
+  "categories": ["food", "health", "community"],
+  "icons": [
+    {
+      "src": "/app-icon.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/app-icon.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/app-icon-maskable.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/app-icon-maskable.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Get support",
+      "short_name": "Support",
+      "url": "/support",
+      "icons": [{ "src": "/app-icon.svg", "sizes": "192x192", "type": "image/svg+xml" }]
+    },
+    {
+      "name": "Donate",
+      "short_name": "Donate",
+      "url": "/donate",
+      "icons": [{ "src": "/app-icon.svg", "sizes": "192x192", "type": "image/svg+xml" }]
+    },
+    {
+      "name": "Volunteer",
+      "short_name": "Volunteer",
+      "url": "/volunteer",
+      "icons": [{ "src": "/app-icon.svg", "sizes": "192x192", "type": "image/svg+xml" }]
+    }
+  ]
+}

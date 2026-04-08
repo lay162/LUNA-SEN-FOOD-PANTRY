@@ -10,14 +10,71 @@ import Stories from './pages/Stories';
 import Admin from './pages/Admin/Admin';
 import { BrandingProvider } from './context/BrandingContext';
 import { initializeAuth } from './firebase';
-import { registerServiceWorker, showInstallPrompt } from './utils/offline';
+import { HelmetProvider } from 'react-helmet-async';
+import { registerServiceWorker } from './utils/offline';
+import InstallPrompt from './components/InstallPrompt';
+import { Seo } from './components/Seo';
+
+const SEO_BY_PATH = {
+  '/': {
+    title: 'SEN food support in Wirral & Merseyside',
+    description:
+      'Independent SEN-priority food support across the Metropolitan Borough of Wirral, Merseyside. Emergency food help, pantry support, and family-first care — no voucher needed.',
+    path: '/',
+    jsonLd: {
+      '@context': 'https://schema.org',
+      '@type': ['Organization', 'FoodBank'],
+      name: 'LUNA SEN PANTRY',
+      url: 'https://lunasenpantry.co.uk/',
+      logo: 'https://lunasenpantry.co.uk/app-icon.svg',
+      description:
+        'Independent SEN-priority food support across the Metropolitan Borough of Wirral, Merseyside. Emergency food help, pantry support, and family-first care.',
+      areaServed: [
+        { '@type': 'AdministrativeArea', name: 'Wirral' },
+        { '@type': 'AdministrativeArea', name: 'Merseyside' },
+        { '@type': 'Country', name: 'United Kingdom' },
+      ],
+    },
+  },
+  '/support': {
+    title: 'Get support',
+    description:
+      'Request SEN-priority food support in Wirral. Simple self-referral, no voucher needed. Emergency food help designed with sensory needs in mind.',
+    path: '/support',
+  },
+  '/donate': {
+    title: 'Donate',
+    description:
+      'Donate to LUNA SEN PANTRY to help Wirral families. Give online via Tide, arrange food drop-off, or request collection.',
+    path: '/donate',
+  },
+  '/volunteer': {
+    title: 'Volunteer',
+    description:
+      'Volunteer with LUNA SEN PANTRY — hub volunteering and delivery driving across Wirral. Flexible roles, full support, real local impact.',
+    path: '/volunteer',
+  },
+  '/stories': {
+    title: 'Stories & thank yous',
+    description:
+      'Read and share short thank-you messages from families supported by LUNA. Please don’t include personal or sensitive details.',
+    path: '/stories',
+  },
+};
 
 function AppRoutes() {
   const { pathname } = useLocation();
   const hideSiteChrome = pathname.startsWith('/admin');
+  const seo = SEO_BY_PATH[pathname] || {
+    title: 'LUNA SEN PANTRY',
+    description:
+      'Independent SEN-priority food support across Wirral, Merseyside. Emergency food help, pantry support and family-first care.',
+    path: pathname,
+  };
 
   return (
     <div className={`App min-h-screen flex flex-col ${hideSiteChrome ? 'admin-fullscreen-app' : ''}`}>
+      {!hideSiteChrome ? <Seo {...seo} /> : null}
       {!hideSiteChrome && <Navbar />}
       <main className="flex min-h-0 flex-1 flex-col">
         <Routes>
@@ -48,6 +105,7 @@ function AppRoutes() {
         </Routes>
       </main>
       {!hideSiteChrome && <Footer />}
+      {!hideSiteChrome && <InstallPrompt />}
     </div>
   );
 }
@@ -59,64 +117,15 @@ function App() {
 
     // Register service worker for PWA
     registerServiceWorker();
-
-    // Show install prompt
-    showInstallPrompt();
-
-    // Set up meta tags
-    const metaViewport = document.querySelector('meta[name="viewport"]');
-    if (metaViewport) {
-      metaViewport.setAttribute('content', 'width=device-width, initial-scale=1.0, viewport-fit=cover');
-    }
-
-    // Add theme color for mobile browsers
-    let themeColorMeta = document.querySelector('meta[name="theme-color"]');
-    if (!themeColorMeta) {
-      themeColorMeta = document.createElement('meta');
-      themeColorMeta.name = 'theme-color';
-      document.head.appendChild(themeColorMeta);
-    }
-    themeColorMeta.content = '#ff69b4';
-
-    // Add manifest link if not present
-    let manifestLink = document.querySelector('link[rel="manifest"]');
-    if (!manifestLink) {
-      manifestLink = document.createElement('link');
-      manifestLink.rel = 'manifest';
-      manifestLink.href = '/manifest.json';
-      document.head.appendChild(manifestLink);
-    }
-
-    // Add Open Graph meta tags
-    const ogTags = [
-      { property: 'og:site_name', content: 'LUNA SEN PANTRY' },
-      { property: 'og:type', content: 'website' },
-      { property: 'og:locale', content: 'en_GB' },
-      { name: 'twitter:card', content: 'summary_large_image' },
-      { name: 'twitter:site', content: '@LunaSenPantry' }
-    ];
-
-    ogTags.forEach(tag => {
-      let meta = document.querySelector(`meta[${tag.property ? 'property' : 'name'}="${tag.property || tag.name}"]`);
-      if (!meta) {
-        meta = document.createElement('meta');
-        if (tag.property) {
-          meta.setAttribute('property', tag.property);
-        } else {
-          meta.setAttribute('name', tag.name);
-        }
-        document.head.appendChild(meta);
-      }
-      meta.content = tag.content;
-    });
-
   }, []);
 
   return (
     <Router>
-      <BrandingProvider>
-        <AppRoutes />
-      </BrandingProvider>
+      <HelmetProvider>
+        <BrandingProvider>
+          <AppRoutes />
+        </BrandingProvider>
+      </HelmetProvider>
     </Router>
   );
 }

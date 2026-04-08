@@ -1,12 +1,9 @@
 // v4: do not precache HTML — stale shell breaks hashed JS/CSS after deploys (Chrome shows it most).
 const CACHE_NAME = 'luna-sen-pantry-v4';
 const PRECACHE_URLS = [
-  '/manifest.json',
-  '/PANTRY-LOGO.png',
-  '/favicon.ico',
-  '/apple-touch-icon.png',
-  '/web-app-manifest-192x192.png',
-  '/web-app-manifest-512x512.png',
+  '/manifest.webmanifest',
+  '/app-icon.svg',
+  '/app-icon-maskable.svg',
 ];
 
 self.addEventListener('install', (event) => {

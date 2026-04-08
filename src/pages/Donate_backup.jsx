@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import Card, { GiftIcon, HeartIcon, PhoneIcon } from '../components/Card';
 import Button from '../components/Button';
+import { SITE_URL } from '../constants/site';
 
 const Donate = () => {
   useEffect(() => {
@@ -191,7 +192,7 @@ const Donate = () => {
             <div className="flex justify-center">
               <div className="text-center bg-white p-4 rounded-lg">
                 <img
-                  src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https://luna-sen-food-pantry.netlify.app/donate"
+                  src={`https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=${encodeURIComponent(`${SITE_URL}/donate`)}`}
                   alt="QR code for donations page"
                   className="w-24 h-24 mx-auto mb-2"
                 />

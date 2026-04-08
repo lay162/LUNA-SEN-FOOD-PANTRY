@@ -135,31 +135,6 @@ export async function registerServiceWorker() {
   }
 }
 
-// Show install prompt
-export function showInstallPrompt() {
-  let deferredPrompt;
-  
-  window.addEventListener('beforeinstallprompt', (e) => {
-    e.preventDefault();
-    deferredPrompt = e;
-    
-    // Show custom install button
-    const installBtn = document.getElementById('install-btn');
-    if (installBtn) {
-      installBtn.style.display = 'block';
-      installBtn.addEventListener('click', () => {
-        deferredPrompt.prompt();
-        deferredPrompt.userChoice.then((choiceResult) => {
-          if (choiceResult.outcome === 'accepted') {
-            console.log('User accepted the install prompt');
-          }
-          deferredPrompt = null;
-        });
-      });
-    }
-  });
-}
-
 // Generate QR code data
 export function generateQRCode(text, size = 200) {
   // This would typically use a QR code library

@@ -2,17 +2,8 @@ User-agent: *
 Allow: /
 
 # Sitemap
-Sitemap: https://luna-sen-food-pantry.netlify.app/sitemap.xml
-
-# Specific pages to crawl
-Allow: /
-Allow: /get-support
-Allow: /donate  
-Allow: /volunteer
+Sitemap: https://lunasenpantry.co.uk/sitemap.xml
 
 # Block admin areas (when implemented)
 Disallow: /admin
 Disallow: /api/
-
-# SEO-friendly
-Crawl-delay: 1

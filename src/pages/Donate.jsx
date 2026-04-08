@@ -3,6 +3,7 @@ import Card, { GiftIcon, HeartIcon, PhoneIcon } from '../components/Card';
 import Button from '../components/Button';
 import HeroLogo from '../components/HeroLogo';
 import { usePublicImpactStats } from '../hooks/usePublicImpactStats';
+import { SITE_URL } from '../constants/site';
 
 /**
  * Quick donation tiers: five cards so each has a similar chip count (4–5), no overlap.
@@ -459,7 +460,7 @@ const Donate = () => {
               <div className="flex justify-center">
                 <div className="text-center bg-white p-4 rounded-lg shadow-sm">
                   <img
-                    src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https://luna-sen-food-pantry.netlify.app/donate"
+                    src={`https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=${encodeURIComponent(`${SITE_URL}/donate`)}`}
                     alt="QR code for donations page"
                     className="w-24 h-24 mx-auto mb-2"
                   />
