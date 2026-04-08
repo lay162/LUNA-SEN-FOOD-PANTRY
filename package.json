@@ -9,7 +9,8 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "deploy:firebase": "firebase deploy --only firestore:rules,functions",
-    "deploy:firestore-rules": "firebase deploy --only firestore:rules"
+    "deploy:firestore-rules": "firebase deploy --only firestore:rules",
+    "seed:allowlist": "node scripts/seed-access-allowlist.mjs"
   },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",
@@ -30,6 +31,7 @@
     "eslint": "^9.39.1",
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.4.24",
+    "firebase-admin": "^13.0.0",
     "globals": "^16.5.0",
     "postcss": "^8.5.6",
     "tailwindcss": "^4.1.18",
