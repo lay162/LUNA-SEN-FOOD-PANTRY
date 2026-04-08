@@ -13,6 +13,7 @@ import { initializeAuth } from './firebase';
 import { HelmetProvider } from 'react-helmet-async';
 import { registerServiceWorker } from './utils/offline';
 import InstallPrompt from './components/InstallPrompt';
+import CookieConsent from './components/CookieConsent';
 import { Seo } from './components/Seo';
 
 const SEO_BY_PATH = {
@@ -105,6 +106,7 @@ function AppRoutes() {
         </Routes>
       </main>
       {!hideSiteChrome && <Footer />}
+      {!hideSiteChrome && <CookieConsent />}
       {!hideSiteChrome && <InstallPrompt />}
     </div>
   );

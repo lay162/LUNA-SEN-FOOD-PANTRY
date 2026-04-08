@@ -1,9 +1,44 @@
 import React from 'react';
 
 const LS_DISMISSED_KEY = 'luna-install-dismissed-v1';
+const GLOBAL_INSTANCE_KEY = '__luna_install_prompt_instance_v1__';
+const LS_COOKIE_CONSENT_KEY = 'luna-cookie-consent-v1';
+
+function isStandalone() {
+  try {
+    return (
+      window.matchMedia?.('(display-mode: standalone)')?.matches ||
+      window.navigator?.standalone === true
+    );
+  } catch {
+    return false;
+  }
+}
+
+function isIosSafari() {
+  const ua = String(navigator.userAgent || '');
+  const isIOS = /iPad|iPhone|iPod/.test(ua);
+  const isWebKit = /WebKit/.test(ua);
+  const isCriOS = /CriOS/.test(ua);
+  const isFxiOS = /FxiOS/.test(ua);
+  return isIOS && isWebKit && !isCriOS && !isFxiOS;
+}
+
+function hasCookieChoice() {
+  try {
+    const raw = localStorage.getItem(LS_COOKIE_CONSENT_KEY);
+    if (!raw) return false;
+    const parsed = JSON.parse(raw);
+    return Boolean(parsed?.choice);
+  } catch {
+    return false;
+  }
+}
 
 export default function InstallPrompt() {
   const [deferredPrompt, setDeferredPrompt] = React.useState(null);
+  const [blocked, setBlocked] = React.useState(false);
+  const [cookiesAnswered, setCookiesAnswered] = React.useState(() => hasCookieChoice());
   const [dismissed, setDismissed] = React.useState(() => {
     try {
       return localStorage.getItem(LS_DISMISSED_KEY) === '1';
@@ -11,6 +46,33 @@ export default function InstallPrompt() {
       return false;
     }
   });
+
+  React.useEffect(() => {
+    if (cookiesAnswered) return undefined;
+    const t = window.setInterval(() => {
+      setCookiesAnswered(hasCookieChoice());
+    }, 800);
+    return () => window.clearInterval(t);
+  }, [cookiesAnswered]);
+
+  React.useEffect(() => {
+    try {
+      if (window[GLOBAL_INSTANCE_KEY]) {
+        setBlocked(true);
+        return undefined;
+      }
+      window[GLOBAL_INSTANCE_KEY] = true;
+      return () => {
+        try {
+          window[GLOBAL_INSTANCE_KEY] = false;
+        } catch {
+          // ignore
+        }
+      };
+    } catch {
+      return undefined;
+    }
+  }, []);
 
   React.useEffect(() => {
     const onBeforeInstallPrompt = (e) => {
@@ -21,27 +83,48 @@ export default function InstallPrompt() {
     return () => window.removeEventListener('beforeinstallprompt', onBeforeInstallPrompt);
   }, []);
 
-  if (dismissed || !deferredPrompt) return null;
+  const showIosHelp = !deferredPrompt && isIosSafari() && !isStandalone();
+  const showDevHint = !deferredPrompt && import.meta.env.DEV && !isStandalone();
+
+  // Avoid stacking with cookie banner: show install after cookies answered.
+  if (!cookiesAnswered) return null;
+  if (blocked || dismissed || (!deferredPrompt && !showIosHelp && !showDevHint)) return null;
 
   return (
     <div className="luna-install">
       <div className="luna-install__card" role="region" aria-label="Install LUNA SEN PANTRY app">
         <div className="luna-install__text">
           <div className="luna-install__title">
-            Install the <span className="luna-install__brand">LUNA</span> app
+            Install the <span className="luna-install__brand">LUNA</span> SEN PANTRY app
           </div>
-          <div className="luna-install__desc">Quick access to support, donate and volunteer.</div>
+          <div className="luna-install__desc">
+            {showIosHelp
+              ? 'On iPhone/iPad: tap Share → “Add to Home Screen”.'
+              : showDevHint
+                ? 'Install popups usually appear on the live HTTPS site (or a production preview build), not during dev.'
+                : 'Quick access to support, donate and volunteer.'}
+          </div>
         </div>
         <div className="luna-install__actions">
           <button
             type="button"
             className="luna-button luna-button--gradient luna-install__btn"
             onClick={async () => {
-              try {
-                deferredPrompt.prompt();
-                await deferredPrompt.userChoice;
-              } finally {
-                setDeferredPrompt(null);
+              if (deferredPrompt) {
+                try {
+                  deferredPrompt.prompt();
+                  await deferredPrompt.userChoice;
+                } finally {
+                  setDeferredPrompt(null);
+                }
+                return;
+              }
+              if (showIosHelp) {
+                window.alert('To install: tap the Share button in Safari, then choose “Add to Home Screen”.');
+                return;
+              }
+              if (showDevHint) {
+                window.alert('Install is available on the live HTTPS site (or after running a production preview build).');
               }
             }}
           >
