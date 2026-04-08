@@ -181,7 +181,7 @@ const Donate = () => {
             <Button variant="secondary" size="xl" className="w-full bg-white text-luna-pink hover:bg-gray-100" disabled>
               Donate online (coming soon)
             </Button>
-            <a href="tel:07123456789" className="block">
+            <a href="tel:07718851362" className="block">
               <Button variant="outline" size="xl" className="w-full border-white text-white hover:bg-white hover:text-luna-pink">
                 Arrange Food Collection
               </Button>

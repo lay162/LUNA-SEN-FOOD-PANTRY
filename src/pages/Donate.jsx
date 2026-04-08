@@ -350,7 +350,7 @@ const Donate = () => {
                   your home or workplace if that&apos;s easier.
                 </p>
                 <div className="luna-grid luna-grid--2">
-                  <a href="tel:07123456789" className="luna-link-button">
+                  <a href="tel:07718851362" className="luna-link-button">
                     <Button variant="primary" size="lg" className="w-full">
                       Call for collection
                     </Button>
@@ -448,7 +448,7 @@ const Donate = () => {
                   Donate with Tide
                 </Button>
               </a>
-              <a href="tel:07123456789" className="luna-link-button">
+              <a href="tel:07718851362" className="luna-link-button">
                 <Button variant="secondary" size="xl" className="luna-button--full-width">
                   Arrange food collection
                 </Button>

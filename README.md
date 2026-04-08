@@ -56,7 +56,7 @@ backgroundImage: {
 
 ### Update Contact Information
 Search for these placeholders and replace:
-- `07123 456 789` → Your phone number
+- `07718851362` → Your phone number
 - `donations@lunasen.org` → Your email
 - `https://paypal.me/lunasen` → Your PayPal.me link
 

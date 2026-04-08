@@ -295,7 +295,7 @@ const GetSupport = () => {
                     onChange={updateField}
                     onBlur={touchField}
                     error={touched.phoneNumber ? errors.phoneNumber : ''}
-                    placeholder="07123 456 789"
+                    placeholder="07718851362"
                     required
                   />
 
@@ -754,7 +754,7 @@ const GetSupport = () => {
               <div className="luna-emergency-strip__icon">🚨</div>
               <div className="luna-emergency-strip__text">
                 <strong>NEED HELP NOW?</strong> Call or text our crisis line:
-                <a href="tel:07123456789" className="luna-emergency-strip__phone"> 07123 456 789</a>
+                <a href="tel:07718851362" className="luna-emergency-strip__phone"> 07718851362</a>
               </div>
             </div>
           </div>
@@ -787,7 +787,7 @@ const GetSupport = () => {
             <h4 className="luna-footer__subtitle">Contact</h4>
             <ul className="luna-footer__contact">
               <li>📧 hello@lunasen.org</li>
-              <li>📱 07123 456 789</li>
+              <li>📱 07718851362</li>
               <li>📍 Serving Wirral (CH62+)</li>
             </ul>
           </div>
@@ -1075,7 +1075,7 @@ export default GetSupport;
                   required
                   placeholder={
                     formData.contactMethod === 'email' ? 'your.email@example.com' : 
-                    '07123 456 789'
+                    '07718851362'
                   }
                 />
 
@@ -1182,7 +1182,7 @@ export default GetSupport;
         {/* Help Text */}
         <div className="luna-help-section">
           <p className="luna-help-text">
-            Need immediate help? Call our emergency line: <strong className="luna-text-gradient">07123 456 789</strong>
+            Need immediate help? Call our emergency line: <strong className="luna-text-gradient">07718851362</strong>
           </p>
           <p className="luna-help-text">
             This form is saved as you type and works offline.

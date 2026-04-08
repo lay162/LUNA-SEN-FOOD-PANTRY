@@ -268,7 +268,7 @@ const Support = () => {
       setCurrentStep(1);
       setErrors({});
     } else {
-      alert(result.message || 'We could not submit your referral. Please try again or call 07123 456 789.');
+      alert(result.message || 'We could not submit your referral. Please try again or call 07718851362.');
     }
   };
 
@@ -389,7 +389,7 @@ const Support = () => {
               onChange={handleInputChange}
               error={errors.phone}
               required
-              placeholder="07123 456 789"
+              placeholder="07718851362"
             />
             <FormField
               label="Email (optional but recommended)"
@@ -725,9 +725,9 @@ const Support = () => {
               </div>
               <div className="luna-emergency-strip__text">
                 <strong>CRISIS SUPPORT:</strong> Need food today? Call or text
-                <a href="tel:07123456789" className="luna-emergency-strip__phone">
+                <a href="tel:07718851362" className="luna-emergency-strip__phone">
                   {' '}
-                  07123 456 789
+                  07718851362
                 </a>
               </div>
             </div>

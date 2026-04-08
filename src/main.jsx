@@ -53,7 +53,7 @@ class ErrorBoundary extends React.Component {
               </button>
               <div className="text-sm text-gray-500">
                 <p>Need immediate help?</p>
-                <p><strong>Call: 07123 456 789</strong></p>
+                <p><strong>Call: 07718851362</strong></p>
               </div>
             </div>
           </div>

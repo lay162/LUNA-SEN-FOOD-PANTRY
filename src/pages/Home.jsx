@@ -350,7 +350,7 @@ const Home = () => {
               <div className="luna-emergency-strip__icon">🚨</div>
               <div className="luna-emergency-strip__text">
                 <strong>CRISIS SUPPORT:</strong> Need food today? Call or text 
-                <a href="tel:07123456789" className="luna-emergency-strip__phone"> 07123 456 789</a>
+                <a href="tel:07718851362" className="luna-emergency-strip__phone"> 07718851362</a>
               </div>
             </div>
           </div>

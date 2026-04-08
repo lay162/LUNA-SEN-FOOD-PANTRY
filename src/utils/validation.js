@@ -46,7 +46,7 @@ export function validatePhone(phone) {
     national.startsWith('0') && national.length >= 10 && national.length <= 11 && /^0\d+$/.test(national);
   return {
     valid: ok,
-    message: ok ? '' : 'Please enter a valid UK phone number (e.g. 07123 456 789)',
+    message: ok ? '' : 'Please enter a valid UK phone number (e.g. 07718851362)',
   };
 }
 
