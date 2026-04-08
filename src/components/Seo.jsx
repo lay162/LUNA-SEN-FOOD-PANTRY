@@ -12,7 +12,7 @@ export function Seo({
   title,
   description,
   path = '/',
-  imagePath = '/app-icon.svg',
+  imagePath = '/PANTRY-LOGO.png',
   robots = 'index,follow',
   jsonLd,
 }) {

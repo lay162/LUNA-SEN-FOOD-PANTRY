@@ -1,2 +1,2 @@
-/** Brand logo (placeholder SVG in `public/app-icon.svg`). */
-export const brandLogoUrl = `${import.meta.env.BASE_URL}app-icon.svg`;
+/** Brand logo in `public/PANTRY-LOGO.png`. */
+export const brandLogoUrl = `${import.meta.env.BASE_URL}PANTRY-LOGO.png`;
