@@ -70,6 +70,8 @@ const QUICK_DONATION_TIERS = [
   }
 ];
 
+const TIDE_DONATE_URL = 'https://pay.tide.co/pay/a09c827d-4eaf-4fdd-823c-be490e5fa6df';
+
 const Donate = () => {
   const impactStats = usePublicImpactStats();
 
@@ -90,15 +92,12 @@ const Donate = () => {
       description: 'Direct financial support helps us buy exactly what families need, including specialty items for SEN requirements.',
       action: (
         <div className="space-y-4">
-          <a href="#donate-methods" className="luna-link-button">
+          <a href={TIDE_DONATE_URL} target="_blank" rel="noopener noreferrer" className="luna-link-button">
             <Button variant="primary" size="lg" className="w-full">
-              Donate online (coming soon)
+              Donate with Tide
             </Button>
           </a>
-          <p className="text-xs text-gray-500">
-            We’re setting up our official donation checkout. In the meantime, please use the options on this page to
-            contact us for the current best way to donate.
-          </p>
+          <p className="text-xs text-gray-500">Secure payment link powered by Tide.</p>
         </div>
       )
     },
@@ -190,9 +189,9 @@ const Donate = () => {
                 Every contribution stays local. Money, food, or corporate support - choose what works for you.
               </p>
               <div className="luna-hero__actions">
-                <a href="#donate-methods" className="luna-link-button">
+                <a href={TIDE_DONATE_URL} target="_blank" rel="noopener noreferrer" className="luna-link-button">
                   <Button variant="primary" size="xl" className="luna-button--full-width">
-                    Donate online (coming soon)
+                    Donate with Tide
                   </Button>
                 </a>
                 <a href="#donate-methods" className="luna-link-button">
@@ -235,7 +234,8 @@ const Donate = () => {
                 Quick donation to <span className="luna-brand-text">LUNA</span>
               </h3>
               <p className="luna-card-text mb-6">
-                Tap an amount to open PayPal - every gift stays in Wirral and supports SEN-first food support.
+                Tap an amount to open our secure Tide checkout - every gift stays in Wirral and supports SEN-first food
+                support.
               </p>
 
               <div className="luna-donate-tiers" role="group" aria-label="Suggested donation amounts by tier">
@@ -247,18 +247,26 @@ const Donate = () => {
                     <h4 className="luna-donate-tier__title">{tier.label}</h4>
                     <div className="luna-donate-tier__chips">
                       {tier.amounts.map((row) => (
-                        <span key={row.paypal} className="luna-donate-tier__chip luna-link-button">
+                        <a
+                          key={row.paypal}
+                          href={TIDE_DONATE_URL}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="luna-donate-tier__chip luna-link-button"
+                          aria-label={`Donate ${row.label} (opens Tide checkout)`}
+                          title={`Donate ${row.label}`}
+                        >
                           <Button variant={tier.buttonVariant} size="sm" className="luna-donate-tier__btn">
                             {row.label}
                           </Button>
-                        </span>
+                        </a>
                       ))}
                     </div>
                   </div>
                 ))}
               </div>
               <p className="text-xs text-gray-500 mt-4 mb-0">
-                Quick-pay links will appear here once our official checkout is live.
+                You can enter your chosen amount during checkout.
               </p>
 
               <p className="luna-card-text luna-donate-impact-footnote text-sm mb-0">
@@ -434,9 +442,9 @@ const Donate = () => {
             </p>
 
             <div className="luna-grid luna-grid--2">
-              <a href="#donate-methods" className="luna-link-button">
+              <a href={TIDE_DONATE_URL} target="_blank" rel="noopener noreferrer" className="luna-link-button">
                 <Button variant="primary" size="xl" className="luna-button--full-width">
-                  Donate online (coming soon)
+                  Donate with Tide
                 </Button>
               </a>
               <a href="tel:07123456789" className="luna-link-button">
