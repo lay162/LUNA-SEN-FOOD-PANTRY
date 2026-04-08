@@ -5,7 +5,8 @@ import { STOCK_SEED } from '../pages/Admin/data/stockSeed';
 import { getAuthInstance, getDb, isFirebaseConfigured, omitUndefinedDeep } from '../firebase';
 import { DEMO_MODE } from '../utils/demoMode';
 
-const LS_SUFFIX = DEMO_MODE ? '' : '-live';
+// Always use the live keys for real operations (no demo seed data).
+const LS_SUFFIX = '-live';
 const LS_REF = `luna-admin-referrals-v3${LS_SUFFIX}`;
 const LS_AUDIT = `luna-admin-audit-v1${LS_SUFFIX}`;
 const LS_TX = `luna-admin-transactions-v1${LS_SUFFIX}`;
@@ -43,10 +44,10 @@ function readActor() {
 const AdminOpsContext = createContext(null);
 
 export function AdminOpsProvider({ children }) {
-  const [referrals, setReferrals] = useState(() => loadJSON(LS_REF, DEMO_MODE ? REFERRALS_SEED : []));
+  const [referrals, setReferrals] = useState(() => loadJSON(LS_REF, []));
   const [auditLog, setAuditLog] = useState(() => loadJSON(LS_AUDIT, []));
-  const [transactions, setTransactions] = useState(() => loadJSON(LS_TX, DEMO_MODE ? TRANSACTIONS_SEED : []));
-  const [stockItems, setStockItems] = useState(() => loadJSON(LS_STOCK, DEMO_MODE ? STOCK_SEED : []));
+  const [transactions, setTransactions] = useState(() => loadJSON(LS_TX, []));
+  const [stockItems, setStockItems] = useState(() => loadJSON(LS_STOCK, []));
 
   // If Firebase is configured, hydrate referrals from the server (newest first).
   useEffect(() => {

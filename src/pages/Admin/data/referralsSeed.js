@@ -3,6 +3,9 @@
  * Referrer-facing fields use organisations / places (Wirral-familiar examples), not individual clinician names.
  */
 
+// Production: start with no demo referrals.
+export const REFERRALS_SEED = [];
+
 /** Short route/type for meta lines — paired with referrerOrganisation */
 const REFERRER_ROUTES = [
   'School or education',
@@ -217,4 +220,4 @@ function buildGeneratedReferrals(startNum, count) {
 }
 
 /** ~58 referrals: hand-crafted variety + generated rows for list/pagination demos */
-export const REFERRALS_SEED = [...CORE_REFERRALS, ...buildGeneratedReferrals(7, 52)];
+// (Intentionally left in source for future demo-only work; not exported.)

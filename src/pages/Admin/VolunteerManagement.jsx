@@ -14,56 +14,10 @@ import {
 } from './utils/applicantDocReview';
 import { DEMO_MODE } from '../../utils/demoMode';
 
-const LS_SUFFIX = DEMO_MODE ? '' : '-live';
+// Always use the live keys for real operations (no demo seed data).
+const LS_SUFFIX = '-live';
 const LS_APPLICANTS = `luna-admin-applicants-v1${LS_SUFFIX}`;
 const LS_VOLUNTEERS_ROSTER = `luna-admin-volunteers-roster-v1${LS_SUFFIX}`;
-
-function defaultApplicantsSeed() {
-  return [
-    {
-      id: 'APP-001',
-      name: 'Hannah Reid',
-      roleApplied: 'delivery',
-      submittedOn: '2026-03-18',
-      stage: 'application-received',
-      email: 'hannah.reid@email.com',
-      notes: 'Has own car and weekday morning availability.',
-      drivingLicenceProofDataUrl: '',
-      drivingLicenceProofFileName: '',
-      bringInsuranceInPerson: false,
-      bringDrivingLicenceInPerson: false,
-      bringDbsInPerson: false,
-      founderDocsVerified: false,
-    },
-    {
-      id: 'APP-002',
-      name: 'Omar Khan',
-      roleApplied: 'packer',
-      submittedOn: '2026-03-20',
-      stage: 'informal-chat-booked',
-      email: 'omar.k@email.com',
-      notes: 'Food handling background, needs evening slots.',
-      bringInsuranceInPerson: false,
-      bringDbsInPerson: false,
-      founderDocsVerified: true,
-    },
-    {
-      id: 'APP-003',
-      name: 'Sophie Miles',
-      roleApplied: 'admin',
-      submittedOn: '2026-03-14',
-      stage: 'offered',
-      email: 's.miles@email.com',
-      notes: 'Strong admin profile, DBS in progress.',
-      drivingLicenceProofDataUrl: '',
-      drivingLicenceProofFileName: '',
-      bringInsuranceInPerson: false,
-      bringDrivingLicenceInPerson: false,
-      bringDbsInPerson: false,
-      founderDocsVerified: true,
-    },
-  ];
-}
 
 function normalizeApplicantRow(a) {
   if (!a || typeof a !== 'object') return a;
@@ -93,7 +47,7 @@ function loadApplicantsInitial() {
   } catch {
     /* ignore */
   }
-  return DEMO_MODE ? defaultApplicantsSeed().map(normalizeApplicantRow) : [];
+  return [];
 }
 import { useAdminOps } from '../../context/AdminOpsContext';
 import { getDb, isFirebaseConfigured } from '../../firebase';
