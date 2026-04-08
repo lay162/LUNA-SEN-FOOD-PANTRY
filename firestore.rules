@@ -11,11 +11,46 @@ service cloud.firestore {
         get(/databases/$(database)/documents/adminUsers/$(request.auth.uid)).data.role == 'founder';
     }
 
-    // User role documents (founder manages)
+    function isAdminUser() {
+      return signedIn() &&
+        exists(/databases/$(database)/documents/adminUsers/$(request.auth.uid));
+    }
+
+    // User role documents (founder manages; allowlisted users can create their own first doc)
     match /adminUsers/{uid} {
       allow read: if signedIn() && request.auth.uid == uid; // users can read own role
       allow list: if isFounder();
-      allow create, update, delete: if isFounder();
+      allow create: if signedIn()
+        && request.auth.uid == uid
+        && !exists(/databases/$(database)/documents/adminUsers/$(uid))
+        && request.resource.data.uid == uid
+        && request.resource.data.email is string
+        && exists(/databases/$(database)/documents/accessAllowlist/$(request.resource.data.email))
+        && get(/databases/$(database)/documents/accessAllowlist/$(request.resource.data.email)).data.active != false;
+      allow update, delete: if isFounder();
+    }
+
+    // Public forms (Firestore: useOfflineForm sets source + type; anonymous auth = signed in)
+    match /referrals/{id} {
+      allow create: if signedIn()
+        && request.resource.data.source == 'web'
+        && request.resource.data.type == 'referral';
+      allow read, list, update, delete: if isFounder() || isAdminUser();
+    }
+
+    match /volunteers/{id} {
+      allow create: if signedIn()
+        && request.resource.data.source == 'web'
+        && request.resource.data.type == 'volunteer';
+      allow read, list, update, delete: if isFounder() || isAdminUser();
+    }
+
+    match /stories/{id} {
+      allow create: if signedIn()
+        && request.resource.data.source == 'web'
+        && request.resource.data.type == 'story';
+      allow read, list: if signedIn();
+      allow update, delete: if isFounder() || isAdminUser();
     }
 
     // Allowlist entries: founder manages; invited users can "get" their own allowlist doc (anonymous auth counts as signed in)
