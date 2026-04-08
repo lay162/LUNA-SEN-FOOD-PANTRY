@@ -2,6 +2,13 @@ import React, { useState } from 'react';
 import Button from '../components/Button';
 
 const Admin = () => {
+  const ADMIN_CREDENTIALS = [
+    { username: 'lauren', password: 'luna2024' },
+    { username: 'lauren', password: 'luna2026' },
+    { username: 'lunaadmin', password: 'luna2024' },
+    { username: 'lunaadmin', password: 'luna2026' },
+  ];
+
   const [referrals, setReferrals] = useState({
     taken: 247,
     fulfilled: 231,
@@ -13,8 +20,14 @@ const Admin = () => {
 
   const handleLogin = (e) => {
     e.preventDefault();
+    const username = credentials.username.trim().toLowerCase();
+    const password = credentials.password.trim();
+    const isValidLogin = ADMIN_CREDENTIALS.some(
+      (entry) => entry.username === username && entry.password === password
+    );
+
     // Simple auth - in production use proper authentication
-    if (credentials.username === 'lauren' && credentials.password === 'luna2024') {
+    if (isValidLogin) {
       setIsLoggedIn(true);
     } else {
       alert('Invalid credentials');

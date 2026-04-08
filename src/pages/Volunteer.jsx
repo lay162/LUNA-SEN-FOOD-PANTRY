@@ -6,6 +6,7 @@ import Card, { UserGroupIcon, PhoneIcon, HeartIcon } from '../components/Card';
 import { useFormValidation } from '../hooks/useFormValidation';
 import { useOfflineForm } from '../hooks/useOfflineForm';
 import HeroLogo from '../components/HeroLogo';
+import VolunteerDocUploadRow from '../components/VolunteerDocUploadRow';
 
 const Volunteer = () => {
   const [searchParams] = useSearchParams();
@@ -30,7 +31,17 @@ const Volunteer = () => {
     additionalInfo: '',
     consent: false,
     references: '',
-    startDate: ''
+    startDate: '',
+    keepOnFile: false,
+    drivingLicenceProofDataUrl: '',
+    drivingLicenceProofFileName: '',
+    insuranceProofDataUrl: '',
+    insuranceProofFileName: '',
+    dbsProofDataUrl: '',
+    dbsProofFileName: '',
+    bringInsuranceInPerson: false,
+    bringDrivingLicenceInPerson: false,
+    bringDbsInPerson: false,
   };
 
   const requiredFields = ['name', 'email', 'phone', 'role', 'availability', 'consent'];
@@ -45,6 +56,28 @@ const Volunteer = () => {
     e.preventDefault();
     
     if (!validateForm()) {
+      return;
+    }
+
+    if (
+      formData.role === 'driver' &&
+      !formData.bringInsuranceInPerson &&
+      !String(formData.insuranceProofDataUrl || '').trim()
+    ) {
+      window.alert(
+        'Please add proof of motor insurance (Choose file or Take photo), or tick the box to show it in person.'
+      );
+      return;
+    }
+
+    if (
+      formData.role === 'driver' &&
+      !formData.bringDrivingLicenceInPerson &&
+      !String(formData.drivingLicenceProofDataUrl || '').trim()
+    ) {
+      window.alert(
+        "Please add a photo/PDF of your driving licence, or tick the box to show it in person."
+      );
       return;
     }
 
@@ -313,6 +346,47 @@ const Volunteer = () => {
                       onBlur={touchField}
                       helpText="Food parcels can be heavy, especially for larger families"
                     />
+
+                    <div className="rounded-xl border border-gray-100 bg-gray-50/80 p-4 space-y-4">
+                      <VolunteerDocUploadRow
+                        idPrefix="vol-licence"
+                        label="Driving licence (photo or PDF)"
+                        description="Required for delivery drivers unless you choose in person below. Upload a clear photo (front/back) or PDF."
+                        dataUrl={formData.drivingLicenceProofDataUrl}
+                        fileName={formData.drivingLicenceProofFileName}
+                        onChange={({ dataUrl, fileName }) => {
+                          updateField('drivingLicenceProofDataUrl', dataUrl);
+                          updateField('drivingLicenceProofFileName', fileName);
+                        }}
+                      />
+                      <FormField
+                        label="I'll show my driving licence in person instead of uploading (we'll check it at interview or induction)"
+                        name="bringDrivingLicenceInPerson"
+                        type="checkbox"
+                        value={formData.bringDrivingLicenceInPerson}
+                        onChange={updateField}
+                        onBlur={touchField}
+                      />
+                      <VolunteerDocUploadRow
+                        idPrefix="vol-insurance"
+                        label="Motor insurance certificate"
+                        description="Required for delivery drivers unless you choose in person below. Upload a clear photo or PDF of your current cover (business use if applicable)."
+                        dataUrl={formData.insuranceProofDataUrl}
+                        fileName={formData.insuranceProofFileName}
+                        onChange={({ dataUrl, fileName }) => {
+                          updateField('insuranceProofDataUrl', dataUrl);
+                          updateField('insuranceProofFileName', fileName);
+                        }}
+                      />
+                      <FormField
+                        label="I'll show my motor insurance in person instead of uploading (we'll check it at interview or induction)"
+                        name="bringInsuranceInPerson"
+                        type="checkbox"
+                        value={formData.bringInsuranceInPerson}
+                        onChange={updateField}
+                        onBlur={touchField}
+                      />
+                    </div>
                   </div>
                 )}
 
@@ -355,6 +429,50 @@ const Volunteer = () => {
                     onBlur={touchField}
                     error={touched.additionalInfo ? errors.additionalInfo : ''}
                     placeholder="Anything else we should know? Special skills, accessibility needs, etc..."
+                  />
+                </div>
+
+                {/* DBS / safeguarding — optional proof */}
+                <div className="space-y-6">
+                  <div className="border-b pb-4">
+                    <h2 className="text-xl font-semibold">DBS &amp; safeguarding (optional)</h2>
+                  </div>
+                  <div className="rounded-xl border border-gray-100 bg-gray-50/80 p-4 space-y-4">
+                    <VolunteerDocUploadRow
+                      idPrefix="vol-dbs"
+                      label="DBS certificate or update service summary"
+                      description="If you already have an enhanced DBS for regulated activity, or subscribe to the DBS Update Service, you can upload a photo or PDF here. Optional — or show in person below."
+                      dataUrl={formData.dbsProofDataUrl}
+                      fileName={formData.dbsProofFileName}
+                      onChange={({ dataUrl, fileName }) => {
+                        updateField('dbsProofDataUrl', dataUrl);
+                        updateField('dbsProofFileName', fileName);
+                      }}
+                    />
+                    <FormField
+                      label="I'll show DBS or update-service evidence in person instead of uploading"
+                      name="bringDbsInPerson"
+                      type="checkbox"
+                      value={formData.bringDbsInPerson}
+                      onChange={updateField}
+                      onBlur={touchField}
+                    />
+                  </div>
+                </div>
+
+                {/* Data retention — mirrors clarity of the food bank referral form */}
+                <div className="space-y-6">
+                  <div className="border-b pb-4">
+                    <h2 className="text-xl font-semibold">How we use your application</h2>
+                  </div>
+                  <FormField
+                    label="If we can't offer a role straight away, I'm happy for LUNA to keep my details on file for future volunteer opportunities."
+                    name="keepOnFile"
+                    type="checkbox"
+                    value={formData.keepOnFile}
+                    onChange={updateField}
+                    onBlur={touchField}
+                    helpText="Optional. You can ask us to remove your details at any time. We only use your information for recruitment in line with our privacy practices."
                   />
                 </div>
 

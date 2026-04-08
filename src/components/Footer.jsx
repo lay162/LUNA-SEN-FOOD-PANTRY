@@ -1,8 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { brandLogoUrl } from '../constants/assets';
+import { useBrandLogoUrl } from '../context/BrandingContext';
 
 const Footer = () => {
+  const brandLogoUrl = useBrandLogoUrl();
   const currentYear = new Date().getFullYear();
 
   const quickLinks = [

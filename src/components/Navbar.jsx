@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { brandLogoUrl } from '../constants/assets';
+import { useBrandLogoUrl } from '../context/BrandingContext';
 
 const Navbar = () => {
+  const brandLogoUrl = useBrandLogoUrl();
   const location = useLocation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -13,7 +14,7 @@ const Navbar = () => {
     { path: '/support', label: 'Support' },
     { path: '/donate', label: 'Donate' },
     { path: '/volunteer', label: 'Volunteer' },
-    { path: '/admin', label: 'Admin', isAdmin: true },
+    { path: '/admin', label: 'Staff sign in', isAdmin: true },
   ];
 
   const toggleMobileMenu = () => {

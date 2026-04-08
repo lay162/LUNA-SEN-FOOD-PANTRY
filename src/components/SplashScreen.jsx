@@ -1,7 +1,8 @@
 import React from 'react';
-import { brandLogoUrl } from '../constants/assets';
+import { useBrandLogoUrl } from '../context/BrandingContext';
 
 const SplashScreen = ({ isVisible }) => {
+  const brandLogoUrl = useBrandLogoUrl();
   if (!isVisible) return null;
 
   return (

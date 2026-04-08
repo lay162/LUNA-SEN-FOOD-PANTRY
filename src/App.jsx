@@ -1,14 +1,54 @@
 import React, { useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Home from './pages/Home';
 import Support from './pages/Support';
 import Donate from './pages/Donate';
 import Volunteer from './pages/Volunteer';
-import Admin from './pages/Admin';
+import Admin from './pages/Admin/Admin';
+import { BrandingProvider } from './context/BrandingContext';
 import { initializeAuth } from './firebase';
 import { registerServiceWorker, showInstallPrompt } from './utils/offline';
+
+function AppRoutes() {
+  const { pathname } = useLocation();
+  const hideSiteChrome = pathname.startsWith('/admin');
+
+  return (
+    <div className={`App min-h-screen flex flex-col ${hideSiteChrome ? 'admin-fullscreen-app' : ''}`}>
+      {!hideSiteChrome && <Navbar />}
+      <main className="flex min-h-0 flex-1 flex-col">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/support" element={<Support />} />
+          <Route path="/donate" element={<Donate />} />
+          <Route path="/volunteer" element={<Volunteer />} />
+          <Route path="/admin/*" element={<Admin />} />
+
+          <Route path="/about" element={<div className="min-h-screen bg-gray-50 flex items-center justify-center"><h1 className="text-2xl">About Us - Coming Soon</h1></div>} />
+          <Route path="/contact" element={<div className="min-h-screen bg-gray-50 flex items-center justify-center"><h1 className="text-2xl">Contact - Coming Soon</h1></div>} />
+          <Route path="/privacy" element={<div className="min-h-screen bg-gray-50 flex items-center justify-center"><h1 className="text-2xl">Privacy Policy - Coming Soon</h1></div>} />
+          <Route path="/accessibility" element={<div className="min-h-screen bg-gray-50 flex items-center justify-center"><h1 className="text-2xl">Accessibility Statement - Coming Soon</h1></div>} />
+          <Route path="/qr-codes" element={<div className="min-h-screen bg-gray-50 flex items-center justify-center"><h1 className="text-2xl">QR Codes - Coming Soon</h1></div>} />
+
+          <Route path="*" element={
+            <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+              <div className="text-center">
+                <h1 className="text-4xl font-bold text-gray-900 mb-4">Page Not Found</h1>
+                <p className="text-gray-600 mb-8">Sorry, we couldn't find the page you're looking for.</p>
+                <a href="/" className="text-luna-pink hover:text-pink-600 font-medium">
+                  Return to Home
+                </a>
+              </div>
+            </div>
+          } />
+        </Routes>
+      </main>
+      {!hideSiteChrome && <Footer />}
+    </div>
+  );
+}
 
 function App() {
   useEffect(() => {
@@ -72,39 +112,9 @@ function App() {
 
   return (
     <Router>
-      <div className="App min-h-screen flex flex-col">
-        <Navbar />
-        <main className="flex-grow min-h-0 flex flex-col">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/support" element={<Support />} />
-            <Route path="/donate" element={<Donate />} />
-            <Route path="/volunteer" element={<Volunteer />} />
-            <Route path="/admin" element={<Admin />} />
-            
-            {/* Additional routes for future pages */}
-            <Route path="/about" element={<div className="min-h-screen bg-gray-50 flex items-center justify-center"><h1 className="text-2xl">About Us - Coming Soon</h1></div>} />
-            <Route path="/contact" element={<div className="min-h-screen bg-gray-50 flex items-center justify-center"><h1 className="text-2xl">Contact - Coming Soon</h1></div>} />
-            <Route path="/privacy" element={<div className="min-h-screen bg-gray-50 flex items-center justify-center"><h1 className="text-2xl">Privacy Policy - Coming Soon</h1></div>} />
-            <Route path="/accessibility" element={<div className="min-h-screen bg-gray-50 flex items-center justify-center"><h1 className="text-2xl">Accessibility Statement - Coming Soon</h1></div>} />
-            <Route path="/qr-codes" element={<div className="min-h-screen bg-gray-50 flex items-center justify-center"><h1 className="text-2xl">QR Codes - Coming Soon</h1></div>} />
-            
-            {/* 404 page */}
-            <Route path="*" element={
-              <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-                <div className="text-center">
-                  <h1 className="text-4xl font-bold text-gray-900 mb-4">Page Not Found</h1>
-                  <p className="text-gray-600 mb-8">Sorry, we couldn't find the page you're looking for.</p>
-                  <a href="/" className="text-luna-pink hover:text-pink-600 font-medium">
-                    Return to Home
-                  </a>
-                </div>
-              </div>
-            } />
-          </Routes>
-        </main>
-        <Footer />
-      </div>
+      <BrandingProvider>
+        <AppRoutes />
+      </BrandingProvider>
     </Router>
   );
 }

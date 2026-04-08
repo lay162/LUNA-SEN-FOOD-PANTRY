@@ -1,21 +1,65 @@
 rules_version = '2';
-
 service cloud.firestore {
   match /databases/{database}/documents {
-
-    // Web forms use anonymous auth — require a signed-in user (anonymous is fine)
-    match /referrals/{document} {
-      allow create: if request.auth != null
-        && request.resource.data.source == 'web'
-        && request.resource.data.type == 'referral';
-      allow read, update, delete: if false;
+    function signedIn() {
+      return request.auth != null;
     }
 
-    match /volunteers/{document} {
-      allow create: if request.auth != null
-        && request.resource.data.source == 'web'
-        && request.resource.data.type == 'volunteer';
-      allow read, update, delete: if false;
+    function isFounder() {
+      return signedIn() &&
+        exists(/databases/$(database)/documents/adminUsers/$(request.auth.uid)) &&
+        get(/databases/$(database)/documents/adminUsers/$(request.auth.uid)).data.role == 'founder';
+    }
+
+    // User role documents (founder manages)
+    match /adminUsers/{uid} {
+      allow read: if signedIn() && request.auth.uid == uid; // users can read own role
+      allow list: if isFounder();
+      allow create, update, delete: if isFounder();
+    }
+
+    // Allowlist entries: founder manages; invited users can "get" their own allowlist doc (anonymous auth counts as signed in)
+    match /accessAllowlist/{email} {
+      allow get: if signedIn();
+      // Everyone signed-in can list contacts for internal comms.
+      allow list: if signedIn();
+      allow create, update, delete: if isFounder();
+    }
+
+    // Immutable audit trail: everyone can write their own actions; founder can read all.
+    match /adminAudit/{docId} {
+      allow create: if signedIn();
+      allow read, list: if isFounder();
+      allow update, delete: if false;
+    }
+
+    // Announcements: founder posts; everyone signed-in can read; users can ack.
+    match /adminAnnouncements/{id} {
+      allow read, list: if signedIn();
+      allow create, update, delete: if isFounder();
+    }
+
+    match /adminAnnouncementAcks/{ackId} {
+      allow create: if signedIn();
+      allow read: if isFounder() || (signedIn() && resource.data.uid == request.auth.uid);
+      allow list: if isFounder();
+      allow update, delete: if false;
+    }
+
+    // Internal messages (foundation): signed-in can read/write; founder can list all for audit.
+    match /adminMessages/{id} {
+      allow create: if signedIn();
+      allow read: if signedIn();
+      allow list: if isFounder();
+      allow update, delete: if false;
+    }
+
+    // Availability schedules: users manage their own; founder can view/list all.
+    match /availabilitySchedules/{uid} {
+      allow read: if signedIn() && request.auth.uid == uid;
+      allow list: if isFounder();
+      allow create, update: if signedIn() && request.auth.uid == uid;
+      allow delete: if false;
     }
   }
 }

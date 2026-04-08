@@ -70,6 +70,17 @@ export function validateSupportReferralStep(data, step) {
 
   switch (step) {
     case 1: {
+      required('applyingFor', 'Please choose who this application is for');
+      if (trim(data.applyingFor) === 'on_behalf') {
+        required('submitterCapacity', 'Please tell us who is completing this form');
+        if (trim(data.submitterCapacity) === 'other' && trim(data.submitterCapacityDetail).length < 3) {
+          errors.submitterCapacityDetail = 'Please briefly describe who you are (e.g. extended family, advocate)';
+        }
+        if (trim(data.submitterOrganisation).length < 2) {
+          errors.submitterOrganisation =
+            'Please give the organisation, school, or place (or write “friend or family” / “none” if that fits)';
+        }
+      }
       required('firstName');
       required('lastName');
       required('phone');
@@ -132,6 +143,10 @@ export function validateSupportReferralStep(data, step) {
       break;
     }
     case 6: {
+      required('heardAboutUs', 'Please tell us how you heard about LUNA SEN Pantry');
+      if (trim(data.heardAboutUs) === 'other' && trim(data.heardAboutUsDetail).length < 3) {
+        errors.heardAboutUsDetail = 'Please briefly tell us where you heard about us';
+      }
       if (!data.consentData) {
         errors.consentData = 'Please confirm consent to continue';
       }

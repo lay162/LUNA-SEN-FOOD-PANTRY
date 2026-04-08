@@ -31,7 +31,35 @@ const countOptions = (max) =>
 const adultCountOptions = () =>
   Array.from({ length: 10 }, (_, i) => ({ value: String(i + 1), label: String(i + 1) }));
 
+const SUBMITTER_CAPACITY_OPTIONS = [
+  { value: 'school', label: 'School, nursery, or other education setting' },
+  { value: 'nhs_health', label: 'NHS, GP practice, or other health service' },
+  { value: 'social_council', label: 'Social care or local council (e.g. Wirral Council)' },
+  { value: 'charity', label: 'Charity, food bank, or community organisation' },
+  { value: 'faith', label: 'Faith group, church, mosque, temple, or chaplaincy' },
+  { value: 'family_friend', label: 'Family member or friend (not a paid service)' },
+  { value: 'other', label: 'Other — please describe below' },
+];
+
+const HEARD_ABOUT_US_OPTIONS = [
+  { value: 'gp', label: 'GP / NHS service' },
+  { value: 'school', label: 'School / SENCO / education setting' },
+  { value: 'cab', label: 'Citizens Advice (CAB)' },
+  { value: 'charity', label: 'Charity / community group' },
+  { value: 'social', label: 'Wirral Council / social care' },
+  { value: 'faith', label: 'Faith group' },
+  { value: 'friend', label: 'Friend / family / neighbour' },
+  { value: 'social_media', label: 'Social media (Facebook/Instagram/etc.)' },
+  { value: 'search', label: 'Google / internet search' },
+  { value: 'poster', label: 'Poster / leaflet' },
+  { value: 'other', label: 'Other' },
+];
+
 const initialFormData = {
+  applyingFor: 'myself',
+  submitterOrganisation: '',
+  submitterCapacity: '',
+  submitterCapacityDetail: '',
   firstName: '',
   lastName: '',
   phone: '',
@@ -62,6 +90,8 @@ const initialFormData = {
   consentData: false,
   preferredLanguage: 'english',
   preferredContact: 'weekday',
+  heardAboutUs: '',
+  heardAboutUsDetail: '',
 };
 
 const Support = () => {
@@ -72,8 +102,117 @@ const Support = () => {
   const progress = (currentStep / totalSteps) * 100;
   const { submitForm, isSubmitting } = useOfflineForm('referral');
 
+  const mirrorSupportToAdminReferrals = (data) => {
+    try {
+      const LS_REF = 'luna-admin-referrals-v3';
+      const toInt = (v) => {
+        const n = Number.parseInt(String(v || '0'), 10);
+        return Number.isFinite(n) ? n : 0;
+      };
+      const parseAges = (raw) => {
+        const str = String(raw || '').trim();
+        if (!str) return [];
+        return str
+          .split(/[,\n]/g)
+          .map((s) => s.trim())
+          .filter(Boolean)
+          .map((s) => Number.parseInt(s, 10))
+          .filter((n) => Number.isFinite(n) && n >= 0 && n <= 120);
+      };
+      const routeFromCapacity = (d) => {
+        if (String(d?.applyingFor || '') !== 'on_behalf') return 'Self-referral';
+        const cap = String(d?.submitterCapacity || '').trim();
+        const org = String(d?.submitterOrganisation || '').trim().toLowerCase();
+        if (cap === 'school') return 'School or education';
+        if (cap === 'nhs_health') return 'Health visiting (NHS)';
+        if (cap === 'social_council') return 'Social care';
+        if (cap === 'faith') return 'Faith group';
+        if (cap === 'family_friend') return 'Friend or neighbour';
+        if (cap === 'charity') {
+          if (org.includes('citizens advice') || org.includes('cab')) return 'Citizens Advice (CAB)';
+          return 'Charity or community';
+        }
+        return 'Other';
+      };
+
+      const now = new Date();
+      const referredBy = routeFromCapacity(data);
+      const submitterOrg = String(data?.submitterOrganisation || '').trim();
+      const referrerOrganisation =
+        submitterOrg || (referredBy === 'Self-referral' ? 'Family — direct (no agency)' : '');
+
+      const heard = String(data?.heardAboutUs || '').trim();
+      const heardDetail = String(data?.heardAboutUsDetail || '').trim();
+      const heardLabel =
+        heard === 'gp'
+          ? 'GP / NHS service'
+          : heard === 'school'
+            ? 'School / education'
+            : heard === 'cab'
+              ? 'Citizens Advice (CAB)'
+              : heard === 'charity'
+                ? 'Charity / community'
+                : heard === 'social'
+                  ? 'Council / social care'
+                  : heard === 'faith'
+                    ? 'Faith group'
+                    : heard === 'friend'
+                      ? 'Friend / family / neighbour'
+                      : heard === 'social_media'
+                        ? 'Social media'
+                        : heard === 'search'
+                          ? 'Google / internet search'
+                          : heard === 'poster'
+                            ? 'Poster / leaflet'
+                            : heard || '—';
+
+      const row = {
+        id: `REF-WEB-${now.getTime()}`,
+        familyCode: `WEB-${String(now.getTime()).slice(-6)}`,
+        referredBy,
+        referrerOrganisation,
+        contactName: `${String(data?.firstName || '').trim()} ${String(data?.lastName || '').trim()}`.trim() || '—',
+        contactEmail: String(data?.email || '').trim(),
+        dateReferred: now.toISOString().slice(0, 10),
+        priority: String(data?.urgencyLevel || '').toLowerCase() === 'urgent' ? 'urgent' : 'medium',
+        status: 'pending',
+        familySize: Math.max(1, toInt(data?.adultsCount) + toInt(data?.childrenCount)),
+        childrenAges: parseAges(data?.childrenAges),
+        senNeeds: [],
+        dietaryReqs: [],
+        lastContact: 'Just now (web)',
+        nextAction: 'Initial assessment call',
+        notes: [
+          `Heard about us: ${heardLabel}${heard === 'other' && heardDetail ? ` — ${heardDetail}` : ''}`,
+          String(data?.additionalComments || '').trim(),
+        ]
+          .filter(Boolean)
+          .join('\n\n'),
+        heardAboutUs: heardLabel,
+      };
+
+      const raw = localStorage.getItem(LS_REF);
+      const existing = raw ? JSON.parse(raw) : [];
+      const arr = Array.isArray(existing) ? existing : [];
+      localStorage.setItem(LS_REF, JSON.stringify([row, ...arr].slice(0, 500)));
+    } catch {
+      // ignore
+    }
+  };
+
   const handleInputChange = (name, value) => {
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormData((prev) => {
+      if (name === 'applyingFor' && value === 'myself') {
+        return {
+          ...prev,
+          applyingFor: 'myself',
+          submitterOrganisation: '',
+          submitterCapacity: '',
+          submitterCapacityDetail: '',
+        };
+      }
+      return { ...prev, [name]: value };
+    });
   };
 
   const toggleInArray = (name, item) => {
@@ -116,6 +255,7 @@ const Support = () => {
     }
     const result = await submitForm(formData);
     if (result.success) {
+      mirrorSupportToAdminReferrals(formData);
       alert(
         result.offline
           ? result.message ||
@@ -160,6 +300,72 @@ const Support = () => {
       case 1:
         return (
           <div>
+            <FormField
+              label="Is this application for your own household, or for someone else you are supporting?"
+              name="applyingFor"
+              type="radio"
+              value={formData.applyingFor}
+              onChange={handleInputChange}
+              error={errors.applyingFor}
+              required
+              options={[
+                { value: 'myself', label: 'For myself and my household' },
+                {
+                  value: 'on_behalf',
+                  label:
+                    'For someone else — I am referring another family or young person (e.g. as a worker, school, friend, or relative)',
+                },
+              ]}
+            />
+            {formData.applyingFor === 'on_behalf' && (
+              <>
+                <p className="luna-form-help" style={{ marginBottom: 'var(--luna-space-4)' }}>
+                  We use this to record whether the request came from a service (e.g. GP surgery, Citizens Advice
+                  Wirral, Wirral Ark) or from a friend, neighbour, or family member. Fields stay plain language so
+                  they work with screen readers and mobiles.
+                </p>
+                <FormField
+                  label="Who is completing this form?"
+                  name="submitterCapacity"
+                  type="select"
+                  value={formData.submitterCapacity}
+                  onChange={handleInputChange}
+                  error={errors.submitterCapacity}
+                  required
+                  options={SUBMITTER_CAPACITY_OPTIONS}
+                />
+                <FormField
+                  label="Organisation, school, or place name (if it applies)"
+                  name="submitterOrganisation"
+                  value={formData.submitterOrganisation}
+                  onChange={handleInputChange}
+                  error={errors.submitterOrganisation}
+                  required
+                  placeholder="e.g. Citizens Advice Wirral, Wirral Ark, your school name or GP surgery — or “friend / neighbour”"
+                  helpText="If you are a friend or relative without an organisation, you can write “Friend or family” or “None”."
+                />
+                {formData.submitterCapacity === 'other' && (
+                  <FormField
+                    label="Briefly describe who you are in relation to the family"
+                    name="submitterCapacityDetail"
+                    type="textarea"
+                    value={formData.submitterCapacityDetail}
+                    onChange={handleInputChange}
+                    error={errors.submitterCapacityDetail}
+                    required
+                    placeholder="e.g. extended family member, volunteer, advocate…"
+                  />
+                )}
+              </>
+            )}
+            <p
+              className="luna-form-help"
+              style={{ marginBottom: 'var(--luna-space-4)', marginTop: 'var(--luna-space-2)' }}
+            >
+              {formData.applyingFor === 'on_behalf'
+                ? 'Details below should be the family or young person being referred — name, phone, and postcode — so we can contact them about support.'
+                : 'Your details below should be for the main contact in the household (usually a parent or carer).'}
+            </p>
             <FormField
               label="First Name"
               name="firstName"
@@ -441,6 +647,29 @@ const Support = () => {
         return (
           <div>
             <FormField
+              label="How did you hear about LUNA SEN Pantry?"
+              name="heardAboutUs"
+              type="select"
+              value={formData.heardAboutUs}
+              onChange={handleInputChange}
+              error={errors.heardAboutUs}
+              required
+              options={HEARD_ABOUT_US_OPTIONS}
+              helpText="This helps us understand which routes are reaching families (e.g. school, GP, CAB, social media)."
+            />
+            {formData.heardAboutUs === 'other' && (
+              <FormField
+                label="Please tell us where you heard about us"
+                name="heardAboutUsDetail"
+                type="textarea"
+                value={formData.heardAboutUsDetail}
+                onChange={handleInputChange}
+                error={errors.heardAboutUsDetail}
+                required
+                placeholder="e.g. Local group, newsletter, support worker, community centre…"
+              />
+            )}
+            <FormField
               label="I consent to LUNA SEN Pantry storing and using this information to arrange support, in line with the privacy policy."
               name="consentData"
               type="checkbox"
@@ -512,8 +741,9 @@ const Support = () => {
             Get <span className="luna-text-gradient">Support</span>
           </h1>
           <p className="luna-page-subtitle">
-            Self-referral for Wirral families — especially where SEN, sensory needs, or crisis circumstances mean ordinary food-bank
-            referrals don’t cover everything. Share as much detail as you can; it helps us pack and respond with dignity.
+            For Wirral households — especially where SEN, sensory needs, or crisis circumstances mean ordinary food-bank
+            referrals don’t cover everything. You can apply for your own family or refer someone else (school, GP, charity,
+            faith group, friend, or neighbour). Share as much detail as you can; it helps us respond with dignity.
           </p>
         </header>
 
@@ -571,7 +801,7 @@ const Support = () => {
               )}
               <div className="luna-support-form__action-primary">
                 {currentStep < totalSteps ? (
-                  <Button variant="secondary" onClick={nextStep} fullWidth className="luna-support-form__action-btn">
+                  <Button variant="gradient" onClick={nextStep} fullWidth className="luna-support-form__action-btn">
                     Next Step
                   </Button>
                 ) : (

@@ -168,5 +168,7 @@ async function submitToFirebase(formData, formType) {
     source: 'web',
   };
 
-  await addDoc(collection(db, formType === 'referral' ? 'referrals' : 'volunteers'), docData);
+  const collectionName =
+    formType === 'referral' ? 'referrals' : formType === 'story' ? 'stories' : 'volunteers';
+  await addDoc(collection(db, collectionName), docData);
 }

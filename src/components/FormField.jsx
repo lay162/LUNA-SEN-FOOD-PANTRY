@@ -511,26 +511,26 @@ const FormField = ({
           cursor: not-allowed;
         }
 
-        /* Dark mode */
+        /* Dark mode: keep LUNA light form fields for readability */
         @media (prefers-color-scheme: dark) {
           .luna-form-input,
           .luna-form-select,
           .luna-form-textarea {
-            background-color: var(--luna-grey-800);
-            border-color: var(--luna-grey-600);
-            color: var(--luna-text-on-dark);
+            background-color: var(--luna-bg-primary);
+            border-color: var(--luna-grey-300);
+            color: var(--luna-text-primary);
           }
 
           .luna-form-input:disabled,
           .luna-form-select:disabled,
           .luna-form-textarea:disabled {
-            background-color: var(--luna-grey-900);
+            background-color: var(--luna-grey-100);
           }
 
           .luna-form-checkbox,
           .luna-form-radio {
-            background-color: var(--luna-grey-800);
-            border-color: var(--luna-grey-600);
+            background-color: var(--luna-bg-primary);
+            border-color: var(--luna-grey-300);
           }
         }
 

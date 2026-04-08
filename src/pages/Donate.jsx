@@ -141,6 +141,7 @@ const Donate = () => {
     }
   ];
 
+  /** Donor-facing groups — titles align with src/constants/pantryCatalog.js (stock / admin) */
   const mostNeededItems = [
     {
       category: 'SEN-Friendly Foods',

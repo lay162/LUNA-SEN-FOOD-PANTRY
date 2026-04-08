@@ -153,12 +153,13 @@
   }
 }
 
-/* Dark Mode Preparation (Optional) */
+/* Dark mode: keep LUNA light theme for consistency/readability.
+   (Users reported dark greys making content unreadable.) */
 @media (prefers-color-scheme: dark) {
   :root {
-    --luna-text-primary: var(--luna-white);
-    --luna-text-secondary: var(--luna-grey-300);
-    --luna-bg-primary: var(--luna-grey-900);
-    --luna-bg-secondary: var(--luna-grey-800);
+    --luna-text-primary: var(--luna-grey-900);
+    --luna-text-secondary: var(--luna-grey-600);
+    --luna-bg-primary: var(--luna-white);
+    --luna-bg-secondary: var(--luna-bg-secondary, #f7f7fb);
   }
 }

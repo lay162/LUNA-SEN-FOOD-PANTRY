@@ -201,31 +201,31 @@ const QRCodeGenerator = () => {
             
             <div className="space-y-3">
               <button 
-                onClick={() => {setQrType('family-code'); setQrInput('2024-089'); generateQRCode();}}
+                onClick={() => {setQrType('family-code'); setQrInput(''); generateQRCode();}}
                 className="luna-button luna-button--outline w-full text-left"
               >
-                👨‍👩‍👧‍👦 Family Code: FAM-2024-089
+                👨‍👩‍👧‍👦 Family Code (enter a real code)
               </button>
               
               <button 
-                onClick={() => {setQrType('stock-item'); setQrInput('PASTA-GF-001'); generateQRCode();}}
+                onClick={() => {setQrType('stock-item'); setQrInput(''); generateQRCode();}}
                 className="luna-button luna-button--outline w-full text-left"
               >
-                📦 Stock Item: Gluten-Free Pasta
+                📦 Stock Item (enter a real SKU / item code)
               </button>
               
               <button 
-                onClick={() => {setQrType('delivery-route'); setQrInput('ROUTE-03'); generateQRCode();}}
+                onClick={() => {setQrType('delivery-route'); setQrInput(''); generateQRCode();}}
                 className="luna-button luna-button--outline w-full text-left"
               >
-                🚚 Delivery Route 3
+                🚚 Delivery Route (enter a real route ID)
               </button>
               
               <button 
-                onClick={() => {setQrType('volunteer-id'); setQrInput('001'); generateQRCode();}}
+                onClick={() => {setQrType('volunteer-id'); setQrInput(''); generateQRCode();}}
                 className="luna-button luna-button--outline w-full text-left"
               >
-                👥 Volunteer ID: VOL-001
+                👥 Volunteer ID (enter a real ID)
               </button>
             </div>
           </div>
