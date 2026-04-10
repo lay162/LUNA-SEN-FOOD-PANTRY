@@ -3,7 +3,9 @@ import Card, { GiftIcon, HeartIcon, PhoneIcon } from '../components/Card';
 import Button from '../components/Button';
 import HeroLogo from '../components/HeroLogo';
 import { usePublicImpactStats } from '../hooks/usePublicImpactStats';
-import { SITE_URL } from '../constants/site';
+import { sitePath } from '../constants/site';
+import QrCodeImage from '../components/QrCodeImage';
+import { ADMIN_EMAIL } from '../constants/contact';
 
 /**
  * Quick donation tiers: five cards so each has a similar chip count (4–5), no overlap.
@@ -119,7 +121,7 @@ const Donate = () => {
             </Button>
           </a>
           <a
-            href="mailto:donations@lunasen.org?subject=Request%20food%20collection"
+            href={`mailto:${encodeURIComponent(ADMIN_EMAIL)}?subject=${encodeURIComponent('Request food collection')}`}
             className="luna-link-button"
           >
             <Button variant="gradient" size="lg" className="w-full">
@@ -135,9 +137,14 @@ const Donate = () => {
       title: 'Corporate Support',
       description: 'Business partnerships, regular donations, or employee fundraising. Help us help more Wirral families.',
       action: (
-        <Button variant="secondary" size="lg" className="w-full">
-          Contact for Partnership
-        </Button>
+        <a
+          href={`mailto:${encodeURIComponent(ADMIN_EMAIL)}?subject=${encodeURIComponent('Corporate partnership — LUNA SEN PANTRY')}`}
+          className="luna-link-button"
+        >
+          <Button variant="secondary" size="lg" className="w-full">
+            Contact for Partnership
+          </Button>
+        </a>
       )
     }
   ];
@@ -359,7 +366,7 @@ const Donate = () => {
                       Call for collection
                     </Button>
                   </a>
-                  <a href="mailto:donations@lunasen.org" className="luna-link-button">
+                  <a href={`mailto:${encodeURIComponent(ADMIN_EMAIL)}`} className="luna-link-button">
                     <Button variant="secondary" size="lg" className="w-full">
                       Email us
                     </Button>
@@ -460,13 +467,17 @@ const Donate = () => {
             </div>
 
             <div className="luna-card-note">
-              <p className="mb-4">Quick access via QR code:</p>
+              <p className="mb-2">Quick access via QR code:</p>
+              <p className="mb-4 text-sm text-gray-600">
+                Scan with your phone — opens this donate page in the browser.
+              </p>
               <div className="flex justify-center">
                 <div className="text-center bg-white p-4 rounded-lg shadow-sm">
-                  <img
-                    src={`https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=${encodeURIComponent(`${SITE_URL}/donate`)}`}
-                    alt="QR code for donations page"
-                    className="w-24 h-24 mx-auto mb-2"
+                  <QrCodeImage
+                    value={sitePath('/donate')}
+                    size={120}
+                    alt="QR code: open Donate page"
+                    className="w-[120px] h-[120px] mx-auto mb-2 object-contain rounded-md"
                   />
                   <p className="text-xs text-gray-600">Scan to donate</p>
                 </div>

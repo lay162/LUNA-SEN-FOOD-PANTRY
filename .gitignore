@@ -15,6 +15,7 @@ serviceAccount*.json
 
 dist
 dist-ssr
+.firebase
 *.local
 
 # Editor directories and files

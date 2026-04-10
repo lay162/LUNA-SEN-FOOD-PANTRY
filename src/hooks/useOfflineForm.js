@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { OfflineStorage, isOnline, onNetworkChange } from '../utils/offline';
 import { isFirebaseConfigured, omitUndefinedDeep } from '../firebase';
 import { isEmailJsConfigured, sendFormViaEmailJs } from '../utils/emailJsSubmit';
+import { isFormEmailCloudConfigured, sendFormViaCloudFunction } from '../utils/formEmailCloud';
 
 export function useOfflineForm(formType) {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -36,6 +37,7 @@ export function useOfflineForm(formType) {
                 )
               ),
             ]);
+            await notifyTeamByEmail(formType, safeData);
             setSubmitStatus({ success: true, message: 'Form submitted successfully!' });
             return { success: true, message: 'Form submitted successfully!' };
           } catch (firestoreErr) {
@@ -43,29 +45,25 @@ export function useOfflineForm(formType) {
           }
         }
 
-        if (isEmailJsConfigured()) {
-          try {
-            await sendFormViaEmailJs(formType, safeData);
-            const id = await OfflineStorage.saveSubmission({
-              type: formType,
-              data: safeData,
-            });
-            setSubmitStatus({
-              success: true,
-              message: 'Emailed to team.',
-              offline: true,
-              id,
-            });
-            return {
-              success: true,
-              message:
-                'Your form was sent by email to the address you set up. A copy was also saved on this device.',
-              offline: true,
-              viaEmail: true,
-            };
-          } catch (emailErr) {
-            console.error('EmailJS:', emailErr);
-          }
+        const emailed = await notifyTeamByEmail(formType, safeData);
+        if (emailed) {
+          const id = await OfflineStorage.saveSubmission({
+            type: formType,
+            data: safeData,
+          });
+          setSubmitStatus({
+            success: true,
+            message: 'Emailed to team.',
+            offline: true,
+            id,
+          });
+          return {
+            success: true,
+            message:
+              'Your form was sent by email to the team. A copy was also saved on this device.',
+            offline: true,
+            viaEmail: true,
+          };
         }
 
         const id = await OfflineStorage.saveSubmission({
@@ -81,9 +79,9 @@ export function useOfflineForm(formType) {
         return {
           success: true,
           message:
-            isFirebaseConfigured() || isEmailJsConfigured()
+            isFirebaseConfigured() || isEmailJsConfigured() || isFormEmailCloudConfigured()
               ? 'We could not finish sending to the cloud or email. Your answers were saved on this device.'
-              : 'Your answers were saved on this device. Add free EmailJS or Firebase (see docs/FREE_SETUP.md) to send them to your team automatically.',
+              : 'Your answers were saved on this device. Configure EmailJS or deploy form email (see .env.example) to notify the team automatically.',
           offline: true,
         };
       }
@@ -152,6 +150,30 @@ export function useOfflineForm(formType) {
     networkStatus,
     submitForm,
   };
+}
+
+/**
+ * Try Cloud Function (SMTP) first when VITE_FORM_NOTIFY_CLOUD is set, then EmailJS.
+ * @returns {true} if at least one path succeeded
+ */
+async function notifyTeamByEmail(formType, safeData) {
+  if (isFormEmailCloudConfigured()) {
+    try {
+      await sendFormViaCloudFunction(formType, safeData);
+      return true;
+    } catch (err) {
+      console.error('Form email (Cloud Function):', err);
+    }
+  }
+  if (isEmailJsConfigured()) {
+    try {
+      await sendFormViaEmailJs(formType, safeData);
+      return true;
+    } catch (err) {
+      console.error('Form email (EmailJS):', err);
+    }
+  }
+  return false;
 }
 
 async function submitToFirebase(formData, formType) {

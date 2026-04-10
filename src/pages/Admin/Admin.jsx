@@ -34,6 +34,8 @@ import { getAdminProfile } from './utils/adminProfile';
 import { getAllowlistEntries, getCurrentAdminRole, signInAdmin, signOutAdmin, bootstrapAdminUsers, requestPasswordReset } from './utils/adminAuth';
 import { useBrandLogoUrl } from '../../context/BrandingContext';
 import { getAuthInstance, getDb, isFirebaseConfigured, omitUndefinedDeep } from '../../firebase';
+import { showAuthSplash, hideAuthSplash } from '../../utils/authSplash';
+import InstallPrompt from '../../components/InstallPrompt';
 
 const ADMIN_USER_KEY = 'luna-admin-user';
 const ADMIN_SESSION_KEY = 'luna-admin';
@@ -716,6 +718,7 @@ const AdminShell = () => {
 };
 
 const Admin = () => {
+  const brandLogoUrl = useBrandLogoUrl();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
   const [credentials, setCredentials] = useState({ username: '', password: '' });
@@ -740,40 +743,52 @@ const Admin = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    const res = await signInAdmin(credentials);
-    if (!res.ok) {
-      window.alert(res.error || 'Invalid credentials');
-      return;
+    showAuthSplash(
+      activeTab === 'staff'
+        ? 'Signing in — staff, volunteers & drivers…'
+        : 'Signing in — admin…'
+    );
+    try {
+      const res = await signInAdmin(credentials);
+      if (!res.ok) {
+        window.alert(res.error || 'Invalid credentials');
+        return;
+      }
+      setIsAuthenticated(true);
+    } finally {
+      hideAuthSplash();
     }
-    setIsAuthenticated(true);
   };
 
-  if (loading) {
-    return (
-      <div className="luna-page">
-        <div className="luna-container">
-          <div className="flex min-h-64 items-center justify-center">
-            <div className="luna-spinner" />
-          </div>
-        </div>
-      </div>
-    );
-  }
+  const showPortalGate = loading || !isAuthenticated;
 
-  if (!isAuthenticated) {
+  if (showPortalGate) {
     return (
       <div className="admin-login-page">
-        <div className="luna-container max-w-md">
-          <p className="mb-6 text-center">
-            <Link to="/" className="text-sm font-semibold text-white/95 drop-shadow transition hover:opacity-90">
-              ← Back to site
-            </Link>
-          </p>
+        <InstallPrompt skipCookieGate variant="fab" />
+        <div className="admin-login-page__frame">
           <div className="admin-login">
             <div className="admin-login__card">
-              <h1 className="admin-login__title">LUNA SEN PANTRY</h1>
-              <h2 className="admin-login__subtitle">Staff portal sign-in</h2>
-
+              <h1 className="admin-login__title">
+                <span className="admin-login__heading-stack">
+                  <span className="admin-login__title-luna">LUNA</span>
+                  <span className="admin-login__title-rest">SEN PANTRY</span>
+                </span>
+              </h1>
+              <div className="admin-login__brand-mark" aria-hidden="true">
+                <img src={brandLogoUrl} alt="" width={132} height={132} decoding="async" />
+              </div>
+              {loading ? (
+                <>
+                  <p className="admin-login__subtitle admin-login__subtitle--compact">Staff portal</p>
+                  <div className="admin-login__loading" aria-live="polite" aria-busy="true">
+                    <div className="luna-spinner" />
+                    <p className="admin-login__loading-text">Getting things ready…</p>
+                  </div>
+                </>
+              ) : (
+                <>
+              <h2 className="admin-login__subtitle admin-login__subtitle--signin">Sign in</h2>
               <div className="admin-login__tabs" role="tablist" aria-label="Sign in type">
                 <button
                   type="button"
@@ -782,7 +797,7 @@ const Admin = () => {
                   className={`admin-login__tab ${activeTab === 'staff' ? 'admin-login__tab--active' : ''}`}
                   onClick={() => setActiveTab('staff')}
                 >
-                  Staff / volunteer
+                  Volunteer/driver
                 </button>
                 <button
                   type="button"
@@ -791,7 +806,7 @@ const Admin = () => {
                   className={`admin-login__tab ${activeTab === 'admin' ? 'admin-login__tab--active' : ''}`}
                   onClick={() => setActiveTab('admin')}
                 >
-                  Admin sign in
+                  Admin
                 </button>
               </div>
 
@@ -860,20 +875,118 @@ const Admin = () => {
                   Sign in
                 </Button>
               </form>
+                </>
+              )}
+              <div className="admin-login__card-footer">
+                <Link to="/" className="admin-login__footer-back">
+                  Back to site
+                </Link>
+              </div>
             </div>
           </div>
         </div>
         <style jsx>{`
           .admin-login-page {
             min-height: 100vh;
+            min-height: 100dvh;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: var(--luna-space-8) var(--luna-space-4);
+            padding: max(env(safe-area-inset-top, 0px), 1.25rem)
+              max(env(safe-area-inset-right, 0px), 1rem)
+              max(env(safe-area-inset-bottom, 0px), 1.25rem)
+              max(env(safe-area-inset-left, 0px), 1rem);
             background: var(--luna-gradient-primary);
             box-sizing: border-box;
+            overflow-y: auto;
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
           }
+
+          .admin-login-page__frame {
+            width: 100%;
+            max-width: min(28rem, 100%);
+            margin: 0 auto;
+          }
+
+          .admin-login__card-footer {
+            margin-top: var(--luna-space-6);
+            padding-top: var(--luna-space-4);
+            border-top: 1px solid var(--luna-grey-200);
+            text-align: center;
+          }
+
+          .admin-login__footer-back {
+            display: inline-block;
+            font-size: 0.8125rem;
+            font-weight: 700;
+            color: var(--luna-grey-600);
+            text-decoration: none;
+            letter-spacing: 0.02em;
+            transition: opacity var(--luna-transition-fast, 0.15s ease);
+          }
+
+          /* Same pink→blue gradient text as .luna-navbar__link:hover */
+          .admin-login__card .admin-login__footer-back:hover,
+          .admin-login__card .admin-login__footer-back:focus-visible,
+          .admin-login__card .admin-login__footer-back:active {
+            background: var(--luna-gradient-primary) !important;
+            -webkit-background-clip: text !important;
+            background-clip: text !important;
+            -webkit-text-fill-color: transparent !important;
+            color: transparent !important;
+            text-decoration: none !important;
+          }
+
+          .admin-login__card .admin-login__footer-back:active {
+            opacity: 0.9;
+          }
+
+          .admin-login__loading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 1.25rem;
+            padding: 2rem 0 1rem;
+            min-height: 8rem;
+          }
+
+          .admin-login__loading-text {
+            margin: 0;
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--luna-text-secondary);
+          }
+
+          .admin-login__subtitle--compact {
+            margin-bottom: 0.5rem;
+          }
+
+          .admin-login__subtitle strong {
+            font-weight: 800;
+            color: var(--luna-grey-900);
+          }
+
+          .admin-login__brand-mark {
+            width: clamp(5.75rem, 26vw, 8.25rem);
+            height: clamp(5.75rem, 26vw, 8.25rem);
+            margin: 0 auto var(--luna-space-5);
+            border-radius: 50%;
+            overflow: hidden;
+            border: 2px solid var(--luna-grey-100);
+            box-shadow: 0 8px 22px rgba(15, 23, 42, 0.12);
+            background: #fff;
+            flex-shrink: 0;
+          }
+          .admin-login__brand-mark img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+          }
+
           .admin-login {
             display: flex;
             align-items: center;
@@ -881,25 +994,60 @@ const Admin = () => {
           }
           .admin-login__card {
             background: #ffffff;
-            padding: var(--luna-space-12);
-            border-radius: var(--luna-radius-lg);
-            box-shadow: var(--luna-shadow-xl);
-            max-width: 400px;
+            padding: clamp(1.5rem, 4vw, 2.75rem);
+            border-radius: clamp(1rem, 3vw, 1.5rem);
             width: 100%;
             text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.65);
+            box-shadow:
+              0 4px 6px -1px rgba(0, 0, 0, 0.06),
+              0 24px 48px -12px rgba(15, 23, 42, 0.18);
           }
-          .admin-login__title {
+          @media (min-width: 480px) {
+            .admin-login__card {
+              padding: 2.75rem 2.5rem;
+            }
+          }
+          .admin-login__card .admin-login__title {
             font-size: var(--luna-font-size-2xl);
             font-weight: var(--luna-font-weight-bold);
-            background: var(--luna-gradient-primary);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: var(--luna-space-2);
+            text-align: center;
+            margin-bottom: var(--luna-space-4);
+            line-height: var(--luna-line-height-tight);
+          }
+          /* Inner wrapper stacks lines; h1 stays global display:block — no !important fight */
+          .admin-login__card .admin-login__heading-stack {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.45rem;
+          }
+          .admin-login__card .admin-login__title-luna {
+            background: var(--luna-gradient-primary) !important;
+            -webkit-background-clip: text !important;
+            background-clip: text !important;
+            -webkit-text-fill-color: transparent !important;
+            color: transparent !important;
+          }
+          .admin-login__card .admin-login__title-rest {
+            color: var(--luna-grey-900) !important;
+            -webkit-text-fill-color: var(--luna-grey-900) !important;
           }
           .admin-login__subtitle {
             color: var(--luna-text-secondary);
             margin-bottom: var(--luna-space-8);
+            font-size: clamp(0.8rem, 2.8vw, 0.95rem);
+            line-height: 1.45;
+            font-weight: 600;
+          }
+          .admin-login__subtitle.admin-login__subtitle--signin {
+            color: var(--luna-grey-800);
+            font-size: 1.05rem;
+            font-weight: 800;
+            text-align: center;
+            width: 100%;
+            margin: 0 0 var(--luna-space-4);
+            line-height: 1.3;
           }
           .admin-login__tabs {
             display: grid;
@@ -918,9 +1066,11 @@ const Admin = () => {
             padding: 0.65rem 0.75rem;
             border-radius: 999px;
             font-weight: 800;
-            font-size: 0.75rem;
+            font-size: clamp(0.68rem, 2.2vw, 0.78rem);
             letter-spacing: 0.02em;
             color: var(--luna-grey-600);
+            touch-action: manipulation;
+            min-height: 44px;
           }
           .admin-login__tab--active {
             background: #ffffff;
@@ -1016,6 +1166,11 @@ const Admin = () => {
             outline: none;
             border-color: var(--luna-primary);
             box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+          }
+          @media (max-width: 480px) {
+            .admin-login__field input {
+              font-size: 16px;
+            }
           }
         `}</style>
       </div>

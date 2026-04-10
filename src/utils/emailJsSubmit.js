@@ -1,29 +1,23 @@
 import emailjs from '@emailjs/browser';
+import {
+  buildFormEmailHtml,
+  buildFormEmailSubject,
+  formatFormBodyPlain,
+  formReplyToEmail,
+  formTypeLabel,
+} from './formEmailPayload';
 
 /**
  * Free tier (~200 emails/month): https://www.emailjs.com/
- * Template should include {{form_type}} and {{form_body}} (plain text).
+ * Connect the EmailJS “Email service” to Namecheap Private Email SMTP (not Gmail/Zoho).
+ *
+ * Prefer Firebase `sendFormNotificationEmail` (nodemailer) when VITE_FORM_NOTIFY_CLOUD=true — see .env.example.
  */
 export function isEmailJsConfigured() {
   const k = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
   const s = import.meta.env.VITE_EMAILJS_SERVICE_ID;
   const t = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
   return Boolean(k && s && t && String(k).trim().length > 5);
-}
-
-function formatFormBody(formType, data) {
-  const lines = [`Form: ${formType}`, `Time: ${new Date().toISOString()}`, '---'];
-  for (const [key, value] of Object.entries(data)) {
-    if (value === undefined || value === null) continue;
-    const v =
-      typeof value === 'object' && !Array.isArray(value)
-        ? JSON.stringify(value)
-        : Array.isArray(value)
-          ? value.join(', ')
-          : String(value);
-    lines.push(`${key}: ${v}`);
-  }
-  return lines.join('\n');
 }
 
 /**
@@ -34,9 +28,17 @@ export async function sendFormViaEmailJs(formType, data) {
     throw new Error('EmailJS is not configured');
   }
 
+  const safe = data && typeof data === 'object' ? data : {};
+  const form_body = formatFormBodyPlain(formType, safe);
+  const form_html = buildFormEmailHtml(formType, safe);
+  const reply_to = formReplyToEmail(safe);
+
   const templateParams = {
-    form_type: formType === 'referral' ? 'Support referral' : 'Volunteer application',
-    form_body: formatFormBody(formType, data),
+    form_subject: buildFormEmailSubject(formType),
+    form_type: formTypeLabel(formType),
+    form_body,
+    form_html,
+    ...(reply_to ? { reply_to } : {}),
   };
 
   await emailjs.send(

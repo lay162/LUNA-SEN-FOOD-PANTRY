@@ -7,3 +7,10 @@ export const SITE_URL = (import.meta.env.VITE_SITE_URL || 'https://lunasenpantry
   /\/$/,
   ''
 );
+
+/** Absolute URL for a site path — use for QR codes, share links, and print materials. */
+export function sitePath(path = '/') {
+  const base = SITE_URL;
+  const p = path.startsWith('/') ? path : `/${path}`;
+  return `${base}${p === '//' ? '/' : p}`;
+}

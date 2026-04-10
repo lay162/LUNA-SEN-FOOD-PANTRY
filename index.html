@@ -37,13 +37,18 @@
         <p>Call us directly: <a href="tel:07718851362">07718851362</a></p>
       </div>
     </noscript>
-    <div id="luna-splash" aria-hidden="true">
+    <div id="luna-splash" class="luna-splash--boot-hidden" aria-hidden="true">
       <div class="luna-splash__inner">
         <img class="luna-splash__logo" src="/PANTRY-LOGO.png" alt="" />
-        <div class="luna-splash__text">Loading LUNA SEN PANTRY…</div>
+        <div class="luna-splash__text">Signing in…</div>
       </div>
     </div>
     <style>
+      /* Hidden on first paint — shown only during /admin sign-in via authSplash.js */
+      #luna-splash.luna-splash--boot-hidden {
+        display: none !important;
+      }
+
       #luna-splash {
         position: fixed;
         inset: 0;
@@ -57,6 +62,7 @@
       #luna-splash.is-hidden {
         opacity: 0;
         visibility: hidden;
+        pointer-events: none;
       }
 
       .luna-splash__inner {

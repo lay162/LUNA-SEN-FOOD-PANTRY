@@ -7,12 +7,12 @@ import Support from './pages/Support';
 import Donate from './pages/Donate';
 import Volunteer from './pages/Volunteer';
 import Stories from './pages/Stories';
+import QrCodesPage from './pages/QrCodesPage';
 import Admin from './pages/Admin/Admin';
 import { BrandingProvider } from './context/BrandingContext';
 import { initializeAuth } from './firebase';
 import { HelmetProvider } from 'react-helmet-async';
 import { registerServiceWorker } from './utils/offline';
-import InstallPrompt from './components/InstallPrompt';
 import CookieConsent from './components/CookieConsent';
 import { Seo } from './components/Seo';
 
@@ -61,6 +61,12 @@ const SEO_BY_PATH = {
       'Read and share short thank-you messages from families supported by LUNA. Please don’t include personal or sensitive details.',
     path: '/stories',
   },
+  '/qr-codes': {
+    title: 'QR codes',
+    description:
+      'Printable QR codes for LUNA SEN PANTRY — support, donate, volunteer, and stories. Scan to open the website.',
+    path: '/qr-codes',
+  },
 };
 
 function AppRoutes() {
@@ -90,7 +96,7 @@ function AppRoutes() {
           <Route path="/contact" element={<div className="min-h-screen bg-gray-50 flex items-center justify-center"><h1 className="text-2xl">Contact - Coming Soon</h1></div>} />
           <Route path="/privacy" element={<div className="min-h-screen bg-gray-50 flex items-center justify-center"><h1 className="text-2xl">Privacy Policy - Coming Soon</h1></div>} />
           <Route path="/accessibility" element={<div className="min-h-screen bg-gray-50 flex items-center justify-center"><h1 className="text-2xl">Accessibility Statement - Coming Soon</h1></div>} />
-          <Route path="/qr-codes" element={<div className="min-h-screen bg-gray-50 flex items-center justify-center"><h1 className="text-2xl">QR Codes - Coming Soon</h1></div>} />
+          <Route path="/qr-codes" element={<QrCodesPage />} />
 
           <Route path="*" element={
             <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -107,7 +113,6 @@ function AppRoutes() {
       </main>
       {!hideSiteChrome && <Footer />}
       {!hideSiteChrome && <CookieConsent />}
-      {!hideSiteChrome && <InstallPrompt />}
     </div>
   );
 }

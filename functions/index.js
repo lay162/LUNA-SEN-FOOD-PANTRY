@@ -6,16 +6,79 @@
 const { initializeApp } = require("firebase-admin/app");
 const { Timestamp } = require("firebase-admin/firestore");
 const { onDocumentCreated } = require("firebase-functions/v2/firestore");
+const { onCall, HttpsError } = require("firebase-functions/v2/https");
 const { logger } = require("firebase-functions");
-const { defineSecret } = require("firebase-functions/params");
+const { defineSecret, defineString } = require("firebase-functions/params");
 const { google } = require("googleapis");
+const nodemailer = require("nodemailer");
+const formEmail = require("./formEmailPayload.cjs");
 
 initializeApp();
 
 const googleServiceAccountJson = defineSecret("GOOGLE_SERVICE_ACCOUNT_JSON");
 const googleSheetId = defineSecret("GOOGLE_SHEET_ID");
 
+/** Namecheap Private Email — use App Password if 2FA; TLS port 587 */
+const smtpUser = defineSecret("SMTP_USER");
+const smtpPass = defineSecret("SMTP_PASS");
+const smtpHost = defineString("SMTP_HOST", { default: "mail.privateemail.com" });
+const smtpPort = defineString("SMTP_PORT", { default: "587" });
+const mailFrom = defineString("MAIL_FROM", { default: "admin@lunasenpantry.co.uk" });
+const mailTo = defineString("MAIL_TO", { default: "admin@lunasenpantry.co.uk" });
+
 const REGION = "europe-west2";
+
+const ALLOWED_FORM_TYPES = new Set(["referral", "volunteer", "story"]);
+const MAX_FORM_PAYLOAD_BYTES = 100_000;
+
+function validateFormPayload(formType, data) {
+  if (!ALLOWED_FORM_TYPES.has(formType)) {
+    throw new HttpsError("invalid-argument", "Invalid form type.");
+  }
+  if (!data || typeof data !== "object" || Array.isArray(data)) {
+    throw new HttpsError("invalid-argument", "Invalid form data.");
+  }
+  let size = 0;
+  try {
+    size = Buffer.byteLength(JSON.stringify(data), "utf8");
+  } catch {
+    throw new HttpsError("invalid-argument", "Form data could not be encoded.");
+  }
+  if (size > MAX_FORM_PAYLOAD_BYTES) {
+    throw new HttpsError("invalid-argument", "Form data too large.");
+  }
+}
+
+async function sendFormSmtpMail(formType, data) {
+  const user = smtpUser.value();
+  const pass = smtpPass.value();
+  if (!user || !pass) {
+    logger.warn("SMTP_USER / SMTP_PASS not set; skip sendFormSmtpMail");
+    throw new HttpsError("failed-precondition", "Email is not configured on the server.");
+  }
+
+  const port = Number.parseInt(String(smtpPort.value()), 10) || 587;
+  const transporter = nodemailer.createTransport({
+    host: smtpHost.value(),
+    port,
+    secure: port === 465,
+    auth: { user, pass },
+  });
+
+  const subject = formEmail.buildFormEmailSubject(formType);
+  const html = formEmail.buildFormEmailHtml(formType, data);
+  const text = formEmail.formatFormBodyPlain(formType, data);
+  const replyTo = formEmail.formReplyToEmail(data);
+
+  await transporter.sendMail({
+    from: mailFrom.value(),
+    to: mailTo.value(),
+    subject,
+    text,
+    html,
+    replyTo: replyTo || undefined,
+  });
+}
 
 function formatDate(d) {
   if (!d) return "";
@@ -144,6 +207,35 @@ exports.appendVolunteerToSheet = onDocumentCreated(
       logger.info("Volunteer row appended", { volunteerId });
     } catch (e) {
       logger.error("appendVolunteerToSheet failed", e);
+    }
+  }
+);
+
+/**
+ * HTTPS callable — sends referral / volunteer / story notification via Private Email SMTP.
+ * Requires Blaze + secrets SMTP_USER, SMTP_PASS (see .env.example in repo root).
+ * Client: VITE_FORM_NOTIFY_CLOUD=true and same Firebase region (europe-west2).
+ */
+exports.sendFormNotificationEmail = onCall(
+  {
+    region: REGION,
+    secrets: [smtpUser, smtpPass],
+    cors: true,
+  },
+  async (request) => {
+    if (!request.auth) {
+      throw new HttpsError("unauthenticated", "Sign in required.");
+    }
+    const { formType, data } = request.data || {};
+    validateFormPayload(formType, data);
+    try {
+      await sendFormSmtpMail(formType, data);
+      logger.info("sendFormNotificationEmail sent", { formType, uid: request.auth.uid });
+      return { ok: true };
+    } catch (e) {
+      if (e instanceof HttpsError) throw e;
+      logger.error("sendFormNotificationEmail failed", e);
+      throw new HttpsError("internal", "Could not send email.");
     }
   }
 );

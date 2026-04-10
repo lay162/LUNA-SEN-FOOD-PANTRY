@@ -1,3 +1,7 @@
+# Same app build as Firebase Hosting: `npm run build` → `dist/`. This file only affects Netlify.
+# To stop using Netlify build minutes: Netlify → Site → Build & deploy → Stop builds, or disconnect the Git repo.
+# Deploy via Firebase instead: `npm run deploy:hosting` (uses your local .env.local at build time).
+
 [build]
   command = "npm run build"
   publish = "dist"

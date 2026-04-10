@@ -8,6 +8,7 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
+    "deploy:hosting": "npm run build && firebase deploy --only hosting",
     "deploy:firebase": "firebase deploy --only firestore:rules,functions",
     "deploy:firestore-rules": "firebase deploy --only firestore:rules",
     "seed:allowlist": "node scripts/seed-access-allowlist.mjs"
@@ -16,6 +17,7 @@
     "@emailjs/browser": "^4.4.1",
     "firebase": "^12.9.0",
     "lucide-react": "^1.7.0",
+    "qrcode": "^1.5.4",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-helmet-async": "^3.0.0",

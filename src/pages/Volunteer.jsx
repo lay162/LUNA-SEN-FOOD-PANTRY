@@ -7,6 +7,7 @@ import { useFormValidation } from '../hooks/useFormValidation';
 import { useOfflineForm } from '../hooks/useOfflineForm';
 import HeroLogo from '../components/HeroLogo';
 import VolunteerDocUploadRow from '../components/VolunteerDocUploadRow';
+import { ADMIN_EMAIL } from '../constants/contact';
 
 const Volunteer = () => {
   const [searchParams] = useSearchParams();
@@ -905,7 +906,10 @@ const Volunteer = () => {
             </div>
             
             <p className="luna-card-note">
-              Questions? Email us at <a href="mailto:volunteers@lunasen.org" className="luna-link">volunteers@lunasen.org</a>
+              Questions? Email us at{' '}
+              <a href={`mailto:${encodeURIComponent(ADMIN_EMAIL)}`} className="luna-link">
+                {ADMIN_EMAIL}
+              </a>
             </p>
           </section>
 

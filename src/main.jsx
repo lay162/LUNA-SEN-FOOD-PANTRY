@@ -3,23 +3,6 @@ import ReactDOM from 'react-dom/client';
 import App from './App.jsx';
 import './index.css';
 
-function hideSplash() {
-  try {
-    const el = document.getElementById('luna-splash');
-    if (!el) return;
-    el.classList.add('is-hidden');
-    window.setTimeout(() => {
-      try {
-        el.remove();
-      } catch {
-        // ignore
-      }
-    }, 260);
-  } catch {
-    // ignore
-  }
-}
-
 // Error boundary component
 class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -76,6 +59,3 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     )}
   </React.StrictMode>,
 );
-
-// Hide branded splash after first paint
-hideSplash();

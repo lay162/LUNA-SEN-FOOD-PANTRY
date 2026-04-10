@@ -134,10 +134,3 @@ export async function registerServiceWorker() {
     }
   }
 }
-
-// Generate QR code data
-export function generateQRCode(text, size = 200) {
-  // This would typically use a QR code library
-  // For now, return a QR code service URL
-  return `https://api.qrserver.com/v1/create-qr-code/?size=${size}x${size}&data=${encodeURIComponent(text)}`;
-}

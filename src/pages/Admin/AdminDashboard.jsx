@@ -261,12 +261,14 @@ export default function AdminDashboard() {
             covered and are waiting for your <strong>Documents reviewed</strong> tick before they can move to the next
             stage.
           </p>
-          <Link
-            to="/admin/recruitment"
-            className="admin-panel__btn admin-panel__btn--primary inline-flex rounded-xl px-5 py-2.5 text-sm font-bold"
-          >
-            Open recruitment
-          </Link>
+          <div className="admin-panel__dash-queue-cta">
+            <Link
+              to="/admin/recruitment"
+              className="admin-panel__btn admin-panel__btn--primary rounded-xl px-5 py-2.5 text-sm font-bold"
+            >
+              Open recruitment
+            </Link>
+          </div>
         </div>
       ) : null}
 

@@ -13,6 +13,7 @@ import Button from '../components/Button';
 import { useOfflineForm } from '../hooks/useOfflineForm';
 import { validateSupportReferralStep } from '../utils/validation';
 import '../styles/global.css';
+import { ADMIN_EMAIL } from '../constants/contact';
 
 const SUPPORT_OPTIONS = ['Food parcel', 'Clothing', 'Household essentials', 'Other'];
 const DIETARY_OPTIONS = ['Halal', 'Kosher', 'Vegetarian', 'Vegan', 'Gluten-free', 'Dairy-free'];
@@ -744,6 +745,13 @@ const Support = () => {
             For Wirral households — especially where SEN, sensory needs, or crisis circumstances mean ordinary food-bank
             referrals don’t cover everything. You can apply for your own family or refer someone else (school, GP, charity,
             faith group, friend, or neighbour). Share as much detail as you can; it helps us respond with dignity.
+          </p>
+          <p className="luna-page-subtitle luna-support-form__contact-email">
+            Questions about this form? Email{' '}
+            <a href={`mailto:${encodeURIComponent(ADMIN_EMAIL)}`} className="luna-link">
+              {ADMIN_EMAIL}
+            </a>
+            .
           </p>
         </header>
 

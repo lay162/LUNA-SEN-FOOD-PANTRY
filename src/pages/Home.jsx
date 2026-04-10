@@ -5,7 +5,8 @@ import Button from '../components/Button';
 import HeroLogo from '../components/HeroLogo';
 import { useHomeLiveStats } from '../hooks/useHomeLiveStats';
 import { usePublicImpactStats } from '../hooks/usePublicImpactStats';
-import { SITE_URL } from '../constants/site';
+import { sitePath } from '../constants/site';
+import QrCodeImage from '../components/QrCodeImage';
 
 const Home = () => {
   // Set page title and meta description
@@ -447,22 +448,36 @@ const Home = () => {
               
               <div className="luna-cta__qr">
                 <p className="luna-cta__qr-title">Quick access via QR codes:</p>
+                <p className="luna-cta__qr-hint">
+                  Scan with your phone camera — opens this website (no app required).
+                </p>
                 <div className="luna-cta__qr-codes">
                   <div className="luna-cta__qr-item">
-                    <img 
-                      src={`https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=${encodeURIComponent(`${SITE_URL}/support`)}`}
-                      alt="QR code for self-referral"
+                    <QrCodeImage
+                      value={sitePath('/support')}
+                      size={100}
+                      alt="QR code: open Get Support page"
                       className="luna-cta__qr-image"
                     />
                     <p className="luna-cta__qr-label">Get Support</p>
                   </div>
                   <div className="luna-cta__qr-item">
-                    <img 
-                      src={`https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=${encodeURIComponent(`${SITE_URL}/donate`)}`}
-                      alt="QR code for donations"
+                    <QrCodeImage
+                      value={sitePath('/donate')}
+                      size={100}
+                      alt="QR code: open Donate page"
                       className="luna-cta__qr-image"
                     />
                     <p className="luna-cta__qr-label">Donate</p>
+                  </div>
+                  <div className="luna-cta__qr-item">
+                    <QrCodeImage
+                      value={sitePath('/volunteer')}
+                      size={100}
+                      alt="QR code: open Volunteer page"
+                      className="luna-cta__qr-image"
+                    />
+                    <p className="luna-cta__qr-label">Volunteer</p>
                   </div>
                 </div>
               </div>
@@ -737,13 +752,24 @@ const Home = () => {
         .luna-cta__qr-title {
           font-size: var(--luna-font-size-sm);
           color: var(--luna-text-muted);
-          margin-bottom: var(--luna-space-4);
+          margin-bottom: var(--luna-space-2);
+        }
+
+        .luna-cta__qr-hint {
+          font-size: var(--luna-font-size-xs);
+          color: var(--luna-text-muted);
+          margin: 0 0 var(--luna-space-4) 0;
+          line-height: var(--luna-line-height-relaxed);
+          max-width: 22rem;
+          margin-left: auto;
+          margin-right: auto;
         }
 
         .luna-cta__qr-codes {
           display: flex;
+          flex-wrap: wrap;
           justify-content: center;
-          gap: var(--luna-space-8);
+          gap: var(--luna-space-6);
         }
 
         .luna-cta__qr-item {
@@ -751,10 +777,11 @@ const Home = () => {
         }
 
         .luna-cta__qr-image {
-          width: 80px;
-          height: 80px;
+          width: 100px;
+          height: 100px;
           margin-bottom: var(--luna-space-2);
           border-radius: var(--luna-radius-md);
+          object-fit: contain;
         }
 
         .luna-cta__qr-label {

@@ -2,6 +2,10 @@
 import { initializeApp, getApps } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
 import { getAuth, signInAnonymously, onAuthStateChanged } from 'firebase/auth';
+import { getFunctions } from 'firebase/functions';
+
+/** Must match Cloud Functions region in functions/index.js */
+export const FIREBASE_FUNCTIONS_REGION = 'europe-west2';
 
 /** Paste once from Firebase → Project settings → Your apps → Web app (see .env.example). */
 const firebaseConfig = {
@@ -51,6 +55,12 @@ export function getDb() {
 export function getAuthInstance() {
   const app = getOrInitApp();
   return app ? getAuth(app) : null;
+}
+
+/** @returns {import('firebase/functions').Functions | null} */
+export function getFunctionsInstance() {
+  const app = getOrInitApp();
+  return app ? getFunctions(app, FIREBASE_FUNCTIONS_REGION) : null;
 }
 
 /** Firestore rejects undefined — strip recursively before addDoc. */

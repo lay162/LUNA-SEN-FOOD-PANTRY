@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useBrandLogoUrl } from '../context/BrandingContext';
 import { SOCIAL_LINKS } from '../constants/socials';
+import { ADMIN_EMAIL } from '../constants/contact';
 
 const Footer = () => {
   const brandLogoUrl = useBrandLogoUrl();
@@ -13,13 +14,14 @@ const Footer = () => {
     { path: '/donate', label: 'Donate' },
     { path: '/volunteer', label: 'Volunteer' },
     { path: '/stories', label: 'Stories & Thank Yous' },
+    { path: '/qr-codes', label: 'QR codes (print)' },
   ];
 
   const supportInfo = [
     { label: 'Emergency Food', value: 'Available 7 days' },
     { label: 'SEN Support', value: 'Priority Service' },
     { label: 'Area Coverage', value: 'Metropolitan Borough of Wirral' },
-    { label: 'Contact', value: 'Via Referral Form' },
+    { label: 'Email', value: ADMIN_EMAIL, mailto: true },
   ];
 
   const emergencyContacts = [
@@ -103,10 +105,19 @@ const Footer = () => {
               <div className="luna-footer__section">
                 <h4 className="luna-footer__heading">Support Information</h4>
                 <div className="luna-footer__info">
-                  {supportInfo.map(({ label, value }) => (
+                  {supportInfo.map(({ label, value, mailto }) => (
                     <div key={label} className="luna-footer__info-item">
                       <span className="luna-footer__info-label">{label}:</span>
-                      <span className="luna-footer__info-value">{value}</span>
+                      {mailto ? (
+                        <a
+                          href={`mailto:${encodeURIComponent(value)}`}
+                          className="luna-footer__info-value luna-footer__link"
+                        >
+                          {value}
+                        </a>
+                      ) : (
+                        <span className="luna-footer__info-value">{value}</span>
+                      )}
                     </div>
                   ))}
                 </div>
