@@ -1,4 +1,4 @@
-# Push to `main` → build → Firebase Hosting (same output as `npm run deploy:hosting` locally).
+# Push to `main` → build → Firebase Hosting only (Spark-safe). For Hosting + Firestore rules/indexes locally: `npm run deploy:live`.
 # Repo → Settings → Secrets and variables → Actions: add the secrets below.
 # Pause Netlify auto-builds (see netlify.toml) so pushes do not consume Netlify minutes.
 

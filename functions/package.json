@@ -2,7 +2,7 @@
   "name": "luna-sen-pantry-functions",
   "description": "Append Firestore referrals/volunteers to Google Sheets",
   "engines": {
-    "node": ">=20"
+    "node": "20"
   },
   "main": "index.js",
   "dependencies": {
